@@ -1,0 +1,262 @@
+﻿
+@{
+    ViewData["Title"] = "Utility Bill Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/pages/wizard/wizard-4.css" rel="stylesheet" />
+<div class="card card-custom card-transparent">
+    <div class="card-body p-0">
+        <!--begin::Wizard-->
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
+            <!--begin::Wizard Nav-->
+            <div class="wizard-nav">
+                <div class="wizard-steps">
+                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">1</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Utility Operator</div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">2</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Account Number</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">3</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Fetch Bill Amount</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">4</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Receipt</div>
+                                <div class="wizard-desc">Transaction Receipt</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Wizard Nav-->
+            <!--begin::Card-->
+            <div class="card card-custom card-shadowless rounded-top-0">
+                <!--begin::Body-->
+                <div class="card-body p-0">
+                    <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <!--begin::Wizard Form-->
+                            <form class="form" id="kt_form">
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-9">
+                                        <!--begin: Wizard Step 1-->
+                                        <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Operator Name</h4>
+                                            <!--begin::Input-->
+                                            @{
+
+                                                var list = new List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>();
+                                                if (ViewBag.Operator != null)
+                                                {
+                                                    list = (List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>)ViewBag.Operator;
+                                                }
+                                            }
+                                            <div class="form-group">
+                                                <label>Operator</label>
+                                                <select name="operator" class="form-control">
+                                                    <option value="">Select Operator</option>
+                                                    @foreach (var item in list)
+                                                    {
+                                                        <option value="@item.serviceProviderId">@item.serviceProviderName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
+                                                <div class="mr-2">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+                                                </div>
+                                                <div>
+                                                    <button type="button" id="btn_step1" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!--end: Wizard Step 1-->
+                                        <!--begin: Wizard Step 2-->
+                                        <div class="pb-5" data-wizard-type="step-content">
+                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Account Number</h4>
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label> Account Number</label>
+                                                <input type="text" class="form-control" name="mobilenumber" placeholder="Enter Account Number" maxlength="15" />
+
+                                            </div>
+                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
+                                                <div class="mr-2">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+                                                </div>
+                                                <div>
+                                                    <button type="button" id="btn_step2" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end: Wizard Step 2-->
+                                        <!--begin: Wizard Step 3-->
+                                        <div class="pb-5" data-wizard-type="step-content">
+                                            <h4 class="mb-10 font-weight-bold text-dark">Fetch Bill Amount</h4>
+                                            <!--begin::Select-->
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label>Amount</label>
+                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="btn btn-bg-danger">Fetch Bill</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
+                                                <div class="mr-2">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+                                                </div>
+                                                <div>
+                                                    <button type="button" id="enter_tpin" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end: Wizard Step 3-->
+                                        <!--begin: Wizard Step 4-->
+                                        <div class="pb-5" data-wizard-type="step-content">
+                                            <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
+                                            <div class="my-5">
+                                                <div class="card card-custom card-stretch gutter-b">
+                                                    <!--begin::Header-->
+                                                    <div class="card-header pull-right border-0 pt-5">
+
+                                                        <div class="card-toolbar">
+                                                            <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Print Receipt">
+                                                                <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="ki ki-bold-more-hor"></i>
+                                                                </a>
+                                                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right" style="">
+                                                                    <!--begin::Navigation-->
+                                                                    <ul class="navi navi-hover py-5">
+                                                                        <li class="navi-item">
+                                                                            <a href="#" class="navi-link">
+                                                                                <span class="navi-icon">
+                                                                                    <i class="flaticon2-drop"></i>
+                                                                                </span>
+                                                                                <span class="navi-text">Print</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="navi-item">
+                                                                            <a href="#" class="navi-link">
+                                                                                <span class="navi-icon">
+                                                                                    <i class="flaticon2-list-3"></i>
+                                                                                </span>
+                                                                                <span class="navi-text">Downlaod Receipt</span>
+                                                                            </a>
+                                                                        </li>
+
+                                                                    </ul>
+                                                                    <!--end::Navigation-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Header-->
+                                                    <!--begin::Body-->
+                                                    <div class="card-body pt-8">
+                                                        <!--begin::Item-->
+                                                        <table class="table table-bordered">
+                                                            <tr>
+                                                                <td>Operator</td>
+                                                                <td>Amount</td>
+                                                                <td>TransctionId</td>
+                                                                <td>Status</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Airtel</td>
+                                                                <td>100</td>
+                                                                <td>4869187987</td>
+                                                                <td><span class="text-success">Success</span></td>
+                                                            </tr>
+
+                                                        </table>
+                                                        <!--end::Item-->
+                                                    </div>
+                                                    <!--end::Body-->
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!--end: Wizard Step 4-->
+                                    </div>
+                                </div>
+                            </form>
+                            <!--end::Wizard Form-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Body-->
+            </div>
+            <!--end::Card-->
+        </div>
+        <!--end::Wizard-->
+    </div>
+</div>
+<link href="~/assets/css/jquery.pinlogin.css" rel="stylesheet" />
+<script src="~/assets/js/jquery.pinlogin.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        // ---- Single pincode input -----
+
+        var loginpin = $('#loginpin').pinlogin({
+            fields: 8,
+            reset: false,
+            complete: function (pin) {
+
+            },
+
+
+        });
+
+
+    });
+</script>
+<div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">PIN Password for recharge</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body d-flex flex-center">
+                <div id="loginpin" style="max-width:80%"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <button type="button" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/prepaid_wizard_script.js"></script>
+
