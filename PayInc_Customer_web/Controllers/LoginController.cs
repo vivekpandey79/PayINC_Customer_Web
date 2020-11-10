@@ -19,7 +19,7 @@ namespace PayInc_Customer_web.Controllers
         [HttpPost]
         public IActionResult Index(LoginModelReq req)
         {
-            var values = new { userName = req.UserName, password = req.Password };
+            var values = new { userName = req.UserName, password =new PasswordHash().HashShA1(req.Password) };
             string errorMessage = string.Empty;
             try
             {

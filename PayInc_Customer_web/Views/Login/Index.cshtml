@@ -55,12 +55,12 @@
                         </div>
                         <form class="form" asp-controller="login" asp-action="index" method="post">
                             <div class="form-group mb-5">
-                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" autocomplete="off" value="cust1010" />
+                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" autocomplete="off" value="cust1000" />
                                 <span asp-validation-for="UserName" class="text-danger"></span>
 
                             </div>
                             <div class="form-group mb-5">
-                                <input asp-for="Password" class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="PASSWORD" name="password" value="10101010" />
+                                <input asp-for="Password" class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="PASSWORD" name="password" value="12345678" maxlength="8" />
                                 <span asp-validation-for="Password" class="text-danger"></span>
 
                             </div>
@@ -128,7 +128,23 @@
                                 <input class="form-control form-control-solid h-auto py-4 px-8" type="text" placeholder="Mobile Number" name="mobilenumber" autocomplete="off" />
                             </div>
                             <div class="form-group d-flex flex-wrap flex-center mt-10">
-                                <button id="kt_login_forgot_submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Send OTP</button>
+                                <button id="kt_login_forgot_submit" type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Send OTP</button>
+                                <button id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-2">Cancel</button>
+                            </div>
+                        </form>
+                        <form class="form digit-group" id="kt_login_forgot_otp" style="display:none" data-group-name="digits" data-autosubmit="false" autocomplete="off">
+                            <div class="text-muted font-weight-bold">ENTER OTP</div>
+                            <div class="form-group mb-10">
+                                <input type="text" id="digit-1" name="digit-1" data-next="digit-2" class="form-control-solid" />
+                                <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
+                                <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
+                                <span class="splitter">&ndash;</span>
+                                <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
+                                <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
+                                <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" class="form-control-solid" />
+                            </div>
+                            <div class="form-group d-flex flex-wrap flex-center mt-10">
+                                <button id="kt_login_forgot_submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Change</button>
                                 <button id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-2">Cancel</button>
                             </div>
                         </form>
@@ -139,7 +155,23 @@
         </div>
         <!--end::Login-->
     </div>
-
+    <style>
+        .digit-group input {
+            width: 30px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 24px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 200;
+            margin: 0 2px;
+        }
+        .splitter {
+            padding: 0 5px;
+            color: black;
+            font-size: 24px;
+        }
+    </style>
     <!--end::Main-->
     <script>var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";</script>
     <!--begin::Global Config(global config for global JS scripts)-->
@@ -156,6 +188,37 @@
             $("#kt_login_forgot").click(function () {
                 $(".login-signin").hide();
                 $(".login-forgot").show();
+            });
+            $("#kt_login_forgot_form").submit(function (e) {
+                e.preventDefault();
+                $("#kt_login_forgot_form").hide();
+                $("#kt_login_forgot_otp").show();
+            });
+        });
+    </script>
+    <script>
+        $('.digit-group').find('input').each(function () {
+            $(this).attr('maxlength', 1);
+            $(this).on('keyup', function (e) {
+                var parent = $($(this).parent());
+
+                if (e.keyCode === 8 || e.keyCode === 37) {
+                    var prev = parent.find('input#' + $(this).data('previous'));
+
+                    if (prev.length) {
+                        $(prev).select();
+                    }
+                } else if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                    var next = parent.find('input#' + $(this).data('next'));
+
+                    if (next.length) {
+                        $(next).select();
+                    } else {
+                        if (parent.data('autosubmit')) {
+                            parent.submit();
+                        }
+                    }
+                }
             });
         });
     </script>

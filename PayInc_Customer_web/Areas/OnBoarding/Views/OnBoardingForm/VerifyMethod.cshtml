@@ -1,0 +1,68 @@
+﻿
+<div class="flex-center ml-3 mr-3">
+    <form action="@Url.Action("SubmitOnBoarding","OnBoardingForm")" method="post" id="form_onboarding">
+        <div class="form-group row">
+            <label class="col-3 col-form-label">Verify Method</label>
+            <div class="col-9 col-form-label">
+                <div class="radio-list">
+                    <label class="radio">
+                        <input type="radio" name="vmode" value="1" />
+                        <span></span>
+                        Adhaar OTP
+                    </label>
+                    <label class="radio radio-disabled">
+                        <input type="radio" name="vmode" value="2" disabled="disabled" />
+                        <span></span>
+                        Adhaar Biometrics
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="vmode" value="3" checked="checked" />
+                        <span></span>
+                        Manual Form
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-3 col-form-label"></label>
+            <div class="col-9 col-form-label">
+                <div class="col-6">
+                    <button id="btn_request_submission" type="submit" class="btn btn-block btn-primary">Submit Request  <span class="loader" style="display:none"></span></button>
+                    <div class="alert  alert-custom  alert-success" role="alert" id="lbl_success" style="display:none;">
+                        <div class="alert-icon"><i class="fa fa-check-circle"></i></div>
+                        <div class="alert-text">Retailer On-Boarding Submitted!</div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $("#btn_request_submission").click(function (e) {
+        $("#lbl_success").show();
+        $("#btn_request_submission").hide();
+    });
+    $("#form_onboarding").submit(function (e) {
+        e.preventDefault();
+        $(".loader").show();
+        $("#btn_request_submission").attr("disabled","disabled");
+        var url = this.action;
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: $("#form_onboarding").serialize(),
+            success: function (data) {
+                $(".loader").hide();
+                $("#btn_request_submission").removeAttr("disabled");
+                $("#lbl_success").show();
+                $("#btn_request_submission").hide();
+            },
+            error: function(err){
+            }
+        });
+        
+    });
+</script>

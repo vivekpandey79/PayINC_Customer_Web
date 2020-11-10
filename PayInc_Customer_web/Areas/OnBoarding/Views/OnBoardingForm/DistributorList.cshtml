@@ -1,0 +1,66 @@
+﻿@model List<PayInc_Customer_web.Areas.OnBoarding.Models.LowChainResponse>
+
+
+<div class="row">
+    <div class="col-4" id="show_pan_verify_panel">
+        <form class="form" id="submit_dist_form" method="post" action="@Url.Action("VerifyMethod","OnBoardingForm")">
+            @if (ViewBag.MDList != null)
+            {
+                <div class="form-group">
+                    <label>Select Master Distributor</label>
+                    @Html.DropDownList("ddlMDlist", new SelectList(ViewBag.MDList, "customerId", "mobileNumber"), "--SELECT MD--", new { @class = "form-control" })
+                </div>
+            }
+            else
+            {
+                var list = new List<SelectListItem>();
+                list.Add(new SelectListItem { Text = "--SELECT MD--" });
+                <div class="form-group">
+                    <label>Select Master Distributor</label>
+
+                    @Html.DropDownList("ddlADlist", new SelectList(list), new { @class = "form-control" })
+                </div>
+            }
+            @if (ViewBag.ADList != null)
+            {
+                <div class="form-group">
+                    <label>Select Master Distributor</label>
+                    @Html.DropDownList("ddlADlist", new SelectList(ViewBag.ADList, "customerId", "mobileNumber"), "--SELECT AD--", new { @class = "form-control" })
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label>Select Area Distributor</label>
+                    @Html.DropDownList("ddlADlist", new List<SelectListItem>{
+                    new SelectListItem{ Text="SELECT AD" }} , new {  @class = "form-control" })
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit" id="btn_submit_dist" class="btn btn-primary btn-block font-weight-bolder">Submit  <span class="loader" style="display:none;"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $("#ddlMDlist").change(function (e) {
+        if ($(this).val()!="") {
+            $.ajax({
+                url: "@Url.Action("GetNetworkChain", "OnBoardingForm")",
+                type: "POST",
+                data: { customerId:$("#ddlMDlist").val() },
+                success: function (data) {
+                    if (data.success) {
+                        if (data.role == "AD") {
+                            $.each(data.responseData, function (key, value) {
+                                $("#ddlADlist").append($("<option></option>").val(value.customerId).html(value.mobileNumber));
+                            })
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+<script src="~/js/onboarding_wizard.js"></script>

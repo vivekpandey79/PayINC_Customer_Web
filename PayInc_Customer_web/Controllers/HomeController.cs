@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PayInc_Customer_web.Models;
+using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Controllers
 {
@@ -33,6 +34,30 @@ namespace PayInc_Customer_web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public void GetDashboard()
+        {
+            try
+            {
+                var listParam = new List<KeyValuePair<string, string>>();
+                listParam.Add(new KeyValuePair<string, string>());
+                string errorMessage = string.Empty;
+                var response = new CallService().GetResponse<List<DashboardRes>>("getDashboardImages", listParam, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    ViewBag.DashboardImage = response;
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+           
         }
     }
 }

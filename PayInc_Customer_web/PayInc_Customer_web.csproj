@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\RetailerCreation\**" />
+    <Content Remove="Areas\RetailerCreation\**" />
+    <EmbeddedResource Remove="Areas\RetailerCreation\**" />
+    <None Remove="Areas\RetailerCreation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="RestSharp" Version="106.11.7" />
@@ -13,6 +20,7 @@
   <ItemGroup>
     <Folder Include="Areas\BillPayments\Data\" />
     <Folder Include="Areas\BillPayments\Models\" />
+    <Folder Include="Areas\OnBoarding\Data\" />
     <Folder Include="Areas\Recharge\Data\" />
   </ItemGroup>
 

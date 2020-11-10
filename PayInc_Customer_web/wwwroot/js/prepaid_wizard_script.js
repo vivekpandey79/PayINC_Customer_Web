@@ -99,13 +99,15 @@
         e.preventDefault();
     })
 
-
+    
     $("#btn_step1").click(function (e) {
         e.preventDefault();
         // Validate form
         var validator = _validations[0]; // get validator for currnt step
         validator.validate().then(function (status) {
             if (status == 'Valid') {
+                $("#txtShowMobileNo").val($("#txtMobileNo").val());
+                $("#lblMobileNo").val($("#txtMobileNo").val());
                 _wizard1.goNext();
 
             } else {
@@ -132,6 +134,8 @@
     });
     $("#enter_tpin").click(function (e) {
         e.preventDefault();
+        $("#lblMobileNo").val($("#txtMobileNo").val());
+        $("#lblOperator").text($("#ddlOperator option:selected").text());
         $('#mymodal').modal('show');
     });
     $("#btn_step3").click(function (e) {
@@ -147,5 +151,11 @@
 
             }
         });
+    });
+   
+    $(".select-plan").click(function (e) {
+        $(this).html('<i class="text-white fa fa-check"></i>');
+        $("#txtamount").val($(this).attr("data-amt"));
+        $('#mymodal').modal('show');
     });
 })

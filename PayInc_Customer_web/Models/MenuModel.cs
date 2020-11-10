@@ -22,6 +22,10 @@ namespace PayInc_Customer_web.Models
         public int webPortalId { get; set; }
         public string webPortalName { get; set; }
         public string webPortalUrl { get; set; }
+        public int? subMenu { get; set; }
+        public int menuTypeId { get; set; }
         public int webPortalStatus { get; set; }
+        public string menuIcon { get; set; }
+
     }
 }

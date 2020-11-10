@@ -21,8 +21,8 @@ namespace PayInc_Customer_web.Controllers
             var result = httpContextAccessor.HttpContext.Session.GetString("LoginDetails");
             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResData>(result);
             string errorMessage = string.Empty;
-            var parameter = new { customerId = obj.customerId, passwordType = 0, oldPassword = HashShA1(req.oldPassword), newPassword = HashShA1(req.newPassword) };
-            var response = new CallService().PostResponse<ChangePasswordResponse>(APIMethodConst.ChangePassword, parameter, ref errorMessage);
+            var parameter = new { customerId = obj.customerId, passwordType = 1, oldPassword = HashShA1(req.oldPassword), newPassword = HashShA1(req.newPassword) };
+            var response = new CallService().PostResponse<int>(APIMethodConst.ChangePassword, parameter, ref errorMessage);
             if (string.IsNullOrEmpty(errorMessage))
             {
                 return Json(new { success=true,errorMessage="Password Changed" });
@@ -79,11 +79,13 @@ namespace PayInc_Customer_web.Controllers
                 using (SHA1Managed sha1 = new SHA1Managed())
                 {
                     var hashSh1 = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                    return System.Convert.ToBase64String(hashSh1);
                     // declare stringbuilder
-                    var sb = new StringBuilder(hashSh1.Length * 2);
-                    // computing hashSh1
-                    foreach (byte b in hashSh1) { sb.Append(b.ToString("X2").ToLower()); }
-                    return sb.ToString();
+                    //var sb = new StringBuilder(hashSh1.Length * 2);
+                    //// computing hashSh1
+                    //foreach (byte b in hashSh1) { sb.Append(b.ToString("X2").ToLower()); }
+                    //return sb.ToString();
                 }
             }
             catch

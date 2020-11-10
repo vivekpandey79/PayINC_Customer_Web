@@ -50,7 +50,6 @@ namespace PayInc_Customer_web.Utility
 
             return response;
         }
-
         public string HttpGetRS(string serviceUrl, List<KeyValuePair<string, string>> parameter, ref string error)
         {
             string response = null;
@@ -118,8 +117,6 @@ namespace PayInc_Customer_web.Utility
                 return default(T);
             }
         }
-
-
         public T GetResponse<T>(string methodName, List<KeyValuePair<string,string>> keyValues, ref string errorMessage)
         {
             ApiResponse apiResponse = new ApiResponse();
@@ -129,10 +126,14 @@ namespace PayInc_Customer_web.Utility
                 if (response == null) { return default(T); }
                 apiResponse = JsonConvert.DeserializeObject<ApiResponse>(Convert.ToString(response));
                 if (apiResponse == null) { return default(T); }
-                if (apiResponse.errorCode != 200)
+                if (apiResponse.errorCode != 200 )
                 {
-                    errorMessage = apiResponse.message;
-                    return default(T);
+                    //if (apiResponse.errorCode != 1027)
+                    //{
+                        errorMessage = apiResponse.message;
+                        return default(T);
+                    //}
+                    
                 }
                 if (apiResponse.status != true)
                 {
@@ -147,7 +148,5 @@ namespace PayInc_Customer_web.Utility
                 return default(T);
             }
         }
-
-        
     }
 }

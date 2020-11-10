@@ -40,15 +40,6 @@
                     </div>
                     <div class="wizard-step" data-wizard-type="step">
                         <div class="wizard-wrapper">
-                            <div class="wizard-number">3</div>
-                            <div class="wizard-label">
-                                <div class="wizard-title">Amount</div>
-                                <div class="wizard-desc">Select Plan</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="wizard-step" data-wizard-type="step">
-                        <div class="wizard-wrapper">
                             <div class="wizard-number">4</div>
                             <div class="wizard-label">
                                 <div class="wizard-title">Receipt</div>
@@ -58,8 +49,7 @@
                     </div>
                 </div>
             </div>
-            <!--end::Wizard Nav-->
-            <!--begin::Card-->
+            
             <div class="card card-custom card-shadowless rounded-top-0">
                 <!--begin::Body-->
                 <div class="card-body p-0">
@@ -68,17 +58,19 @@
                             <!--begin::Wizard Form-->
                             <form class="form" id="kt_form">
                                 <div class="row justify-content-center">
-                                    <div class="col-xl-9">
-                                        <!--begin: Wizard Step 1-->
+                                    <div class="col-xl-12">
                                         <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Prepaid Mobile Number</h4>
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Mobile Number</label>
-                                                <input type="text" class="form-control" name="mobilenumber" placeholder="Enter Mobile Number" maxlength="10" />
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label>Mobile Number</label>
+                                                        <input type="text" class="form-control" name="mobilenumber" placeholder="Enter Mobile Number" id="txtMobileNo" maxlength="10" autocomplete="off" autofocus/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
 
+                                                </div>
                                             </div>
-                                            <!--end::Input-->
                                             <div class="d-flex justify-content-between border-top pt-10 mt-15">
                                                 <div class="mr-2">
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
@@ -88,84 +80,154 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--end: Wizard Step 1-->
-                                        <!--begin: Wizard Step 2-->
                                         <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Operator Name</h4>
-                                            <!--begin::Input-->
-                                            @{
-
-                                                var list = new List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>();
-                                                if (ViewBag.Operator != null)
-                                                {
-                                                    list = (List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>)ViewBag.Operator;
-                                                }
-                                            }
-                                            <div class="form-group">
-                                                <label>Operator</label>
-                                                <select name="operator" class="form-control">
-                                                    <option value="">Select Operator</option>
-                                                    @foreach (var item in list)
-                                                    {
-                                                        <option value="@item.serviceProviderId">@item.serviceProviderName</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
-                                                <div class="mr-2">
-                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" id="btn_step2" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end: Wizard Step 2-->
-                                        <!--begin: Wizard Step 3-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Select your plan/amount</h4>
-                                            <!--begin::Select-->
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group">
+                                                        <label>Mobile Number</label>
+                                                        <input type="text" class="form-control form-control-solid" name="mobilenumbers" maxlength="10" id="txtShowMobileNo" readonly />
+                                                    </div>
+                                                    @{
+                                                        var list = new List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>();
+                                                        if (ViewBag.Operator != null)
+                                                        {
+                                                            list = (List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>)ViewBag.Operator;
+                                                        }
+                                                    }
+                                                    <div class="form-group">
+                                                        <label>Operator</label>
+                                                        <select name="operator" id="ddlOperator" class="form-control">
+                                                            <option value="">Select Operator</option>
+                                                            @foreach (var item in list)
+                                                            {
+                                                                <option value="@item.serviceProviderId">@item.serviceProviderName</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label>Amount</label>
-                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount" id="txtamount"/>
+                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount" id="txtamount" />
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <td>Plan</td>
-                                                                <td>Plan Desc</td>
-                                                                <td>Amount</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Data Plan</td>
-                                                                <td>2GB data,unlimited outgoing call</td>
-                                                                <td>
-                                                                    <a href="#" data-amt="149" class="btn btn-icon btn-circle btn-primary select-plan">
-                                                                        <i class="text-white">149</i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Data Plan</td>
-                                                                <td>3GB data,unlimited outgoing call</td>
-                                                                <td>
-                                                                    <a href="#" data-amt="199" class="btn btn-icon btn-circle btn-primary select-plan">
-                                                                        <i class="text-white">199</i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
+                                                    <section id="plan_panel">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Combo Plan</a>
+                                                                    </li>
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Talktime</a>
+                                                                    </li>
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Roaming</a>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="tab-content" id="myTabContent">
+                                                                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <td>Plan</td>
+                                                                                    <td>Plan Desc</td>
+                                                                                    <td>Amount</td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>Data Plan</td>
+                                                                                    <td>2GB data,unlimited outgoing call</td>
+                                                                                    <td>
+                                                                                        <a href="#" data-amt="149" class="btn btn-icon btn-circle btn-primary select-plan">
+                                                                                            <i class="text-white">149</i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Data Plan</td>
+                                                                                    <td>3GB data,unlimited outgoing call</td>
+                                                                                    <td>
+                                                                                        <a href="#" data-amt="199" class="btn btn-icon btn-circle btn-primary select-plan">
+                                                                                            <i class="text-white">199</i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
 
-                                                    </table>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <td>Plan</td>
+                                                                                    <td>Plan Desc</td>
+                                                                                    <td>Amount</td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>Data Plan</td>
+                                                                                    <td>2GB data,unlimited outgoing call</td>
+                                                                                    <td>
+                                                                                        <a href="#" data-amt="149" class="btn btn-icon btn-circle btn-primary select-plan">
+                                                                                            <i class="text-white">149</i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Data Plan</td>
+                                                                                    <td>3GB data,unlimited outgoing call</td>
+                                                                                    <td>
+                                                                                        <a href="#" data-amt="199" class="btn btn-icon btn-circle btn-primary select-plan">
+                                                                                            <i class="text-white">199</i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <td>Plan</td>
+                                                                                    <td>Plan Desc</td>
+                                                                                    <td>Amount</td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>Data Plan</td>
+                                                                                    <td>2GB data,unlimited outgoing call</td>
+                                                                                    <td>
+                                                                                        <a href="#" data-amt="149" class="btn btn-icon btn-circle btn-primary select-plan">
+                                                                                            <i class="text-white">149</i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Data Plan</td>
+                                                                                    <td>3GB data,unlimited outgoing call</td>
+                                                                                    <td>
+                                                                                        <a href="#" data-amt="199" class="btn btn-icon btn-circle btn-primary select-plan">
+                                                                                            <i class="text-white">199</i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </section>
                                                 </div>
                                             </div>
-
                                             <div class="d-flex justify-content-between border-top pt-10 mt-15">
                                                 <div class="mr-2">
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
@@ -175,15 +237,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--end: Wizard Step 3-->
-                                        <!--begin: Wizard Step 4-->
                                         <div class="pb-5" data-wizard-type="step-content">
                                             <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
                                             <div class="my-5">
                                                 <div class="card card-custom overflow-hidden">
                                                     <div class="card-body p-0">
-                                                        <!-- begin: Invoice-->
-                                                        <!-- begin: Invoice header-->
+
                                                         <div class="row justify-content-center bgi-size-cover bgi-no-repeat py-8 px-8 py-md-27 px-md-0" style="background-image: url(../../assets/media/bg/bg-6.jpg);">
                                                             <div class="col-md-9">
                                                                 <div class="d-flex justify-content-between pb-5 pb-md-5 flex-column flex-md-row">
@@ -207,8 +266,7 @@
                                                                 <div class="border-bottom w-100 opacity-20"></div>
                                                             </div>
                                                         </div>
-                                                        <!-- end: Invoice header-->
-                                                        <!-- begin: Invoice body-->
+                                                        
                                                         <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
                                                             <div class="col-md-9">
                                                                 <div class="table-responsive">
@@ -233,8 +291,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- end: Invoice body-->
-                                                        <!-- begin: Invoice footer-->
+                                                        
                                                         <div class="row justify-content-right bg-gray-100 py-8 px-8 py-md-10 px-md-0">
                                                             <div class="col-md-10">
                                                                 <div class="font-size-lg">
@@ -260,7 +317,7 @@
 
                                             </div>
                                         </div>
-                                        <!--end: Wizard Step 4-->
+                                       
                                     </div>
                                 </div>
                             </form>
@@ -270,35 +327,24 @@
                 </div>
                 <!--end::Body-->
             </div>
-            <!--end::Card-->
+            
         </div>
-        <!--end::Wizard-->
+        
     </div>
 </div>
 <link href="~/assets/css/jquery.pinlogin.css" rel="stylesheet" />
 <script src="~/assets/js/jquery.pinlogin.min.js"></script>
 <script type="text/javascript">
     $(function () {
-
-        // ---- Single pincode input -----
-
         var loginpin = $('#loginpin').pinlogin({
             fields: 8,
             reset: false,
             complete: function (pin) {
 
             },
-
-
         });
-
-
     });
-    $(".select-plan").click(function (e) {
-        $(this).html('<i class="text-white fa fa-check"></i>');
-        $("#txtamount").val($(this).attr("data-amt"));
-        
-    });
+   
 </script>
 <div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -309,8 +355,26 @@
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
-            <div class="modal-body d-flex flex-center">
-                <div id="loginpin" style="max-width:80%"></div>
+            <div class="modal-body">
+                <div class="row  d-flex flex-center">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Mobile Number:</label>
+                            <label id="lblMobileNo" class="form-control-solid"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>Operator:</label>
+                            <label id="lblOperator"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount:</label>
+                            <label id="lblAmount"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-center">
+                    <div id="loginpin" style="max-width:80%"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

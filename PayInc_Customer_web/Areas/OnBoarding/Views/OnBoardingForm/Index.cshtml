@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewData["Title"] = "On Boarding";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/onboarding_wizard.css" rel="stylesheet" />
+<script src="~/js/onboarding_wizard.js"></script>
+<div class="card card-custom card-transparent">
+    <div class="card-body p-0">
+        <!--begin::Wizard-->
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
+            <!--begin::Wizard Nav-->
+            <div class="wizard-nav">
+                <div class="wizard-steps">
+                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">1</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Mobile Number</div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">2</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">PAN Verify</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">3</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Select Distributor</div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">4</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Verify Method</div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Wizard Nav-->
+            <!--begin::Card-->
+            <div class="card card-custom card-shadowless rounded-top-0">
+                <!--begin::Body-->
+                <div class="card-body p-0">
+                    <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <!--begin::Wizard Form-->
+                            
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-12">
+                                        <!--begin::Wizard Step 1-->
+                                        
+                                        <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                            <form class="form" id="step1_form" method="post" action="@Url.Action("VerifyMobileNumber","OnBoardingForm")">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label>Mobile Number</label>
+                                                            <input type="text" class="form-control form-control-solid" name="mobilenumber" placeholder="Mobile Number" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div>
+                                                                <button type="submit" id="btn_mobile_verify" class="btn btn-block btn-primary font-weight-bolder">Verify Mobile Number &nbsp;&nbsp;    <span class="loader" style="display:none"></span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <div class="row">
+                                                            <div class="col-6">
+
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="card card-custom card-stretch gutter-b">
+                                                                    <div class="card-body d-flex p-0">
+                                                                        <div class="flex-grow-1 p-20 bg-warning card-rounded flex-grow-1 bgi-no-repeat"
+                                                                             style="background-position: calc(100% + 0.5rem) bottom; background-size: 50% auto; background-image: url(/../../assets/media/svg/humans/custom-10.svg)">
+                                                                            <h2 class="text-inverse-warning pb-5 font-weight-bolder">OnBoarding Now</h2>
+                                                                            <p class="text-inverse-warning pb-5 font-size-h5">
+                                                                                Verify PAN and On Board your retailer
+                                                                                <br>OnBoard within few minutes
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="pb-5" data-wizard-type="step-content" id="step_pan_verfiy">
+                                            
+                                        </div>
+
+                                        <div class="pb-5" data-wizard-type="step-content" id="step_distributor">
+                                            
+                                        </div>
+                                        
+                                        <div class="pb-5" data-wizard-type="step-content" id="step_verify_method">
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            
+                            <!--end::Wizard Form-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Body-->
+            </div>
+            <!--end::Card-->
+        </div>
+        <!--end::Wizard-->
+    </div>
+</div>
+
+<div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">PIN Password for recharge</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body d-flex flex-center">
+                <div id="loginpin" style="max-width:80%"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <button type="button" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
+            </div>
+        </div>
+    </div>
+</div>

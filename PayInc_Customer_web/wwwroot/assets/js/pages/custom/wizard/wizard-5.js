@@ -22,25 +22,7 @@ var KTWizard5 = function () {
 			_wizard.stop();
 
 			// Validate form
-			var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-			validator.validate().then(function (status) {
-				if (status == 'Valid') {
-					_wizard.goNext();
-					KTUtil.scrollTop();
-				} else {
-					Swal.fire({
-						text: "Sorry, looks like there are some errors detected, please try again.",
-						icon: "error",
-						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
-						customClass: {
-							confirmButton: "btn font-weight-bold btn-light"
-						}
-					}).then(function () {
-						KTUtil.scrollTop();
-					});
-				}
-			});
+			_wizard.goNext();
 		});
 
 		// Change event
