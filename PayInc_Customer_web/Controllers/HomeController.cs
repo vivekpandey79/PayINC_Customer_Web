@@ -22,6 +22,7 @@ namespace PayInc_Customer_web.Controllers
 
         public IActionResult Index()
         {
+            GetDashboard();
             return View();
         }
 
@@ -41,11 +42,28 @@ namespace PayInc_Customer_web.Controllers
             try
             {
                 var listParam = new List<KeyValuePair<string, string>>();
-                listParam.Add(new KeyValuePair<string, string>());
+                listParam.Add(new KeyValuePair<string, string>("test","test"));
                 string errorMessage = string.Empty;
                 var response = new CallService().GetResponse<List<DashboardRes>>("getDashboardImages", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
+                    int i = 0;
+                    foreach (var item in response)
+                    {
+                        if (i==0)
+                        {
+                            item.imageUrl = "/assets/media/dashboard-images/1.png";
+                        }
+                        else if(i==1)
+                        {
+                            item.imageUrl = "/assets/media/dashboard-images/2.png";
+                        }
+                        else
+                        {
+                            item.imageUrl = "/assets/media/dashboard-images/3.png";
+                        }
+                        i = i + 1;
+                    }
                     ViewBag.DashboardImage = response;
                 }
                 else

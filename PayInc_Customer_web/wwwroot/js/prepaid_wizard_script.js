@@ -105,26 +105,55 @@
         // Validate form
         var validator = _validations[0]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
                 $("#txtShowMobileNo").val($("#txtMobileNo").val());
-                $("#lblMobileNo").val($("#txtMobileNo").val());
+                $("#lblMobileNo").text($("#txtMobileNo").val());
+                GetPLAN($("#txtMobileNo").val(), $("#ddlOperator").val())
                 _wizard1.goNext();
-
-            } else {
-
             }
         });
-        // _wizard1.goNext();
+    });
+
+    function GetPLAN(mobileno, operatorName) {
+        if (mobileno === "") {
+            return;
+        }
+        if (operatorName === "") {
+            return;
+        }
+        var loader = '<div class="spinner spinner-lg spinner-primary mr-15"></div>';
+        $("#viewplan_panel").html(loader);
+        $.ajax({
+            url: '/Recharge/Prepaid/GetMobilePlans',
+            type: "POST",
+            data: { mobileNumber: mobileno, operatorName: operatorName },
+            success: function (data) {
+                $("#viewplan_panel").html(data);
+            },
+            error: function (er) {
+                $("#viewplan_panel").html('');
+            }
+        });
+    }
+
+
+    $("#txtMobileNo").keyup(function () {
+        var mobileNumber = $("#txtMobileNo").val();
+        if (mobileNumber.length === 10)
+        {
+            $("#txtShowMobileNo").val($("#txtMobileNo").val());
+            $("#lblMobileNo").text($("#txtMobileNo").val());
+            _wizard1.goNext();
+            GetPLAN($("#txtMobileNo").val(), $("#ddlOperator").val());
+        }
     });
 
     $("#btn_step2").click(function (e) {
         e.preventDefault();
         var validator = _validations[1]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
                 _wizard1.goNext();
-
-            } else {
 
             }
         });
@@ -134,8 +163,9 @@
     });
     $("#enter_tpin").click(function (e) {
         e.preventDefault();
-        $("#lblMobileNo").val($("#txtMobileNo").val());
+        $("#lblMobileNo").text($("#txtMobileNo").val());
         $("#lblOperator").text($("#ddlOperator option:selected").text());
+        $("#lblAmount").text($("#txtamount").val());
         $('#mymodal').modal('show');
     });
     $("#btn_step3").click(function (e) {
@@ -143,11 +173,9 @@
         $('#mymodal').modal('hide');
         var validator = _validations[2]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
 
                 _wizard1.goNext();
-
-            } else {
 
             }
         });
@@ -156,6 +184,14 @@
     $(".select-plan").click(function (e) {
         $(this).html('<i class="text-white fa fa-check"></i>');
         $("#txtamount").val($(this).attr("data-amt"));
+        $("#lblMobileNo").text($("#txtMobileNo").val());
+        $("#lblOperator").text($("#ddlOperator option:selected").text());
+        $("#lblAmount").text($("#txtamount").val());
         $('#mymodal').modal('show');
     });
+
+    $("#ddlOperator").change(function (e) {
+        GetPLAN($("#txtMobileNo").val(), $("#ddlOperator option:selected").text())
+    });
+    
 })

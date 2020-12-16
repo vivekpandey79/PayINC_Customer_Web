@@ -1,0 +1,29 @@
+﻿@model PayInc_Customer_web.Areas.Recharge.Models.MPlansResponse
+
+@if (Model != null)
+{
+    <div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Plan Desc</td>
+                    <td>Amount</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.records)
+                {
+                    <tr>
+                        <td>@item.desc</td>
+                        <td>
+                            <a href="#" data-amt="@item.rs" class="btn btn-icon btn-circle btn-primary select-plan">
+                                <i class="text-white">@item.rs</i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <script src="~/js/prepaid_wizard_script.js"></script>
+}

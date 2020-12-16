@@ -93,11 +93,8 @@
         // Validate form
         var validator = _validations[0]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
                 _wizard1.goNext();
-
-            } else {
-               
             }
         });
         // _wizard1.goNext();
@@ -107,14 +104,36 @@
         e.preventDefault();
         var validator = _validations[1]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
-                _wizard1.goNext();
+            if (status === 'Valid') {
 
-            } else {
-               
+                _wizard1.goNext();
+                GetDTHPlan($("#txtAccountNo").val(), $("#ddlOperator option:selected").text());
             }
         });
     });
+
+    function GetDTHPlan(accountNo, operatorName) {
+        if (accountNo === "") {
+            return;
+        }
+        if (operatorName === "") {
+            return;
+        }
+        var loader = '<div class="spinner spinner-lg spinner-primary mr-15"></div>';
+        $("#customer_details_panel").html(loader);
+        $.ajax({
+            url: '/Recharge/DTH/GetDTHPlans',
+            type: "POST",
+            data: { accountName: accountNo, operatorName: operatorName },
+            success: function (data) {
+                alert(data)
+                $("#customer_details_panel").html(data);
+            },
+            error: function (er) {
+                $("#customer_details_panel").html('');
+            }
+        });
+    }
     $('.prev-step').click(function (e) {
         _wizard1.goPrev();
     });
@@ -127,11 +146,9 @@
         $('#mymodal').modal('hide'); 
         var validator = _validations[2]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
                 
                 _wizard1.goNext();
-
-            } else {
 
             }
         });

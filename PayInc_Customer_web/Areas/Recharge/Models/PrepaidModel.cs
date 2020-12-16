@@ -27,4 +27,21 @@ namespace PayInc_Customer_web.Areas.Recharge.Models
         public string serviceProviderImage { get; set; }
     }
 
+
+    public class PlanRecord
+    {
+        public string rs { get; set; }
+        public string desc { get; set; }
+    }
+
+    public class MPlansResponse
+    {
+        public string tel { get; set; }
+        public string @operator { get; set; }
+        public List<PlanRecord> records { get; set; }
+        public int status { get; set; }
+        public double time { get; set; }
+    }
+
+
 }

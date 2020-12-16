@@ -1,0 +1,76 @@
+﻿@model List<PayInc_Customer_web.Areas.OnBoarding.Models.LowChainResponse>
+@{
+    ViewData["Title"] = "View Network";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="d-flex flex-row">
+    <div class="flex-row-fluid">
+        <!--begin::Card-->
+        <div class="card card-custom">
+            <div class="card-body px-0">
+                <div class="table-responsive">
+                    @if (Model != null)
+                    {
+                        if (Model.Count > 0)
+                        {
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>MobileNumber</td>
+                                        <td>EmailAddress</td>
+                                        <td>Role</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@(item.firstName+" "+item.lastName)</td>
+                                            <td>@item.mobileNumber</td>
+                                            <td>@item.emailAddress</td>
+                                            <td>@item.customerRoleDesc</td>
+                                            <td>
+                                                <a href="@Url.Action("ViewNetwork","ViewNetworks",new { customerId=item.customerId })" class="btn btn-light-success font-weight-bolder font-size-sm view-network">View Networks</a>
+                                            </td>
+                                        </tr>
+                                        <tr style="display:none" class="network-row">
+                                            <td colspan="999">
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-secondary spinner spinner-dark spinner-right">
+                                                        Please wait
+                                                    </button>
+                                                </div>
+                                                
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".view-network").click(function (e) {
+        e.preventDefault();
+        $(this).parent().parent().next().show();
+        var nextTable = $(this).parent().parent().next().children();
+        var url = this.href;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                nextTable.html(data);
+            }
+        });
+    })
+</script>

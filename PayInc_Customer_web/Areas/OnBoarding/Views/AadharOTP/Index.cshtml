@@ -1,0 +1,765 @@
+﻿@model PayInc_Customer_web.Areas.OnBoarding.Models.ManualKYCModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Aadhar OTP - KYC Form</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <link href="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="~/assets/media/logos/favicon.ico" />
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <link href="~/assets/css/pages/wizard/wizard-5.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/aadhar_otp_wizard.js"></script>
+</head>
+<body>
+
+    @if (ViewData["ErrorMessage"] == null)
+    {
+        <div class="card card-custom">
+            <!--begin::Card Body-->
+            <div class="card-body p-0">
+                <!--begin::Wizard 5-->
+                <h1 class="text-center m-5">
+                    Aadhar OTP - On-Boarding Retailer Activation Form
+                </h1>
+                <div class="wizard wizard-5 d-flex flex-column flex-lg-row flex-row-fluid" id="kt_wizard">
+                    <!--begin::Aside-->
+                    <div class="wizard-aside bg-white d-flex flex-column flex-row-auto w-100 w-lg-300px w-xl-400px w-xxl-500px">
+                        <!--begin::Aside Top-->
+                        <div class="d-flex flex-column-fluid flex-column px-xxl-30 px-10">
+                            <!--begin: Wizard Nav-->
+                            <div class="wizard-nav d-flex d-flex justify-content-center pt-10 pt-lg-20 pb-5">
+                                <!--begin::Wizard Steps-->
+                                <div class="wizard-steps">
+                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" data-wizard-clickable="false">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">1</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Verify Mobile Number</h3>
+                                                <div class="wizard-desc">Activation verification</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-step" data-wizard-type="step" data-wizard-clickable="false">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">2</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Verify PAN </h3>
+                                                <div class="wizard-desc">Upload PAN CARD Image</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-step" data-wizard-type="step">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">3</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Address Proof</h3>
+                                                <div class="wizard-desc">Upload Aadhaar Number</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-step" data-wizard-type="step">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">4</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Basic Details</h3>
+                                                <div class="wizard-desc">Basic Proof</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-step" data-wizard-type="step">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">5</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Verify Bank</h3>
+                                                <div class="wizard-desc">Bank Proof</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-step" data-wizard-type="step">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">6</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Declaration</h3>
+                                                <div class="wizard-desc">Terms and Condtions</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-step" data-wizard-type="step">
+                                        <div class="wizard-wrapper">
+                                            <div class="wizard-icon">
+                                                <i class="wizard-check ki ki-check"></i>
+                                                <span class="wizard-number">7</span>
+                                            </div>
+                                            <div class="wizard-label">
+                                                <h3 class="wizard-title">Acknowledgement</h3>
+                                                <div class="wizard-desc"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-content bg-gray-100 d-flex flex-column flex-row-fluid py-10 px-5 px-lg-10">
+                        <div class="text-right mb-3">
+                            <span class="font-weight-bold text-muted font-size-h5">Already having?</span>
+                            <a href="/Login" class="font-weight-bolder text-primary font-size-h4" id="kt_login_signup">Login Here</a>
+                        </div>
+                        <div class="justify-content-center pl-10 pr-10">
+                            <form class="form" action="@Url.Action("VerifyMobileNumber","AadharOTP")" method="post" id="form_verify_mobile">
+                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                    <div class="pb-10 pb-lg-15">
+                                        <h3 class="font-weight-bolder text-dark font-size-h2">Start On-Boarding - Verify Mobile Number</h3>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Mobile Number</label>
+                                        <label class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">@ViewData["BoardedMobile"]</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Name</label>
+                                        <label class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">@ViewData["BoardedName"]</label>
+                                    </div>
+                                    <div class="d-flex justify-content-between pt-3">
+                                        <div class="mr-2">
+                                            <button type="button" class="btn btn-light-primary font-weight-bolder font-size-h6 pl-6 pr-8 py-4 my-3 mr-3" data-wizard-type="action-prev">
+                                                <span class="svg-icon svg-icon-md mr-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect fill="#000000" opacity="0.3" transform="translate(15.000000, 12.000000) scale(-1, 1) rotate(-90.000000) translate(-15.000000, -12.000000)" x="14" y="7" width="2" height="10" rx="1" />
+                                                            <path d="M3.7071045,15.7071045 C3.3165802,16.0976288 2.68341522,16.0976288 2.29289093,15.7071045 C1.90236664,15.3165802 1.90236664,14.6834152 2.29289093,14.2928909 L8.29289093,8.29289093 C8.67146987,7.914312 9.28105631,7.90106637 9.67572234,8.26284357 L15.6757223,13.7628436 C16.0828413,14.136036 16.1103443,14.7686034 15.7371519,15.1757223 C15.3639594,15.5828413 14.7313921,15.6103443 14.3242731,15.2371519 L9.03007346,10.3841355 L3.7071045,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(9.000001, 11.999997) scale(-1, -1) rotate(90.000000) translate(-9.000001, -11.999997)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>Previous
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_verify_mobile">
+                                                Next Step
+                                                <span class="svg-icon svg-icon-md ml-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                            <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            <form id="form_upload_pan_verify" class="form" action="@Url.Action("SubmitPAN","AadharOTP")" method="post" enctype="multipart/form-data">
+                                <div class="pb-5" data-wizard-type="step-content">
+                                    <div class="pb-10 pb-lg-15">
+                                        <h3 class="font-weight-bolder text-dark font-size-h2">Upload PAN</h3>
+                                    </div>
+                                    <section id="upload_section">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Upload Front PAN</label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <div class="dropzone dropzone-default" id="kt_dropzone_1">
+                                                    <div class="dropzone-msg dz-message needsclick">
+                                                        <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
+                                                        <span class="dropzone-msg-desc">
+                                                            PAN Upload
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-5">
+                                            <div class="col-4"></div>
+                                            <div class="col-8">
+                                                <div class="form-group">
+                                                    <a id="btn_fetch_pan" class="btn btn-block btn-success font-weight-bolder">
+                                                        Upload and Verify PAN Details
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </section>
+                                    <section id="pan_fetch_section" style="display:none">
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Your PAN matched. [Name: <span id="lblNamePercent"></span>%, PAN Number: <span id="lblPANPercent"></span>%, FatherName: <span id="lblFNamePercent"></span>%] </label>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">100%</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">PAN CARD Number</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" readonly name="pancard" placeholder="Enter your PAN Number" id="txtfetchPanNumber" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Full Name</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" readonly name="pancard" placeholder="Enter your Full Name" id="txtPanFullName" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Father Name</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" readonly name="pancard" placeholder="Enter your Father Name" id="txtPanFatherName" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Date Of Birth</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" readonly name="pancard" placeholder="DD/MM/YYYY" id="txtPanDOB" />
+                                        </div>
+                                        <div class="d-flex justify-content-between pt-3">
+                                            <div>
+                                                <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_upload_pan">
+                                                    Next Step
+                                                    <span class="svg-icon svg-icon-md ml-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                                <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </form>
+
+
+
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <div class="pb-10 pb-lg-15">
+                                    <h3 class="font-weight-bolder text-dark font-size-h2">Address Proof</h3>
+                                    <div class="text-muted font-weight-bold font-size-h4">Aadhar Number and OTP</div>
+                                </div>
+                                <section id="aadhar_section">
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Aadhaar Number/VID</label>
+                                        @Html.TextBoxFor(m => m.DLNumber, new { @class = "form-control h-auto p-5 border-0 rounded-lg font-size-h6", id = "txtdlnumber",autocomplete="off" ,placeholder = "Enter your Aadhaar Number/ VID" })
+                                        @Html.ValidationMessageFor(m => m.DLNumber, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-lg-4 col-md-9 col-sm-12">
+                                            <a href="javascript:;" id="btn_fetch_otp" class="btn btn-block btn-primary font-weight-bolder">
+                                                Get Aadhar OTP
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </section>
+                                <section id="aadhar_otp_panel" style="display:none;">
+                                    <div class="d-flex justify-content-center">
+                                        <form class="form digit-group" id="form_aadhar_otp" data-group-name="digits" data-autosubmit="false" autocomplete="off" action="@Url.Action("GetAadharOTP","AadharOTP")">
+                                            <div class="text-muted font-weight-bold text-center">Enter Aadhar OTP</div>
+                                            <div class="form-group mb-10">
+                                                <input type="text" id="digit-1" name="digit-1" data-next="digit-2" class="form-control-solid" />
+                                                <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
+                                                <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
+                                                <span class="splitter">&ndash;</span>
+                                                <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
+                                                <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
+                                                <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" class="form-control-solid" />
+                                            </div>
+                                            <div class="form-group d-flex flex-wrap flex-center mt-10">
+                                                <button id="btn_otp_submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                                <form id="form_address" class="form" action="@Url.Action("SubmitAddressProof","AadharOTP")" method="post">
+                                    <section id="dl_fetch_form" style="display:none">
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">DL Number</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchDLNo" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Name</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchDLName" readonly />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">Address</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchAddress" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">City</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchCity" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-size-h6 font-weight-bolder text-dark">State</label>
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchState" readonly />
+                                        </div>
+                                        <div class="d-flex justify-content-between pt-3">
+                                            <div>
+                                                <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_upld_address">
+                                                    Next Step
+                                                    <span class="svg-icon svg-icon-md ml-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                                <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </form>
+                            </div>
+
+
+
+                            <div data-wizard-type="step-content">
+                                <!--begin::Title-->
+                                @* <form id="form_basic_details" action="@Url.Action("BasicDetails","ManualForm")">*@
+                                <div class="pb-10 pb-lg-15">
+                                    <h3 class="font-weight-bolder text-dark font-size-h2">Basic Details</h3>
+                                    <div class="text-muted font-weight-bold font-size-h4">Personal details</div>
+                                </div>
+                                <div class="accordion accordion-toggle-arrow" id="accordionExample4">
+                                    <div class="card">
+                                        <div class="bg-white card-header" id="headingOne4">
+                                            <div class="card-title" data-toggle="collapse" data-target="#collapseOne4">
+                                                <i class="flaticon2-layers-1"></i> Personal Details
+                                            </div>
+                                        </div>
+                                        <div id="collapseOne4" class=" collapse show" data-parent="#accordionExample4">
+                                            <div class="pl-5 pr-5">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bolder text-dark">Name:</label>
+                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Name" id="txtBasicName" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="font-weight-bolder text-dark">Father Name:</label>
+                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Father Name" id="txtBasicFatherName" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="font-weight-bolder text-dark">Date of Birth:</label>
+                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter date of birth" id="txtBasicDateOfBirth" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="font-weight-bolder text-dark">Mobile Number</label>
+                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Mobile Number" id="txtBasicMobileNumber" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="font-weight-bolder text-dark">Email Address</label>
+                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter Email Address" />
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Gender</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- SELECT GENDER --</option>
+                                                            <option value="1">Male</option>
+                                                            <option value="2">Female</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Maritial Status</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select Maritial Status --</option>
+                                                            <option value="1">Married</option>
+                                                            <option value="2">UnMarried</option>
+                                                            <option value="3">Divorced</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Caste</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select Caste --</option>
+                                                            <option value="1">General</option>
+                                                            <option value="2">SC/ST</option>
+                                                            <option value="3">OBC</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Educational Qualification</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select Education --</option>
+                                                            <option value="1">SSC</option>
+                                                            <option value="2">HSC</option>
+                                                            <option value="3">Graduate</option>
+                                                            <option value="4">Post-Graduate</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Mobile Operator</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select Mobile Operator --</option>
+                                                            <option value="1">Vodafone/Idea</option>
+                                                            <option value="2">JIO</option>
+                                                            <option value="3">Airtel</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Physically Disabled</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select --</option>
+                                                            <option value="1">Yes</option>
+                                                            <option value="2">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Occupation Type</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select --</option>
+                                                            <option value="1">Public Sector</option>
+                                                            <option value="2">Private Sector</option>
+                                                            <option value="3">Self Employeed</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Entity Type</label>
+                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
+                                                            <option>-- Select --</option>
+                                                            <option value="1">Individual</option>
+                                                            <option value="2">Sole Properitor ship</option>
+                                                            <option value="3">Partnership firm</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-4">
+                                                        <a href="javascript:;" class="btn btn-block btn-primary collapsed" data-toggle="collapse" data-target="#collapseTwo4">Next</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="bg-white card-header" id="headingTwo4">
+                                            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo4">
+                                                <i class="flaticon2-copy"></i> Address Proof
+                                            </div>
+                                        </div>
+                                        <div id="collapseTwo4" class="collapse" data-parent="#accordionExample4">
+                                            <div class="pl-5 pr-5">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bolder text-dark">Address</label>
+                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="address" readonly placeholder="Enter Address" id="txtBasicAddress" />
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">State</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="state" readonly placeholder="Enter State" id="txtBasicState" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">City</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="city" readonly placeholder="Enter City" id="txtBasicCity" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">District</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter District" id="txtBasicDist" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="font-weight-bolder text-dark">Landmark</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter Landmark" id="txtBasicLandmark" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-4">
+                                                        <a href="javascript:;" class="btn btn-block btn-primary collapsed" data-toggle="collapse" data-target="#collapseThree4">Next</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="bg-white card-header" id="headingThree4">
+                                            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree4">
+                                                <i class="flaticon2-bell-alarm-symbol"></i> Outlet Details
+                                            </div>
+                                        </div>
+                                        <div id="collapseThree4" class="collapse" data-parent="#accordionExample4">
+                                            <div class="pl-5 pr-5">
+                                                <form id="form_basic_details" action="@Url.Action("BasicDetails","AadharOTP")" method="post">
+                                                    <div class="form-group">
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="Checkboxes1" id="chk_same_address" />
+                                                            <span></span>
+                                                            &nbsp; Same as Address Proof
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Address</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg" name="firstname" placeholder="Enter Address" id="txtOutletAddress" />
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">State</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter State" id="txtOutletState" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">City</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter City" id="txtOutletCity" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">District</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter District" id="txtOutletDistrict" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Landmark</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter Landmark" id="txtOutletLandmark" />
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_basic_details">
+                                                        Next Step
+                                                        <span class="svg-icon svg-icon-md ml-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                                    <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                @*<div class="d-flex justify-content-between pt-3">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_basic_details">
+                                                Next Step
+                                                <span class="svg-icon svg-icon-md ml-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                            <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>*@
+                                @* </form>*@
+
+                            </div>
+
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <form id="form_bankdetails" action="@Url.Action("BankDetails","AadharOTP")">
+                                    <div class="pb-10 pb-lg-15">
+                                        <h3 class="font-weight-bolder text-dark font-size-h2">Bank Details</h3>
+                                        <div class="text-muted font-weight-bold font-size-h4">Account Number and Banks </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Bank Name</label>
+                                        @Html.DropDownList("ddlBank", new List<SelectListItem> { new SelectListItem { Text = "Loading Bank" } }, new { @class = "form-control h-auto p-5 border-0 rounded-lg font-size-h6" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Account Number</label>
+                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="firstname" placeholder="Enter Account Number" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">IFSC Code</label>
+                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="firstname" placeholder="Enter IFSC Code" />
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Upload Cancelled Cheque</label>
+                                        <div class="col-lg-4 col-md-9 col-sm-12">
+                                            <div class="dropzone dropzone-default" id="kt_dropzone_5">
+                                                <div class="dropzone-msg dz-message needsclick">
+                                                    <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
+                                                    <span class="dropzone-msg-desc">
+                                                        Cancelled Cheque Upload
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between pt-3">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_bankdetails">
+                                                Next Step
+                                                <span class="svg-icon svg-icon-md ml-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                            <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <label class="radio radio-primary">
+                                    <input type="radio" name="rdbdeclaration" value="1" checked="checked" />
+                                    <span></span>
+                                    I here by declared that, all provided document is correct proof.
+                                </label>
+                                <div class="d-flex justify-content-between pt-3">
+                                    <div>
+                                        <button type="button" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" data-wizard-type="action-next">
+                                            Next Step
+                                            <span class="svg-icon svg-icon-md ml-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                        <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <!--begin::Title-->
+                                <h3>Your On Boarding Process in Verfication</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";</script>
+        <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1400 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#3699FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#E4E6EF", "dark": "#181C32" }, "light": { "white": "#ffffff", "primary": "#E1F0FF", "secondary": "#EBEDF3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#3F4254", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#EBEDF3", "gray-300": "#E4E6EF", "gray-400": "#D1D3E0", "gray-500": "#B5B5C3", "gray-600": "#7E8299", "gray-700": "#5E6278", "gray-800": "#3F4254", "gray-900": "#181C32" } }, "font-family": "Poppins" };</script>
+        <script src="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/js/aadhar_otp_dropzonejs.js"></script>
+        <div class="modal fade" id="pan_dl_comp_modal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Comparison PAN vs Driving License</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td>PAN Details</td>
+                                        <td>DL Details</td>
+                                        <td>Status</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><label id="lbl_match_panname">NA</label></td>
+                                        <td><label id="lbl_match_dlname">NA</label></td>
+                                        <td><label id="lbl_match_percentage">0</label>%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="thumbnail">
+                                                <img src="~/assets/media/users/default.jpg" alt="Lights" id="imgKYC1" style="width:140px;height:140px;">
+                                                <div class="caption">
+                                                    <p>PAN CARD PHOTO</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="thumbnail">
+                                                <img src="~/assets/media/users/default.jpg" alt="Lights" id="imgKYC2" style="width:140px;height:140px;">
+                                                <div class="caption">
+                                                    <p>Driving License PHOTO</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><label id="lbl_face_match_percent">0</label>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            .digit-group input {
+                width: 30px;
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+                font-size: 24px;
+                font-family: 'Raleway', sans-serif;
+                font-weight: 200;
+                margin: 0 2px;
+            }
+            .splitter {
+                padding: 0 5px;
+                color: black;
+                font-size: 24px;
+            }
+        </style>
+    }
+    else
+    {
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <h1 class="text-center m-5">
+                    @ViewData["ErrorMessage"]
+                </h1>
+            </div>
+        </div>
+    }
+</body>
+</html>

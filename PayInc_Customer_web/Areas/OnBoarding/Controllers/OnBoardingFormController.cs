@@ -14,6 +14,7 @@ using PayInc_Customer_web.Utility;
 namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
 {
     [Area("OnBoarding")]
+    [Authentication]
     public class OnBoardingFormController : Controller
     {
         public IActionResult Index()
@@ -37,6 +38,14 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 }
                 else
                 {
+                    var listParam1 = new List<KeyValuePair<string, string>>();
+                    listParam1.Add(new KeyValuePair<string, string>("mobileNumber", fc["mobilenumber"]));
+                    string errorMessage1 = string.Empty;
+                    var reponse1 = new CallService().GetResponse<List<OnBoardedResp>>("getDetailsCustomerOnboarding", listParam1, ref errorMessage1);
+                    if (string.IsNullOrEmpty(errorMessage1))
+                    {
+                        return Json(new { success = true, errorMessage = "This mobile number already in on-boarding proccess." });
+                    }
                     return PartialView("VerifyPAN");
                 }
             }
@@ -108,26 +117,26 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var httpContextAccessor = new HttpContextAccessor();
                 var result = httpContextAccessor.HttpContext.Session.GetString("LoginDetails");
                 var obj = JsonConvert.DeserializeObject<LoginResData>(result);
-                var listParam = new List<KeyValuePair<string,string>>();
-                listParam.Add(new KeyValuePair<string, string>("cutomerId",Convert.ToString(obj.customerId)));
-                string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<List<LowChainResponse>>("getViewCustomerNetwork", listParam ,ref errorMessage);
-                if (response.Count>0)
+                if (obj.customerRoleId!=5)
                 {
-                    foreach (var item in response)
+                    var listParam = new List<KeyValuePair<string, string>>();
+                    listParam.Add(new KeyValuePair<string, string>("parentMobileNumber", Convert.ToString(obj.mobileNumber)));
+                    string errorMessage = string.Empty;
+                    var response = new CallService().GetResponse<List<LowChainResponse>>("getNetworkADByNumber", listParam, ref errorMessage);
+                    if (response.Count > 0)
                     {
-                        item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName+" - "+item.customerRoleDesc;
-                    }
-                    if (response.Where(m=>m.customerRoleDesc=="MD").ToList().Count>0)
-                    {
-                        ViewBag.MDList = response.Where(m => m.customerRoleDesc == "MD").ToList();
-                    }
-                    if (response.Where(m=>m.customerRoleDesc=="AD").ToList().Count>0)
-                    {
-                        ViewBag.ADList = response.Where(m => m.customerRoleDesc == "AD").ToList();
+                        foreach (var item in response)
+                        {
+                            item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName + " - " + item.customerRoleDesc;
+                        }
+                        ViewBag.ADList = response.ToList();
                     }
                 }
-                return PartialView("DistributorList", response);
+                else
+                {
+                    ViewData["ADCustomerName"] = obj.mobileNumber + " - " + obj.firstName + " " + obj.lastName + " - " + obj.customerRoleDesc;
+                }
+                return PartialView("DistributorList");
             }
             catch (Exception ex)
             {
@@ -140,6 +149,14 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
+                if (GetSession<LoginResData>("LoginDetails").customerRoleId==5)
+                {
+                    return PartialView("VerifyMethod");
+                }
+                if (fc["ddlADlist"]=="")
+                {
+                    return Json(new { success = true, errorMessage = "Please select Distributor"  });
+                }
                 SetSession("distributorId", fc["ddlADlist"]);
                 return PartialView("VerifyMethod");
             }
@@ -163,7 +180,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     lastName = "",
                     fatherName = GetStringSession("panfatherName"),
                     dob = 0,
-                    parentCustomerId = Convert.ToInt64(GetStringSession("distributorId")),
+                    parentCustomerId = Convert.ToInt64(GetStringSession("distributorId") ?? Convert.ToString(GetSession<LoginResData>("LoginDetails").customerId)),
                     submittedBy = GetSession<LoginResData>("LoginDetails").customerId,
                     kycChannel = "Manual",
                     remarks = "OnBoarding Request"
@@ -198,13 +215,13 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                         {
                             item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName + " - " + item.customerRoleDesc;
                         }
-                        if (response.Where(m => m.customerRoleDesc == "MD").ToList().Count > 0)
+                        if (response.Where(m => m.customerRoleDesc == "PARTNER").ToList().Count > 0)
                         {
-                            return Json(new { success = true, role = "MD", responseData = response.Where(m => m.customerRoleDesc == "MD").ToList() });
+                            return Json(new { success = true, role = "PARTNER", responseData = response.Where(m => m.customerRoleDesc == "PARTNER").ToList() });
                         }
-                        if (response.Where(m => m.customerRoleDesc == "AD").ToList().Count > 0)
+                        if (response.Where(m => m.customerRoleDesc == "DISTRIBUTOR").ToList().Count > 0)
                         {
-                            return Json(new { success = true, role = "AD", responseData = response.Where(m => m.customerRoleDesc == "AD").ToList() });
+                            return Json(new { success = true, role = "DISTRIBUTOR", responseData = response.Where(m => m.customerRoleDesc == "DISTRIBUTOR").ToList() });
                         }
                     }
                 }

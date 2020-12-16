@@ -45,6 +45,8 @@ namespace PayInc_Customer_web
             services.AddControllersWithViews();
             #region SET ALL APP SETTINGS GET AND SET
             AppSetting.Add("WebApiUrl", Configuration.GetSection("AppSettings").GetSection("WebApiUrl").Value);
+            AppSetting.Add("FileUploadUrl", Configuration.GetSection("AppSettings").GetSection("FileUploadUrl").Value);
+            AppSetting.Add("ManualVideoVerifyUrl", Configuration.GetSection("AppSettings").GetSection("ManualVideoVerifyUrl").Value);
             #endregion
             services.AddMvc(option => option.EnableEndpointRouting = false);
 

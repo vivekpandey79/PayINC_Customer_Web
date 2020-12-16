@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Submit Activation KIT Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form>
+            <div class="form-group row">
+                <label class="col-form-label text-left col-lg-2 col-sm-12">Number of KIT Request</label>
+                <div class="col-lg-6 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="flaticon2-hospital"></i></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Number of KIT" maxlength="5" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-form-label text-left col-lg-2 col-sm-12">Description</label>
+                <div class="col-lg-6 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <textarea class="form-control" placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-12 ml-lg-auto">
+                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

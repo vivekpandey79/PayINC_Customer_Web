@@ -2,8 +2,15 @@
   {
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
-      "wwwroot/css/site.css",
-      "wwwroot/css/custom.css"
+      //"wwwroot/css/site.css",
+      //"wwwroot/css/custom.css",
+      "wwwroot/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css",
+      "wwwroot/assets/plugins/global/plugins.bundle.css",
+      "wwwroot/assets/plugins/custom/prismjs/prismjs.bundle.css",
+      "wwwroot/assets/css/themes/layout/header/base/light.css",
+      "wwwroot/assets/css/themes/layout/header/menu/light.css",
+      "wwwroot/assets/css/themes/layout/brand/dark.css",
+      "wwwroot/assets/css/themes/layout/aside/dark.css"
     ],
     "minify": {
       "enabled": true,
@@ -14,11 +21,15 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/js/site.js",
+      "wwwroot/assets/js/pages/widgets.js"
+      //"wwwroot/assets/plugins/custom/prismjs/prismjs.bundle.js",
+      //"wwwroot/assets/js/scripts.bundle.js",
+      //"wwwroot/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"
     ],
     "minify": {
       "enabled": true,
-      "renameLocals": true
+      "renameLocals": false
     },
     "sourceMap": false
   }

@@ -13,8 +13,12 @@ namespace PayInc_Customer_web.Models
         [Required(ErrorMessage = "Please enter password")]
         [MinLength(8,ErrorMessage ="Please enter 8 digit password")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Please enter mobile number")]
+        public string MobileNumber { get; set; }
     }
-     
+
+
     public class LoginResData
     {
         public int customerId { get; set; }

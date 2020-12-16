@@ -1,0 +1,20 @@
+﻿@model List<PayInc_Customer_web.Areas.PaymentManagement.Models.PaymentTypeRes>
+
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-3">
+            <a href="#" class="symbol symbol-lg-150 symbol-light-success payment-mode" data-item="@item.paymentModeId">
+                <span class="symbol-label">
+                    <span class="fas fa-credit-card icon-8x">
+                    </span>
+                </span>
+                <span class="clearfix text-center">@item.subPaymentModeName</span>
+            </a>
+        </div>
+    }
+</div>
+<script src="~/js/paymentrequest_wizard.js"></script>
+
+

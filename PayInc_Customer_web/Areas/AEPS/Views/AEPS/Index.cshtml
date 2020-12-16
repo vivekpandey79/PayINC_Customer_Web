@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "AEPS Services";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card p-5">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-sm-12">
+            <form class="form" id="kt_form_1" method="post" action="@Url.Action("RegisterAgent","AEPS")">
+                <div class="form-group row">
+                    <label class="col-form-label text-left col-lg-2 col-sm-12">Agent Name</label>
+                    <div class="col-lg-10 col-md-9 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-user"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="agentname" placeholder="Enter your agent name" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label text-left col-lg-2 col-sm-12">Shop Name</label>
+                    <div class="col-lg-10 col-md-9 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-hospital"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="shopname" placeholder="Enter Shop Name" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label text-left col-lg-2 col-sm-12">Pin Code</label>
+                    <div class="col-lg-10 col-md-9 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="flaticon2-location"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="pincode" placeholder="Enter Pin Code" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label text-left col-lg-2 col-sm-12">Pancard Number</label>
+                    <div class="col-lg-10 col-md-9 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="flaticon-price-tag"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="pannumber" placeholder="Enter Pancard Number" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label text-left col-lg-2 col-sm-12">Aadhar Number</label>
+                    <div class="col-lg-10 col-md-9 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="flaticon-price-tag"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="aadharnumber" placeholder="Enter Aadhar Number" maxlength="12" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label text-left col-lg-2 col-sm-12">Address</label>
+                    <div class="col-lg-10 col-md-9 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="flaticon2-location"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="address" placeholder="Enter Address" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-10 ml-lg-auto">
+                        <button type="submit" class="btn btn-primary font-weight-bold mr-2">Create Agent Now</button>
+                        <button type="reset" class="btn btn-light-primary font-weight-bold">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+</div>

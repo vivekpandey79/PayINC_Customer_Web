@@ -1,0 +1,358 @@
+﻿
+@{
+    ViewData["Title"] = "Beneficiary - Domestic Money Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row m-2">
+            <div class="col-4">
+                <label class="form-control form-control-solid">8898862556</label>
+            </div>
+            <div class="col-4">
+                <label class="form-control form-control-solid">Vivek Suryakumar Pandey</label>
+            </div>
+            <div class="col-4">
+                <div class="">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Total Limit</label>
+                        <label>₹ 10000</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Available Limit</label>
+                        <label>₹ 5600</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" id="btn_add_beneficiary"><span class="fa fa-plus"></span> Add Beneficiary</button>
+            </div>
+        </div>
+        <div class="row table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>
+                            Beneficiary ID
+                        </td>
+                        <td>
+                            Beneficiary Name
+                        </td>
+                        <td>
+                            Bank
+                        </td>
+                        <td>
+                            Account No
+                        </td>
+                        <td>
+                            Status
+                        </td>
+                        <td>
+                            -
+                        </td>
+                        <td>
+                            -
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            Vivek Pandey
+                        </td>
+                        <td>
+                            ICICI Bank
+                        </td>
+                        <td>
+                            123801519956
+                        </td>
+                        <td>
+                            <span class="text-success">Active</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-click">Pay</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-verify">Verfiy</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            Manoj Baghel
+                        </td>
+                        <td>
+                            ICICI Bank
+                        </td>
+                        <td>
+                            523801519956
+                        </td>
+                        <td>
+                            <span class="text-success">Active</span>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-primary btn-click">Pay</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-verify">Verfiy</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <a href="/DMT/MoneyTransfer" class="btn btn-secondary"><span class="flaticon2-left-arrow"></span> Back</a>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Beneficiary Name</th>
+                        <td>Vivek Pandey</td>
+                    </tr>
+                    <tr>
+                        <th>Bank</th>
+                        <td>ICICI Bank</td>
+                    </tr>
+                    <tr>
+                        <th>IFSC Code</th>
+                        <td>ICIC0001238</td>
+                    </tr>
+                    <tr>
+                        <th>Mobile Number</th>
+                        <td>8898862556</td>
+                    </tr>
+                </table>
+                <div class="row m-4">
+                    <input type="text" class="form-control form-control-solid" placeholder="Enter Password" maxlength="8"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_transaction">Pay Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mymodal1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Acknowledgement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-lg-4">
+                        <img src="~/assets/media/logos/logo.jpeg" class="img-thumbnail" style="width:220px;height:76px;" />
+                    </div>
+                    <div class="col-lg-4">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="~/assets/media/logos/icici_bank_logo.png" class="img-thumbnail" style="width:220px;height:76px;" />
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td><b>Transaction ID</b></td>
+                            <td>789798</td>
+                        </tr>
+                        <tr>
+                            <td><b>Bank Name</b></td>
+                            <td>Axis Bank</td>
+                        </tr>
+                        <tr>
+                            <td><b>Bank IFSC Code</b></td>
+                            <td>ICIC0001238</td>
+                        </tr>
+                        <tr>
+                            <td><b>Amount</b></td>
+                            <td>Rs. </td>
+                        </tr>
+                        <tr>
+                            <td><b>Account Number</b></td>
+                            <td>123801519956</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td><span class="text-success">Successfully Transferred</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mymodal2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Verify Bank</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">Account Number</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" value="123801519956" />
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">Bank</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" value="ICICI Bank" />
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">IFSC Code</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" value="ICICI0001238" />
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label"></label>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary">Verify Name</button>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">Beneficiary Name</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" placeholder="Beneficiary Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mymodal3" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Beneficiary Registration</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">Account Number</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" placeholder="Enter Account Number" maxlength="20" />
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">Bank</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" placeholder="Enter Bank name" />
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">IFSC Code</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid"  placeholder="Enter IFSC Code"/>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label">Beneficiary Name</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control form-control-solid" placeholder="Beneficiary Name" />
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <label class="col-form-label"></label>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary">Verify Account</button>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <span class="text-danger">Note: Rs. 3 will be charged for account verification</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_transaction">Register Beneficiary</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".btn-click").click(function (e) {
+        e.preventDefault();
+        $("#mymodal").modal("show");
+    });
+    $("#btn_transaction").click(function (e) {
+        e.preventDefault();
+        $("#mymodal").modal("hide");
+        $("#mymodal1").modal("show");
+    });
+    $(".btn-verify").click(function (e) {
+        e.preventDefault();
+        $("#mymodal2").modal("show");
+    });
+    $("#btn_add_beneficiary").click(function (e) {
+        e.preventDefault();
+        $("#mymodal3").modal("show");
+    });
+</script>

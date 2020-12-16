@@ -1,0 +1,91 @@
+﻿@model PayInc_Customer_web.Areas.DMT.Models.RegistrationInput
+@{
+    ViewData["Title"] = "Register User- DMT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form class="form">
+    <div class="card">
+        <div class="card-body">
+            <div class="col-lg-8 col-sm-12">
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <label>First Name:</label>
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "Enter First Name" })
+                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Last Name:</label>
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Enter Last Name" })
+                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="separator separator-dashed my-5"></div>
+                <div class="form-group">
+                    <label>Address1:</label>
+                    @Html.TextBoxFor(m => m.Address1, new { @class = "form-control", placeholder = "Enter Address1" })
+                    @Html.ValidationMessageFor(m => m.Address1, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Address2:</label>
+                    @Html.TextBoxFor(m => m.Address2, new { @class = "form-control", placeholder = "Enter Address2" })
+                    @Html.ValidationMessageFor(m => m.Address2, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>State:</label>
+                    @Html.TextBoxFor(m => m.State, new { @class = "form-control", placeholder = "Enter State" })
+                    @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>City:</label>
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "Enter City" })
+                    @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Pin Code:</label>
+                    @Html.TextBoxFor(m => m.PinCode, new { @class = "form-control", placeholder = "Enter Pin Code" })
+                    @Html.ValidationMessageFor(m => m.PinCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <button type="reset" class="btn btn-secondary mr-2">Cancel</button>
+            <button type="submit" id="btn_validate" class="btn btn-primary">Submit<span class="flaticon2-right-arrow text-white"></span></button>
+        </div>
+    </div>
+
+</form>
+<div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Validate OTP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-4">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>OTP:</label>
+                            <input type="text" class="form-control form-control-solid" placeholder="Enter OTP" maxlength="6" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="/DMT/MoneyTransfer"  class="btn btn-primary font-weight-bolder text-uppercase" id="btn_transaction">Validate & Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function (e) {
+        $("#btn_validate").click(function (e) {
+            e.preventDefault();
+            $("#mymodal").modal("show");
+        });
+    });
+</script>

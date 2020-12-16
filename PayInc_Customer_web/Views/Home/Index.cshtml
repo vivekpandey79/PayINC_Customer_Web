@@ -13,42 +13,35 @@
                 <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
             </ol>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="flex-grow-1 bg-warning p-12  card-rounded flex-grow-1 bgi-no-repeat" 
-                         style="        background-position: right bottom;
-        background-size: 55% auto;
-        background-image: url(assets/media/svg/patterns/aare.svg)">
-                        <h3 class="text-inverse-info pb-5 font-weight-bolder">Recharge Now</h3>
-                        <p class="text-inverse-info pb-5 font-size-h6">
-                            Offering best commission
-                            <br>online recharge with plan
-                            <br>Easy way to recharge
-                        </p>
-                        <a href="#" class="btn btn-success font-weight-bold py-2 px-6">Recharge Now</a>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="flex-grow-1 bg-info p-12  card-rounded flex-grow-1 bgi-no-repeat" style="background-position: right bottom; background-size: 55% auto; background-image: url(assets/media/svg/humans/custom-5.svg)">
-                        <h3 class="text-inverse-info pb-5 font-weight-bolder">Transfer Now</h3>
-                        <p class="text-inverse-info pb-5 font-size-h6">
-                            Wallet to Bank transfer
-                            <br>within few seconds
-                            <br>One stop payment
-                        </p>
-                        <a href="#" class="btn btn-success font-weight-bold py-2 px-6">Pay Now</a>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="flex-grow-1 bg-danger p-12  card-rounded flex-grow-1 bgi-no-repeat" style="background-position: right bottom; background-size: 55% auto; background-image: url(assets/media/svg/humans/custom-6.svg)">
-                        <h3 class="text-inverse-info pb-5 font-weight-bolder">Pay Bill Now</h3>
-                        <p class="text-inverse-info pb-5 font-size-h6">
-                            Offering discounts for better
-                            <br>online a store can loyalty
-                            <br>weapon into driving
-                        </p>
-                        <a href="#" class="btn btn-success font-weight-bold py-2 px-6">Join Now</a>
-                    </div>
-                </div>
+                @{
+                    if (ViewBag.DashboardImage != null)
+                    {
+                        var listImage = (List<DashboardRes>)ViewBag.DashboardImage;
+                        foreach (var item in listImage)
+                        {
+                            <div class="carousel-item @(listImage.First()==item ? " active":"") ">
+                                <img src="@item.imageUrl" class="img-fluid" />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="carousel-item active">
+                            <div class="flex-grow-1 bg-warning p-12  card-rounded flex-grow-1 bgi-no-repeat"
+                                 style="background-position: right bottom;background-size: 55% auto;background-image: url(assets/media/svg/patterns/aare.svg)">
+                                <h3 class="text-inverse-info pb-5 font-weight-bolder">Recharge Now</h3>
+                                <p class="text-inverse-info pb-5 font-size-h6">
+                                    Offering best commission
+                                    <br>online recharge with plan
+                                    <br>Easy way to recharge
+                                </p>
+                                <a href="#" class="btn btn-success font-weight-bold py-2 px-6">Recharge Now</a>
+                            </div>
+                        </div>
+                    }
+
+                }
+
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>

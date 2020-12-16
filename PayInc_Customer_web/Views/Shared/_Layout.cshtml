@@ -5,39 +5,26 @@
 <head>
     <base href="">
     <meta charset="utf-8" />
-    <title>@ViewData["Title"] | PayInc</title>
+    <title>@ViewData["Title"] | ReliPay</title>
     <meta name="description" content="Metronic admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="canonical" href="https://keenthemes.com/metronic" />
-    <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-    <!--end::Fonts-->
-    <!--begin::Page Vendors Styles(used by this page)-->
-    <link href="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-    <!--end::Page Vendors Styles-->
-    <!--begin::Global Theme Styles(used by all pages)-->
-    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
-    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <!--end::Global Theme Styles-->
-    <!--begin::Layout Themes(used by all pages)-->
-    <link href="~/assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
-    <!--end::Layout Themes-->
+    <link rel="stylesheet" href="~/css/site.min.css" type="text/css" />
     <link rel="shortcut icon" href="~/assets/media/logos/favicon.ico" />
-    <!--begin::Global Theme Bundle(used by all pages)-->
+    @*<link href="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />*@
+    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    @*<link href="~/assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />*@
+
     <script src="~/assets/plugins/global/plugins.bundle.js"></script>
     <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     <script src="~/assets/js/scripts.bundle.js"></script>
-
-    <!--end::Global Theme Bundle-->
-
+    <script src="~/js/site.min.js"></script>
 </head>
-<!--end::Head-->
-<!--begin::Body-->
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
@@ -51,7 +38,7 @@
     <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
         <!--begin::Logo-->
         <a href="/Home">
-            <img alt="Logo" src="/assets/media/logos/logo.png" />
+            <img alt="Logo" src="/assets/media/logos/logo_rnfi.png" style="width:130px; height:40px" />
         </a>
         <!--end::Logo-->
         <!--begin::Toolbar-->
@@ -204,7 +191,7 @@
                                 <span class="navi-text text-muted text-hover-primary">@obj.mobileNumber</span>
                             </span>
                         </a>
-                        <a href="@Url.Action("LogOut","Login",new { area="" })" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
+                        <a href="/Login/Logout" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
                     </div>
                 </div>
             </div>
@@ -481,7 +468,7 @@
     <script src="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
-    <script src="~/assets/js/pages/widgets.js"></script>
+    @*<script src="~/assets/js/pages/widgets.js"></script>*@
     <!--end::Page Scripts-->
 </body>
 <!--end::Body-->

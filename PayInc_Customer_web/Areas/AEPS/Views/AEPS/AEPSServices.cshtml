@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "AEPS Services";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card p-5">
+    <div class="col-lg-8 col-md-12 col-sm-12">
+        <form class="form" id="kt_form_1">
+        <div class="form-group row">
+            <label class="col-form-label text-left col-lg-2 col-sm-12">Select Bank</label>
+            <div class="col-lg-10 col-md-9 col-sm-12">
+                <select class="form-control">
+                    <option>--Select Bank--</option>
+                    <option value="">ICICI</option>
+                    <option>HDFC</option>
+                    <option>Axis</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label text-left col-lg-2 col-sm-12">Aadhar Number</label>
+            <div class="col-lg-10 col-md-9 col-sm-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="flaticon2-hospital"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control" name="aadharnumber" placeholder="Enter Aadhar Number" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label text-left col-lg-2 col-sm-12">Customer Number</label>
+            <div class="col-lg-10 col-md-9 col-sm-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="flaticon2-location"></i></span>
+                    </div>
+                    <input type="text" class="form-control" name="pincode" placeholder="Enter Pin Code" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label text-left col-lg-2 col-sm-12"></label>
+            <div class="checkbox-inline">
+                <label class="checkbox">
+                    <input type="checkbox" />
+                    <span></span>
+                    I agree to the Terms & Conditions
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-12 ml-lg-auto">
+                <button type="submit" class="btn btn-primary font-weight-bold mr-2">Capture And Withdraw</button>
+                <button type="submit" class="btn btn-primary font-weight-bold mr-2">Capture And Enquiry</button>
+                <button type="submit" class="btn btn-primary font-weight-bold mr-2">Capture And Statement</button>
+                <button type="submit" class="btn btn-primary font-weight-bold mr-2">Aadhar Pay</button>
+            </div>
+        </div>
+        
+    </form>
+    </div>
+    
+</div>

@@ -1,0 +1,120 @@
+﻿@model PayInc_Customer_web.Areas.Reports.Models.PaymentReportModel
+@{
+    ViewData["Title"] = "Payment Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <div class="input-group date">
+                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <div class="input-group date">
+                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ToDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <button type="submit" class="btn btn-primary mr-2">View Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@{
+    var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.PaymentDetailsRes>)ViewBag.PaymentReport;
+}
+<div class="mt-2">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Transfer From</td>
+                        <td>Tranfer To</td>
+                        <td>Type</td>
+                        <td>Amount</td>
+                        <td>Description</td>
+                        <td>Date</td>
+                        <td>Opening Bal</td>
+                        <td>Closing Bal</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.PaymentReport != null)
+                    {
+                        foreach (var item in listReport)
+                        {
+                            <tr>
+                                <td>@item.transferFromName (@item.transferFromRole) (@item.transferFromMobile)</td>
+                                <td>@item.transferToName (@item.transferToRole) (@item.transferToMobile)</td>
+                                <td>@item.transactionTypeDescription</td>
+                                <td>₹ @item.transactionAmount</td>
+                                <td>
+                                    @if (item.transactionCategoryDescription == "DEBIT")
+                                    {
+                                        <span class="label label-success label-dot mr-2"></span><span class="font-weight-bold text-success">DEBIT</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-success label-dot mr-2"></span><span class="font-weight-bold text-success">@item.transactionCategoryDescription</span>
+                                    }
+                                </td>
+                                <td>@item.txnDate</td>
+                                <td>₹ @item.customerOpBal</td>
+                                <td>₹ @item.customerClBal</td>
+                            </tr>
+                        }
+                    }
+                    <tr>
+                        <td colspan="8">
+                            <div class="d-flex-in justify-content-between">
+                                <span class="text-center text-dark">@ViewData["ErrorMessage"]</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@*<script>
+    document.getElementById("kt_datepicker_2").valueAsDate = new Date("@System.DateTime.Now.Date");
+    document.getElementById("kt_datepicker_3").valueAsDate = new Date("@System.DateTime.Now.Date");
+</script>*@
+<script>
+    var arrows = {
+        leftArrow: '<i class="la la-angle-left"></i>',
+        rightArrow: '<i class="la la-angle-right"></i>'
+    }
+    $('#datepicker_1').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'dd-mm-yyyy',
+        templates: arrows,
+        autoclose: true,
+    });
+    $('#datepicker_2').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'dd-mm-yyyy',
+        templates: arrows,
+        autoclose: true,
+    });
+</script>

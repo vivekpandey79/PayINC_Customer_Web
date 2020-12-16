@@ -36,7 +36,7 @@ namespace PayInc_Customer_web.Models
         public string permAddressLine2 { get; set; }
         public string permAddressLandMark { get; set; }
         public long phoneNumber { get; set; }
-        public int alternatePhoneNumber { get; set; }
+        public string alternatePhoneNumber { get; set; }
         public string emailAddress { get; set; }
         public int customerCategoryId { get; set; }
         public int customerLastLoginDate { get; set; }

@@ -29,5 +29,17 @@ namespace PayInc_Customer_web.Utility
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<List<MenuRes>>(result);
             return null;
         }
+
+        public string GetStringSession(string sessionKey)
+        {
+            var httpContextAccessor = new HttpContextAccessor();
+            var result = httpContextAccessor.HttpContext.Session.GetString(sessionKey);
+            return result;
+        }
+        public void SetSession(string sessionKey, string data)
+        {
+            var httpContextAccessor = new HttpContextAccessor();
+            httpContextAccessor.HttpContext.Session.SetString(sessionKey, data);
+        }
     }
 }

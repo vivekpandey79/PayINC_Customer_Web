@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewData["Title"] = "Payment Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/dth_wizard_style.css" rel="stylesheet" />
+@*<link href="~/css/animatedpopup.css" rel="stylesheet" />*@
+<script src="~/js/paymentrequest_wizard.js"></script>
+<div class="card card-custom">
+    <div class="card-body p-0">
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
+            <div class="wizard-nav">
+                <div class="wizard-steps">
+                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">1</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Payment Mode</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">2</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Select Bank</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">3</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Request Details</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">4</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Acknowledgement</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="wizard-step" data-wizard-type="step">
+                            <div class="wizard-wrapper">
+                                <div class="wizard-number">5</div>
+                                <div class="wizard-label">
+                                    <div class="wizard-title">Acknowledgement</div>
+                                </div>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+            <div class="card card-custom card-shadowless rounded-top-0">
+                <div class="card-body p-0">
+                    <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <form class="form" id="kt_form">
+                            </form>
+                            <div class="row justify-content-center">
+                                <div class="col-xl-12">
+                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <a href="#" class="symbol symbol-lg-150 symbol-light-success showmodal" data-item="CASH">
+                                                    <span class="symbol-label">
+                                                        <span class="fas fa-credit-card icon-8x">
+                                                        </span>
+                                                    </span>
+                                                    <span class="clearfix text-center">CASH</span>
+                                                </a>
+                                            </div>
+                                            <div class="col-3">
+                                                <a href="#" class="symbol symbol-lg-150 symbol-light-primary showmodal" data-item="CHEQUE">
+                                                    <span class="symbol-label">
+                                                        <span class="fas fa-donate icon-8x">
+                                                        </span>
+                                                    </span>
+                                                    <span class="clearfix">CHEQUE</span>
+                                                </a>
+                                            </div>
+                                            <div class="col-3">
+                                                <a href="#" class="symbol symbol-lg-150 symbol-light-danger showmodal" data-item="ONLINE">
+                                                    <span class="symbol-label">
+                                                        <span class="fas fa-hotel icon-8x">
+                                                        </span>
+                                                    </span>
+                                                    <span class="clearfix">ONLINE</span>
+                                                </a>
+                                            </div>
+                                            <div class="col-3">
+                                                <a href="#" class="symbol symbol-lg-150 symbol-light-danger showmodal" data-item="OTHERS">
+                                                    <span class="symbol-label">
+                                                        <span class="fas fa-hotel icon-8x">
+                                                        </span>
+                                                    </span>
+                                                    <span class="clearfix">OTHERS</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between border-top pt-10 mt-15">
+                                            <div class="mr-2">
+                                                <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <div id="bank_list">
+
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <section id="request_map">
+                                        </section>
+
+                                    </div>
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <section id="acknowledge">
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="mymodal" class="modal" data-easein="bounceIn" tabindex="-1" role="dialog" aria-labelledby="costumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Select Payment Type
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="data_panel">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/plugins/custom/velocity/velocity.min.js"></script>
+<script src="~/assets/plugins/custom/velocity/velocity.ui.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".modal").each(function (l) { $(this).on("show.bs.modal", function (l) { var o = $(this).attr("data-easein"); "shake" == o ? $(".modal-dialog").velocity("callout." + o) : "pulse" == o ? $(".modal-dialog").velocity("callout." + o) : "tada" == o ? $(".modal-dialog").velocity("callout." + o) : "flash" == o ? $(".modal-dialog").velocity("callout." + o) : "bounce" == o ? $(".modal-dialog").velocity("callout." + o) : "swing" == o ? $(".modal-dialog").velocity("callout." + o) : $(".modal-dialog").velocity("transition." + o) }) });
+    });
+</script>

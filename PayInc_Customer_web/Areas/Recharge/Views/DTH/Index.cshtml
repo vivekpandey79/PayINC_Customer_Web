@@ -10,11 +10,11 @@
     var result = HttpContextAccessor.HttpContext.Session.GetString("LoginDetails");
     var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<PayInc_Customer_web.Models.LoginResData>(result);
 }
-<link href="~/assets/css/pages/wizard/wizard-4.css" rel="stylesheet" />
+<link href="~/css/dth_wizard_style.css" rel="stylesheet" />
 <div class="card card-custom card-transparent">
     <div class="card-body p-0">
         <!--begin::Wizard-->
-        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="false">
             <!--begin::Wizard Nav-->
             <div class="wizard-nav">
                 <div class="wizard-steps">
@@ -73,7 +73,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Subscriber Number/Account Number</label>
-                                                <input type="text" class="form-control" name="subscriberno" placeholder="Subscriber Number/Account Number" />
+                                                <input type="text" class="form-control" name="subscriberno" placeholder="Subscriber Number/Account Number" id="txtAccountNo"/>
 
                                             </div>
                                             <div class="d-flex justify-content-between border-top pt-10 mt-15">
@@ -102,7 +102,7 @@
                                             }
                                             <div class="form-group">
                                                 <label>Operator</label>
-                                                <select name="operator" class="form-control">
+                                                <select name="operator" class="form-control" id="ddlOperator">
                                                     <option value="">Select Operator</option>
                                                     @foreach (var item in list)
                                                     {
@@ -126,45 +126,15 @@
                                             <h4 class="mb-10 font-weight-bold text-dark">Select your plan/amount</h4>
                                             <!--begin::Select-->
                                             <div class="row">
+                                                <div class="col-6" id="customer_details_panel">
+
+                                                </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label>Amount</label>
-                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount"  id="txtamount"/>
+                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount" id="txtamount" />
                                                     </div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <td>Plan</td>
-                                                                <td>Plan Desc</td>
-                                                                <td>Amount</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Super Value pack</td>
-                                                                <td>All channel, HD channel</td>
-                                                                <td>
-                                                                    <a href="#" data-amt="149"  class="btn btn-icon btn-circle btn-light-twitter select-plan">
-                                                                        <i class="text-white">149</i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>HD premium pack</td>
-                                                                <td>All channel, HD channel</td>
-                                                                <td>
-                                                                    <a href="#" data-amt="199"  class="btn btn-icon btn-circle btn-light-twitter select-plan">
-                                                                        <i class="text-white">199</i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-
-                                                    </table>
-                                                </div>
-
 
                                             </div>
                                             <div class="d-flex justify-content-between border-top pt-10 mt-15">
@@ -261,11 +231,9 @@
 
                                             </div>
                                         </div>
-                                        <!--end::Wizard Step 4-->
                                     </div>
                                 </div>
                             </form>
-                            <!--end::Wizard Form-->
                         </div>
                     </div>
                 </div>

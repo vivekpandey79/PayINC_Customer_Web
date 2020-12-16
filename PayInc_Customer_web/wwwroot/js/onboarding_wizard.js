@@ -92,7 +92,7 @@
         var url = this.action;
         var validator = _validations[0];
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
                 $(".loader").show();
                 $("#btn_mobile_verify").attr("disabled", "disabled");
                 $.ajax({
@@ -104,7 +104,7 @@
                         $("#btn_mobile_verify").removeAttr("disabled");
                         try {
                             var checkError = data.errorMessage;
-                            if (typeof (checkError) != "undefined") {
+                            if (typeof (checkError) !== "undefined") {
                                 toastr.error(checkError, "Alert");
                                 return false;
                             }
@@ -119,7 +119,6 @@
                         }
                     }
                 });
-            } else {
             }
         });
     })

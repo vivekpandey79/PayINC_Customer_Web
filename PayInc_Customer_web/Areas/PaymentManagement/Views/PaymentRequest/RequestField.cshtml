@@ -1,0 +1,116 @@
+﻿@model PayInc_Customer_web.Areas.PaymentManagement.Models.RequestViewModel
+
+@if (Model != null)
+{
+    var inputList = Model.reqList;
+
+    <form id="form_request_fields" action="@Url.Action("SubmitPaymentReq","PaymentRequest")" method="post">
+        @for (int i = 0; i < inputList.Count; i++)
+        {
+        <div class="form-group row">
+            <label class="col-form-label text-left col-lg-2 col-sm-12">@inputList[i].parameterName</label>
+            <div class="col-lg-6 col-md-9 col-sm-12">
+                <div class="input-group">
+
+                    @if (inputList[i].mandatory == 1)
+                    {
+                        if (inputList[i].dataValue.Trim() == "MONEY" && inputList[i].fieldValue.Trim() == "TEXT BOX")
+                        {
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-edit"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off", onkeypress = "return NumericKey(event);" })
+                        }
+                        else if (inputList[i].dataValue.Trim() == "STRING" && inputList[i].fieldValue.Trim() == "TEXT BOX")
+                        {
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-edit"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off" })
+                            
+                        }
+                        else if (inputList[i].dataValue.Trim() == "INTEGER" && inputList[i].fieldValue.Trim() == "DATE PICKER" && inputList[i].parameterName.Trim() == "DEPOSIT DATE")
+                        {
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-calendar"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off", type = "date" })
+                            
+                        }
+                        else if (inputList[i].dataValue.Trim() == "INTEGER" && inputList[i].fieldValue.Trim() == "DATE PICKER" && inputList[i].parameterName.Trim() == "CHEQUE DATE")
+                        {
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-calendar"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", id = "CheckDate", placeholder = @Model.reqList[i].parameterName, Maxlength = @Model.reqList[i].maxLength, MinLength = @Model.reqList[i].minLength, @autocomplete = "off", type = "date", min="01-12-2020", max = "04-12-2020" })
+                            
+                        }
+                        else if (inputList[i].dataValue.Trim() == "INTEGER")
+                        {
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="flaticon2-edit"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off", onkeypress = "return NumericKey(event);" })
+                            
+                        }
+                        else if (inputList[i].dataValue.Trim() == "STRING" && inputList[i].fieldValue.Trim() == "DROP DOWN")
+                        {
+                            if (inputList[i].parameterName.Trim().ToUpper() == "CDM ID" || inputList[i].parameterName.Trim().ToUpper() == "STATE")
+                            {
+                                @Html.DropDownListFor(m => m.reqList[i].UsersInput, new SelectList(string.Empty, "Value", "Text"), "-Select State-", new { @class = "form-control", id = "StateNm", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off" })
+                                
+                            }
+                            else if (inputList[i].parameterName.Trim().ToUpper() == "CDM ID" || inputList[i].parameterName.Trim().ToUpper() == "CITY")
+                            {
+                                @Html.DropDownListFor(m => m.reqList[i].UsersInput, new SelectList(string.Empty, "Value", "Text"), "Select City", new { id = "CityNm", @class = "form-control text-uppercase" })
+                            }
+                            else if (inputList[i].parameterName.Trim().ToUpper() == "CDM ID" || inputList[i].parameterName.Trim().ToUpper() == "BRANCH")
+                            {
+                                @Html.DropDownListFor(m => m.reqList[i].UsersInput, new SelectList(string.Empty, "Value", "Text"), "Select Branch", new { id = "BranchNm", @class = "form-control text-uppercase" })
+                            }
+                        }
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off" })
+                    }
+
+                </div>
+                @Html.ValidationMessageFor(m => m.reqList[i].UsersInput, null, new { @class = "text-danger" })
+                @if (!string.IsNullOrEmpty(inputList[i].hint))
+                {
+                    <span class="form-text text-muted">@inputList[i].hint</span>
+                }
+            </div>
+            @*@if (!string.IsNullOrEmpty(inputList[i].hint))
+            {
+                <div class="col-lg-6 col-sm-12">
+                    <div class="bg-gray-300" style="border: 1px dotted #808080; margin-top: 8px">@inputList[i].hint</div>
+                </div>
+            }*@
+        </div>
+        }
+        <div class="d-flex justify-content-between border-top pt-10 mt-15">
+            <div class="mr-2">
+                <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+            </div>
+            <div>
+                <button type="submit" id="btn_request_fields" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+            </div>
+        </div>
+    </form>
+
+}
+<script src="~/js/paymentrequest_wizard.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

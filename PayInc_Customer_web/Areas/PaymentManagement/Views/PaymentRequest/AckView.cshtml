@@ -1,0 +1,39 @@
+﻿@model PayInc_Customer_web.Areas.PaymentManagement.Models.Acknowledgement 
+
+<style>
+    th {
+        background-color: #f8f8f9;
+    }
+</style>
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Load Req ID</th>
+            <td>@Model.LoadRequestId</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>@Model.Status</td>
+        </tr>
+        <tr>
+            <th>Transaction ID</th>
+            <td>@Model.LoadRequestId</td>
+        </tr>
+        <tr>
+            <th>Bank Name</th>
+            <td>Axis Bank</td>
+        </tr>
+        <tr>
+            <th>Bank RefNo</th>
+            <td>@Model.BankRefNo</td>
+        </tr>
+        <tr>
+            <th>Load Amount</th>
+            <td>Rs. @Model.LoadAmount</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>Load Request Submitted.</td>
+        </tr>
+    </tbody>
+</table>

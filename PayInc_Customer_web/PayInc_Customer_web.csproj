@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>39aac4cc-d99b-43ce-ab75-b7e8af060266</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +19,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\AEPS\Data\" />
     <Folder Include="Areas\BillPayments\Data\" />
     <Folder Include="Areas\BillPayments\Models\" />
+    <Folder Include="Areas\DMT\Data\" />
+    <Folder Include="Areas\KIT_Management\Data\" />
+    <Folder Include="Areas\Networks\Data\" />
     <Folder Include="Areas\OnBoarding\Data\" />
+    <Folder Include="Areas\PaymentManagement\Data\" />
     <Folder Include="Areas\Recharge\Data\" />
+    <Folder Include="Areas\Reports\Data\" />
+    <Folder Include="Areas\StockManagement\Data\" />
+    <Folder Include="Areas\StockManagement\Models\" />
+    <Folder Include="wwwroot\assets\plugins\custom\loader\" />
+    <Folder Include="wwwroot\assets\plugins\custom\velocity\" />
   </ItemGroup>
 
 </Project>

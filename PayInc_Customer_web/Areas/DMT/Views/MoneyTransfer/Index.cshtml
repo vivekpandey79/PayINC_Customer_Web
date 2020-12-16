@@ -1,0 +1,29 @@
+﻿@model PayInc_Customer_web.Areas.DMT.Models.MoneyTransferModel
+@{
+    ViewData["Title"] = "Domestic Money Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card">
+    <div class="card-body">
+        <form action="@Url.Action("CheckMobileNumber","MoneyTransfer")" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="flaticon2-phone text-primary"></i>
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control", placeholder = "Enter Customer Mobile Number" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-8 ml-lg-auto">
+                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Next <span class="flaticon2-right-arrow text-white"></span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

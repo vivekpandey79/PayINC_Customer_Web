@@ -6,66 +6,196 @@ var KTDropzoneDemo = function () {
     var demo1 = function () {
         // single file upload
         $('#kt_dropzone_1').dropzone({
-            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
-            paramName: "file", // The name that will be used to transfer the file
+            url: "/OnBoarding/ManualForm/UploadPancard",
+            uploadMultiple: false,
+            timeout: 180000,
+            autoProcessQueue: false,
+            paramName: "pan_card",
             maxFiles: 1,
             maxFilesize: 5, // MB
             addRemoveLinks: true,
-            accept: function(file, done) {
-                if (file.name == "justinbieber.jpg") {
-                    done("Naha, you don't.");
-                } else {
-                    done();
+            acceptedFiles: "image/*",
+            init: function () {
+                var dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
+                // for Dropzone to process the queue (instead of default form behavior):
+                document.getElementById("btn_fetch_pan").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dzClosure.processQueue();
+                    $("#btn_fetch_pan").attr('disabled','disabled');
+                    $("#btn_fetch_pan").addClass("spinner spinner-white spinner-right");
+                });
+
+                //send all the form data along with the files:
+                this.on("sendingmultiple", function (data, xhr, formData) {
+                    formData.append("firstname", jQuery("#firstname").val());
+                    formData.append("lastname", jQuery("#lastname").val());
+                });
+            },
+            success: function (file, response) {
+                document.getElementById("btn_fetch_pan").removeAttribute("disabled");
+                document.getElementById("btn_fetch_pan").classList.remove("spinner");
+                if (response.success) {
+                    $("#lblPANPercent").text(response.matchData.panNumber);
+                    $("#lblFNamePercent").text(response.matchData.fatherName);
+                    $("#lblNamePercent").text(response.matchData.fullName);
+                    $("#txtfetchPanNumber").val(response.responseData.panNumber);
+                    $("#txtPanFullName").val(response.responseData.name);
+                    $("#txtPanFatherName").val(response.responseData.fatherName);
+                    $("#txtPanDOB").val(response.responseData.dob);
+                    $("#dl_dob").val(response.responseData.dob);
+                    document.getElementById("dl_dob").valueAsDate = new Date(response.responseData.dob);
+                    $("#pan_fetch_section").show();
+                    $("#upload_section").hide();
                 }
+                else {
+                    toastr.error(response.errorMessage, "Alert");
+                }
+                this.removeAllFiles();
+            },
+            error: function (file, response) {
+                document.getElementById("btn_fetch_pan").removeAttribute("disabled");
+                document.getElementById("btn_fetch_pan").classList.remove("spinner");
+                toastr.error("Uploading Cancelled", "Alert");
+                this.removeAllFiles();
             }
         });
 
-        // multiple file upload
         $('#kt_dropzone_2').dropzone({
-            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
-            paramName: "file", // The name that will be used to transfer the file
-            maxFiles: 10,
-            maxFilesize: 10, // MB
+            url: "/OnBoarding/ManualForm/UploadVoterID",
+            paramName: "file1",
+            maxFiles: 1,
+            timeout: 180000,
+            maxFilesize: 10,
             addRemoveLinks: true,
-            accept: function(file, done) {
-                if (file.name == "justinbieber.jpg") {
-                    done("Naha, you don't.");
-                } else {
-                    done();
+            autoProcessQueue: false,
+            acceptedFiles: "image/*",
+        });
+
+        $('#kt_dropzone_3').dropzone({
+            url: "/OnBoarding/ManualForm/UploadVoterID",
+            paramName: "file2",
+            maxFiles: 1,
+            maxFilesize: 10,
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            acceptedFiles: "image/*",
+        });
+
+        $('#kt_dropzone_4').dropzone({
+            url: "/OnBoarding/ManualForm/UploadDL",
+            paramName: "file2",
+            uploadMultiple: false,
+            maxFiles: 1,
+            timeout: 180000,
+            maxFilesize: 10,
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            acceptedFiles: "image/*",
+            init: function () {
+                var dzClosure = this;
+                document.getElementById("btn_fetch_dl").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dzClosure.processQueue();
+                    $("#btn_fetch_dl").attr('disabled', 'disabled');
+                    $("#btn_fetch_dl").addClass("spinner spinner-white spinner-right");
+                });
+                this.on("sending", function (data, xhr, formData) {
+                    formData.append("dlnumber", jQuery("#txtdlnumber").val());
+                    formData.append("dldob", jQuery("#dl_dob").val());
+                });
+            },
+            success: function (file, response) {
+                document.getElementById("btn_fetch_dl").removeAttribute("disabled");
+                document.getElementById("btn_fetch_dl").classList.remove("spinner");
+                if (response.success) {
+                    if (parseFloat(response.responseData.nameMatchCriteria.name1_vs_name2_matchScore) <= parseFloat(0.5)) {
+                        toastr.error("DL Not Matching with PAN Details", "Alert");
+                        $("#lbl_match_panname").text(response.responseData.nameMatchCriteria.name2);
+                        $("#lbl_match_dlname").text(response.responseData.nameMatchCriteria.name1);
+                        $("#lbl_match_percentage").text((parseFloat(response.responseData.nameMatchCriteria.name1_vs_name2_matchScore) * 100));
+                        $('#pan_dl_comp_modal').modal('show');
+                        this.removeAllFiles();
+                        return;
+                    }
+                    $("#lbl_match_panname").text(response.responseData.nameMatchCriteria.name2);
+                    $("#lbl_match_dlname").text(response.responseData.nameMatchCriteria.name1);
+                    $("#lbl_match_percentage").text((parseFloat(response.responseData.nameMatchCriteria.name1_vs_name2_matchScore) * 100));
+                    $("#imgKYC1").attr("src", response.responseData.faceMatchCriteria.imgURL1);
+                    $("#imgKYC2").attr("src", response.responseData.faceMatchCriteria.imgURL2);
+                    $("#lbl_face_match_percent").text(response.responseData.faceMatchCriteria.matchPercentage);
+                    $('#pan_dl_comp_modal').modal('show');
+                    $("#dl_fetch_form").show();
+                    $("#dl_section").hide();
+                    $("#txtFetchDLNo").val(response.responseData.dlNumber);
+                    $("#txtFetchDLName").val(response.responseData.name);
+                    $("#txtFetchAddress").val(response.responseData.address.address);
+                    $("#txtFetchCity").val(response.responseData.address.city);
+                    $("#txtFetchState").val(response.responseData.address.state);
                 }
+                else {
+                    toastr.error(response.errorMessage, "Alert");
+                }
+                this.removeAllFiles();
+            },
+            error: function (file, response) {
+                toastr.error("Uploading Cancelled", "Alert");
+                this.removeAllFiles();
+            }
+        });
+        
+        $('#kt_dropzone_5').dropzone({
+            url: "/OnBoarding/ManualForm/UploadCancelledCheque",
+            paramName: "file2",
+            maxFiles: 1,
+            maxFilesize: 10,
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            acceptedFiles: "image/*",
+            init: function () {
+                var dzClosure = this;
+                document.getElementById("btn_fetch_dl").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!$("#form_address").valid()) {
+                        return;
+                    }
+                    dzClosure.processQueue();
+                    $("#btn_fetch_dl").attr('disabled', 'disabled');
+                    $("#btn_fetch_dl").addClass("spinner spinner-white spinner-right");
+                });
+                this.on("sending", function (data, xhr, formData) {
+                    formData.append("dlnumber", jQuery("#txtdlnumber").val());
+                    formData.append("dldob", jQuery("#dl_dob").val());
+                });
+            },
+            success: function (file, response) {
+                this.removeAllFiles();
+            },
+            error: function (file, response) {
+                toastr.error("Uploading Cancelled", "Alert");
+                this.removeAllFiles();
             }
         });
 
-        // file type validation
-        $('#kt_dropzone_3').dropzone({
-            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
-            paramName: "file", // The name that will be used to transfer the file
-            maxFiles: 10,
-            maxFilesize: 10, // MB
-            addRemoveLinks: true,
-            acceptedFiles: "image/*,application/pdf,.psd",
-            accept: function(file, done) {
-                if (file.name == "justinbieber.jpg") {
-                    done("Naha, you don't.");
-                } else {
-                    done();
-                }
-            }
+        $('#btn_fetch_voterId').click(function () {            
+            var myDropzone = Dropzone.forElement("#kt_dropzone_2");
+            var myDropzone1 = Dropzone.forElement("#kt_dropzone_3");
+            myDropzone.processQueue();
+            myDropzone1.processQueue();
+            
         });
     }
 
     var demo2 = function () {
-        // set the dropzone container id
         var id = '#kt_dropzone_4';
-
-        // set the preview element template
         var previewNode = $(id + " .dropzone-item");
         previewNode.id = "";
         var previewTemplate = previewNode.parent('.dropzone-items').html();
         previewNode.remove();
-
-        var myDropzone4 = new Dropzone(id, { // Make the whole body a dropzone
-            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
+        var myDropzone4 = new Dropzone(id, {
+            url: "https://keenthemes.com/scripts/void.php",
             parallelUploads: 20,
             previewTemplate: previewTemplate,
             maxFilesize: 1, // Max filesize in MB
@@ -173,8 +303,8 @@ var KTDropzoneDemo = function () {
         // public functions
         init: function() {
             demo1();
-            demo2();
-            demo3();
+            //demo2();
+            //demo3();
         }
     };
 }();

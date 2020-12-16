@@ -1,0 +1,108 @@
+﻿@model PayInc_Customer_web.Areas.PaymentManagement.Models.PaymentTransferModel
+@{
+    ViewData["Title"] = "Payment Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/paymenttransfer_wizard.css" rel="stylesheet" />
+<div class="card card-custom">
+    <div class="card-body p-0">
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
+            <div class="wizard-nav">
+                <div class="wizard-steps">
+                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">1</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Mobile Number</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">2</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Enter TPIN</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">3</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Acknowledgement</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-custom card-shadowless rounded-top-0">
+                <div class="card-body p-0">
+                    <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <form class="form" id="kt_form">
+                            </form>
+                            <div class="row justify-content-center">
+                                <div class="col-xl-12">
+                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <section id="first_step">
+                                            <form class="form" method="post" action="@Url.Action("ShowProfile","PaymentTransfer")" id="form_payment">
+                                                <div class="form-group row">
+                                                    <label class="col-form-label text-left col-lg-2 col-sm-12">Mobile Number</label>
+                                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                                        @if (ViewBag.NetworkChain != null)
+                                                        {
+                                                            @Html.DropDownListFor(m => m.MobileNumber, new SelectList(ViewBag.NetworkChain, "mobileNumber", "customerAccountStatus"), "--Select Mobile Number--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
+                                                        }
+                                                        @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label text-left col-lg-2 col-sm-12">Amount</label>
+                                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="flaticon2-hospital"></i></span>
+                                                            </div>
+                                                            @Html.TextBoxFor(m => m.Amount, "", new { @class = "form-control", placeholder = "Enter Amount", maxlength="5" })
+                                                        </div>
+                                                        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-lg-6 ml-lg-auto">
+                                                        <button type="submit" class="btn btn-primary font-weight-bold mr-2">Transfer Now</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </section>
+                                    </div>
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <section id="view_profile">
+                                        </section>
+                                    </div>
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <section id="acknowledge">
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".searchable-dropdown").select2();
+    });
+</script>
+<script src="~/js/prepaid_wizard_script.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/paymenttransfer_wizard.js"></script>

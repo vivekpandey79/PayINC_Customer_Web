@@ -80,4 +80,29 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string kycChannel { get; set; }
         public string remarks { get; set; }
     }
+
+
+    #region On Boarding Reponse
+    public class OnBoardedResp
+    {
+        public long OnboardingId { get; set; }
+        public long CustomerId { get; set; }
+        public long CustomerNumber { get; set; }
+        public string PanCardNumber { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string FatherName { get; set; }
+        public long Dob { get; set; }
+        public long ParentCustomerId { get; set; }
+        public string SubmittedOn { get; set; }
+        public long SubmittedBy { get; set; }
+        public long OnboardingStatus { get; set; }
+        public string KycChannel { get; set; }
+        public string UpdateOn { get; set; }
+        public long UpdatedBy { get; set; }
+        public string Remarks { get; set; }
+    }
+    #endregion
+
 }

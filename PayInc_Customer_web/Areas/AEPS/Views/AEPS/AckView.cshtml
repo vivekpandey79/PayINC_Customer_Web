@@ -1,0 +1,97 @@
+﻿@model PayInc_Customer_web.Areas.AEPS.Models.resAEPSTransaction
+
+
+    <div class="row mb-2">
+        <div class="col-lg-4">
+            <img src="~/assets/media/logos/logo.jpeg" class="img-thumbnail" style="width:220px;height:76px;"/>
+        </div>
+        <div class="col-lg-4">
+
+        </div>
+        <div class="col-lg-4">
+            <img src="~/assets/media/logos/icici_bank_logo.png" class="img-thumbnail" style="width:220px;height:76px;" />
+        </div>
+    </div>
+
+@if (@Model.AEPSModeType!="Mini Statement")
+{
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Request Type </th>
+                <td>@Model.AEPSModeType</td>
+            </tr>
+            <tr>
+                <th>Status </th>
+                <td>@Model.Status</td>
+            </tr>
+            <tr>
+                <th>Request Type </th>
+                <td>@Model.AEPSModeType</td>
+            </tr>
+            <tr>
+                <th>Transfer Amount</th>
+                <td>@Model.Amount</td>
+            </tr>
+            <tr>
+                <th>Account Balance</th>
+                <td>@Model.BalanceAmount</td>
+            </tr>
+            <tr>
+                <th>Client Transaction Id</th>
+                <td>@Model.ClientTransactionId</td>
+            </tr>
+            <tr>
+                <th>Transaction Date</th>
+                <td>@System.DateTime.Now</td>
+            </tr>
+            <tr>
+                <th>Customer Number</th>
+                <td>@Model.MobileNumber</td>
+            </tr>
+            <tr>
+                <th>Bank RRN</th>
+                <td>7897987987987</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td><span class="text-success">@Model.ResponseMessage</span></td>
+            </tr>
+        </tbody>
+
+    </table>
+}
+else
+{
+<table>
+    <thead>
+        <tr>
+            <td>Date</td>
+            <td>Serial No</td>
+            <td>Description</td>
+            <td>Amount</td>
+            <td>Debit/Credit</td>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>27/11/2020</td>
+            <td>78977897</td>
+            <td>NEFT/pay@mds 897/679</td>
+            <td>2000</td>
+            <td>Credit</td>
+
+        </tr>
+        <tr>
+            <td>27/11/2020</td>
+            <td>58977896</td>
+            <td>NEFT/pay@mds 897/679</td>
+            <td>2200</td>
+            <td>Credit</td>
+
+        </tr>
+    </tbody>
+</table>
+}
+

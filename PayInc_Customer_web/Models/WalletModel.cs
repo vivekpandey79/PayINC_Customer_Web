@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PayInc_Customer_web.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,5 +28,16 @@ namespace PayInc_Customer_web.Models
         public decimal customerUnclearBalance { get; set; }
         public decimal customerSystemReservedBalance { get; set; }
         public decimal customerEffectiveBalance { get; set; }
+    }
+    public class WalletDetails
+    {
+        public decimal GetBalanceByCustomerID(string customerId)
+        {
+            var listParam = new List<KeyValuePair<string, string>>();
+            listParam.Add(new KeyValuePair<string, string>("CustomerId", customerId));
+            string errorMessage = string.Empty;
+            var response = new CallService().GetResponse<WalletRes>(APIMethodConst.GetBalanceByCustomerId, listParam, ref errorMessage);
+            return response.customerEffectiveBalance;
+        }
     }
 }

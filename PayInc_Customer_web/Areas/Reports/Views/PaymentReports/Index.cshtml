@@ -1,0 +1,103 @@
+﻿@model PayInc_Customer_web.Areas.Reports.Models.PaymentReportModel  
+@{
+    ViewData["Title"] = "Payment Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.FromDate, new { placeholder = "From Date", @class = "form-control", id = "kt_datepicker_2" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.ToDate, new { placeholder = "To Date", @class = "form-control", id = "kt_datepicker_3" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-9 col-sm-12">
+                    <button type="submit" class="btn btn-primary mr-2">View Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@{ 
+    var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.PaymentReportRes>)ViewBag.PaymentReport;
+}
+<div class="mt-2">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Request ID</td>
+                        <td>Amount</td>
+                        <td>Bank Ref No</td>
+                        <td>Deposit Date</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.PaymentReport != null)
+                    {
+                        foreach (var item in listReport)
+                        {
+                            <tr>
+                                <td>@item.lLoadRequestId</td>
+                                <td>@item.loadAmount</td>
+                                <td>@item.bankRefNo</td>
+                                <td>@item.loadDepositDate</td>
+                                <td><span class="text-success">@item.loadStatusDescription</span></td>
+                            </tr>
+                        }
+                    }
+                    <tr>
+                        <td colspan="6">
+                            <span class="text-center">@ViewData["ErrorMessage"]</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("kt_datepicker_2").valueAsDate = new Date("@System.DateTime.Now.Date");
+    document.getElementById("kt_datepicker_3").valueAsDate = new Date("@System.DateTime.Now.Date");
+</script>
+<script>
+    var arrows = {
+        leftArrow: '<i class="la la-angle-left"></i>',
+        rightArrow: '<i class="la la-angle-right"></i>'
+    }
+    $('#kt_datepicker_2').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'dd-mm-yyyy',
+        templates: arrows,
+        autoclose: true,
+    });
+    $('#kt_datepicker_3').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'dd-mm-yyyy',
+        templates: arrows,
+        autoclose: true,
+    });
+</script>
