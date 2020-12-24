@@ -4,16 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PayInc_Customer_web.Areas.PaymentManagement.Models
+namespace PayInc_Customer_web.Areas.KIT_Management.Models
 {
-    public class PaymentTransferModel
+    public class StockDistributionInput
     {
         [Required(ErrorMessage ="Please enter mobile number")]
         public string MobileNumber { get; set; }
-        [Required(ErrorMessage = "Please enter amount")]
-        public string Amount { get; set; }
+        [Required(ErrorMessage = "Please select stock type")]
+        public string StockType { get; set; }
+        [Required(ErrorMessage = "Please enter number of stock")]
+        public int NumberOfStock { get; set; }
+        public string mode { get; set; }
     }
-
     public class ShowProfile
     {
         public int customerId { get; set; }
@@ -27,20 +29,10 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Models
         public string customerRole { get; set; }
         public string customerRoleDesc { get; set; }
 
-        public string amount { get; set; }
+        public int NumberOfStock { get; set; }
         [Required]
         public string TPIN { get; set; }
         [Required]
         public string Remarks { get; set; }
-    }
-
-    public class PaymentTransferAck
-    {
-        public string PayeeName { get; set; }
-        public string PayeeMobileNumber { get; set; }
-        public string PayeeWalletBal { get; set; }
-        public string Amount { get; set; }
-        public string Status { get; set; }
-        public int StatusId { get; set; }
     }
 }

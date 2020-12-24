@@ -1,6 +1,6 @@
 ﻿@model PayInc_Customer_web.Areas.Reports.Models.PaymentReportModel  
 @{
-    ViewData["Title"] = "Payment Reports";
+    ViewData["Title"] = "Payment Request Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,7 +10,7 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        @Html.TextBoxFor(m => m.FromDate, new { placeholder = "From Date", @class = "form-control", id = "kt_datepicker_2" })
+                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.AddDays(-1).Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-lg-4 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        @Html.TextBoxFor(m => m.ToDate, new { placeholder = "To Date", @class = "form-control", id = "kt_datepicker_3" })
+                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -46,10 +46,17 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>Request ID</td>
-                        <td>Amount</td>
-                        <td>Bank Ref No</td>
+                        <td>Bank</td>
+                        <td>Mode</td>
+                        <td>Branch Code</td>
+                        <td>Branch</td>
+                        <td>Trans ID</td>
                         <td>Deposit Date</td>
+                        <td>Submit Date</td>
+                        <td>Amount</td>
+                        <td>Transferred Date</td>
+                        <td>Customer Remarks</td>
+                        <td>Process Remarks</td>
                         <td>Status</td>
                     </tr>
                 </thead>
@@ -59,16 +66,33 @@
                         foreach (var item in listReport)
                         {
                             <tr>
-                                <td>@item.lLoadRequestId</td>
-                                <td>@item.loadAmount</td>
-                                <td>@item.bankRefNo</td>
-                                <td>@item.loadDepositDate</td>
-                                <td><span class="text-success">@item.loadStatusDescription</span></td>
+                                <td>ICICI</td>
+                                <td>@item.paymentModeName</td>
+                                <td>@item.branchIFSCCode</td>
+                                <td>malad</td>
+                                <td></td>
+                                <td>@item.loadDepositDate @item.loadDepositTime</td>
+                                <td>@item.loadRequestedDate</td>
+                                <td>₹ @item.loadAmount</td>
+                                <td>@item.loadProcessedDate</td>
+                                <td>@item.creditRemarks</td>
+                                <td>@item.creditRemarks</td>
+                                <td>
+                                    @if (item.loadStatusDescription == "PENDING APPROVAL")
+                                    {
+                                        <span class="label label-warning label-dot mr-2"></span><span class="font-weight-bold text-warning">PENDING APPROVAL</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-primary label-dot mr-2"></span><span class="font-weight-bold text-primary">@item.loadStatusDescription</span>
+                                    }
+
+                                </td>
                             </tr>
                         }
                     }
                     <tr>
-                        <td colspan="6">
+                        <td colspan="12">
                             <span class="text-center">@ViewData["ErrorMessage"]</span>
                         </td>
                     </tr>
@@ -77,26 +101,23 @@
         </div>
     </div>
 </div>
-<script>
-    document.getElementById("kt_datepicker_2").valueAsDate = new Date("@System.DateTime.Now.Date");
-    document.getElementById("kt_datepicker_3").valueAsDate = new Date("@System.DateTime.Now.Date");
-</script>
+
 <script>
     var arrows = {
         leftArrow: '<i class="la la-angle-left"></i>',
         rightArrow: '<i class="la la-angle-right"></i>'
     }
-    $('#kt_datepicker_2').datepicker({
+    $('#datepicker_1').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });
-    $('#kt_datepicker_3').datepicker({
+    $('#datepicker_2').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });

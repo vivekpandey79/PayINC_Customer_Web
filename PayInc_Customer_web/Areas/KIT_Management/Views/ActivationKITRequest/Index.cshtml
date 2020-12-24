@@ -3,36 +3,269 @@
     ViewData["Title"] = "Submit Activation KIT Request";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .wizard-bar {
+        height: 4px;
+        width: 100%;
+        background-color: #EBEDF3;
+        position: relative;
+    }
+</style>
 <div class="card">
     <div class="card-body">
-        <form>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Number of KIT Request</label>
-                <div class="col-lg-6 col-md-9 col-sm-12">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="flaticon2-hospital"></i></span>
+        @{
+            var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.StockTypeRes>)ViewBag.StockType;
+        }
+        <section id="stock_type_panel">
+            <div class="wizard-step mb-4">
+                <div class="wizard-label">
+                    <h3 class="wizard-title text-muted">
+                        <span>1. </span>Select Pricing Stock Type
+                    </h3>
+                    <div class="wizard-bar bg-primary"></div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var item in listReport)
+                {
+                    <div class="col-4">
+                        <div class="py-5 px-0 px-lg-5 text-center stock-panel">
+                            <div class="d-flex flex-center mb-4">
+                                <span class="svg-icon svg-icon-5x svg-icon-primary">
+                                    <svg width="24px" height="24px" viewBox="0 0 24 24">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                            <path d="M1.4152146,4.84010415 C11.1782334,10.3362599 14.7076452,16.4493804 12.0034499,23.1794656 C5.02500006,22.0396582 1.4955883,15.9265377 1.4152146,4.84010415 Z" fill="#000000" opacity="0.3"></path>
+                                            <path d="M22.5950046,4.84010415 C12.8319858,10.3362599 9.30257403,16.4493804 12.0067693,23.1794656 C18.9852192,22.0396582 22.5146309,15.9265377 22.5950046,4.84010415 Z" fill="#000000" opacity="0.3"></path>
+                                            <path d="M12.0002081,2 C6.29326368,11.6413199 6.29326368,18.7001435 12.0002081,23.1764706 C17.4738192,18.7001435 17.4738192,11.6413199 12.0002081,2 Z" fill="#000000" opacity="0.3"></path>
+                                        </g>
+                                    </svg>
+                                </span>
+                            </div>
+                            <h4 class="font-size-h2 mb-10 text-muted">@item.stockType</h4>
+                            <div class="d-flex flex-column pb-2 text-dark-50">
+                            </div>
+                            <span class="font-size-h2 font-weight-boldest text-muted">
+                                Market Selling Price:
+                            </span>
+                            <div class="d-flex flex-column pb-2 text-dark-50">
+                            </div>
+                            <span class="font-size-h2 font-weight-boldest text-muted">
+                                ₹ @item.msp
+                            </span>
+                            <div>
+                                <div class="bg-gray-100 py-3">
+                                    <span class="text-muted font-weight-boldest">Base Price</span>
+                                    <span>₹ @item.basePrice</span>
+                                </div>
+                                <div class="py-3">
+                                    <span class="text-muted font-weight-boldest">GST</span>
+                                    <span>₹ @item.gst</span>
+                                </div>
+                                <div class="bg-gray-100 py-3">
+                                    <span class="text-muted font-weight-boldest">Market Retailer Price</span>
+                                    <span>₹ @item.mrp</span>
+                                </div>
+                            </div>
+                            <!--end::Mobile Pricing Table-->
+                            <div class="mt-7">
+                                <button type="button" class="btn btn-primary text-uppercase font-weight-bolder px-15 py-3 btn-stock-price" data-msp="@item.msp" data-id="@item.stockTypeId">Purchase now</button>
+                            </div>
                         </div>
-                        <input type="text" class="form-control" placeholder="Number of KIT" maxlength="5" />
+                    </div>
+                }
+            </div>
+        </section>
+        <section id="no_of_stock_list" style="display:none;">
+            <form method="post" id="form_submit_request" action="@Url.Action("SubmitRequest","ActivationKITRequest")">
+                <input type="hidden" id="hdnStockPrice" />
+                <input type="hidden" id="hdnStockType" name="stockType"/>
+                <div class="wizard-step mb-4 text-primary">
+                    <div class="wizard-label">
+                        <h3 class="wizard-title text-muted">
+                            <span>2. </span>Select Number of Stock you want.
+                        </h3>
+                        <div class="wizard-bar bg-primary"></div>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="form-group mb-12">
+                            <label class="col-form-label">Slide to select number of stocks</label>
+                            <div id="kt_nouislider_1" class="nouislider nouislider-handle-danger"></div>
+                        </div>
+                        <div class="form-group mt-2 mb-6">
+                            <input type="text" class="form-control form-control-solid font-size-h3-xxl" id="kt_nouislider_1_input" name="stockCount" maxlength="2" onkeypress="return NumericKey(event);" placeholder="Quantity">
+                            <span class="form-text font-size-h1-xxl text-muted mt-6"><b>Total Price: </b><span id="lblQuantity"></span> * <span id="lblStockPrice"></span> = ₹<span id="lblPrice"></span> </span>
+                        </div>
+                        <div class="form-group mb-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="flaticon2-lock"></i></span>
+                                </div>
+                                <input type="password" maxlength="8" class="form-control form-control-solid font-size-h3-xxl" id="txtTPIN" placeholder="Enter Password">
+                            </div>
+                        </div>
+                        <div class="form-group row mb-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="btn btn-block btn-secondary btn-back"><span class="flaticon2-left-arrow"></span> Back</div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <button type="submit" class="btn btn-block btn-primary" id="btn_submit">Purchase Now <span class="flaticon2-right-arrow"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 ">
+                        <div class="d-flex flex-center col-lg-8 col-md-12 col-sm-12 ">
+                            <div class="px-lg-5 text-center stock-selected-panel">
+                                <div class="d-flex flex-center mb-7">
+                                    <span class="svg-icon svg-icon-5x svg-icon-primary">
+                                        <svg width="24px" height="24px" viewBox="0 0 24 24">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                                <path d="M1.4152146,4.84010415 C11.1782334,10.3362599 14.7076452,16.4493804 12.0034499,23.1794656 C5.02500006,22.0396582 1.4955883,15.9265377 1.4152146,4.84010415 Z" fill="#000000" opacity="0.3"></path>
+                                                <path d="M22.5950046,4.84010415 C12.8319858,10.3362599 9.30257403,16.4493804 12.0067693,23.1794656 C18.9852192,22.0396582 22.5146309,15.9265377 22.5950046,4.84010415 Z" fill="#000000" opacity="0.3"></path>
+                                                <path d="M12.0002081,2 C6.29326368,11.6413199 6.29326368,18.7001435 12.0002081,23.1764706 C17.4738192,18.7001435 17.4738192,11.6413199 12.0002081,2 Z" fill="#000000" opacity="0.3"></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </div>
 
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Description</label>
-                <div class="col-lg-6 col-md-9 col-sm-12">
-                    <div class="input-group">
-                        <textarea class="form-control" placeholder="Description"></textarea>
+                                <h4 class="font-size-h3 mb-10 text-dark">Activation Kit</h4>
+                                <div class="d-flex flex-column pb-2 text-dark-50">
+                                </div>
+                                <span class="font-size-h2 font-weight-boldest text-muted">
+                                    Market Selling Price
+                                </span>
+                                <div class="d-flex flex-column pb-2 text-dark-50">
+                                </div>
+                                <span class="font-size-h2 font-weight-boldest text-muted">
+                                    ₹ 100
+                                </span>
+                                <div>
+                                    <div class="bg-gray-100 py-3">
+                                        <span class="font-weight-boldest">Base Price</span>
+                                        <span>₹ 100</span>
+                                    </div>
+                                    <div class="py-3">
+                                        <span class="font-weight-boldest">GST</span>
+                                        <span>₹ 18</span>
+                                    </div>
+                                    <div class="bg-gray-100 py-3">
+                                        <span class="font-weight-boldest">Market Retailer Price</span>
+                                        <span>₹ 100</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-lg-12 ml-lg-auto">
-                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Submit</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </section>
+
     </div>
 </div>
+<script>
+    var slider = document.getElementById('kt_nouislider_1');
+        noUiSlider.create(slider, {
+         start: [ 1 ],
+            step: 1,
+            connect: [true, false],
+         range: {
+          'min': [ 1 ],
+          'max': [ 20 ]
+            }, pips: {
+                mode: 'values',
+                values: [1, 20],
+                density: 4
+            },
+         format: wNumb({
+          decimals: 0
+         })
+        });
+    var sliderInput = document.getElementById('kt_nouislider_1_input');
+    var priceInput = document.getElementById('lblPrice');
+    var qtyInput = document.getElementById('lblQuantity');
+    slider.noUiSlider.on('update', function (values, handle) {
+        sliderInput.value = values[handle];
+        priceInput.innerText = parseInt(values[handle]) * parseInt($("#hdnStockPrice").val());
+        qtyInput.innerText = parseInt(values[handle]);
+    });
 
+    sliderInput.addEventListener('change', function () {
+        slider.noUiSlider.set(this.value);
+        priceInput.innerText = parseInt(this.value) * parseInt($("#hdnStockPrice").val());
+        qtyInput.innerText = parseInt(this.value);
+    });
+
+
+    $(document).ready(function () {
+        $(".btn-stock-price").click(function (e) {
+            e.preventDefault();
+            var stock_price = $(this).attr('data-msp');
+            $(".stock-selected-panel").html($(this).parent().parent().html());
+            $(".stock-selected-panel").find(".btn-stock-price").hide();
+            $("#hdnStockType").val($(this).attr("data-id"));
+            $("#lblStockPrice").text(stock_price);
+            $("#hdnStockPrice").val(stock_price);
+            $("#lblPrice").text(parseInt($("#kt_nouislider_1_input").val()) * parseInt(stock_price))
+            $("#stock_type_panel").hide();
+            $("#no_of_stock_list").show();
+        });
+        $(".btn-back").click(function (e) {
+            e.preventDefault();
+            $("#stock_type_panel").show();
+            $("#no_of_stock_list").hide();
+        });
+        $("#form_submit_request").submit(function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "Please Wait",
+                text: "",
+                timer: 99999,
+                onOpen: function () {
+                    Swal.showLoading()
+                }
+            })
+            $("#btn_submit").addClass("spinner spinner-white spinner-right");
+            $("#btn_submit").attr("disabled", "disabled");
+            var url = this.action;
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $("#form_submit_request").serialize(),
+                success: function (data) {
+                    $("#btn_submit").removeClass("spinner spinner-white spinner-right");
+                    $("#btn_submit").removeAttr("disabled");
+                    if (data.success) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Your purchase request submitted.",
+                            icon: "success",
+                            confirmButtonText: "Ok",
+                        }).then(function (result) {
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Oops!",
+                            text: data.errorMessage,
+                            icon: "error",
+                            confirmButtonText: "Ok",
+                        }).then(function (result) {
+                            window.location.reload();
+                        });
+                    }
+                    
+                },
+                error: function (er) {
+                    $("#btn_submit").removeClass("spinner spinner-white spinner-right");
+                    $("#btn_submit").removeAttr("disabled");
+                    Swal.fire("Oops!", "No Internet Connection", "error");
+                }
+            });
+        });
+
+    });
+</script>

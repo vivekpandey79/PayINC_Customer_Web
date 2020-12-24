@@ -34,14 +34,18 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                     sessionUtility.SetSession("PayeeMobileNo",Convert.ToString(response.mobileNumber));
                     sessionUtility.SetSession("PayeeAmount", Convert.ToString(input.Amount));
                     sessionUtility.SetSession("PayeeCustomerID", Convert.ToString(response.customerId));
+                    sessionUtility.SetSession("PayeeName", response.firstName + " " + response.lastName);
                     return PartialView("ShowProfile", response);
                 }
+                else
+                {
+                    return Json(new { success = false, errorMessage });
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                return Json(new { success = false, errorMessage=ex.Message });
             }
-            return PartialView();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -61,23 +65,37 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                     transactionRemarks= inputReq.Remarks
                 };
                 var response = new CallService().PostResponse<string>("PaymentTransfer", req, ref errorMessage);
-                //if (string.IsNullOrEmpty(errorMessage))
-                //{
+                if (string.IsNullOrEmpty(errorMessage))
+                {
                     var ackResp = new PaymentTransferAck
                     {
                         PayeeMobileNumber = sessionUtility.GetStringSession("PayeeMobileNo"),
                         PayeeWalletBal = Convert.ToString(new WalletDetails().GetBalanceByCustomerID(sessionUtility.GetStringSession("PayeeCustomerID"))),
-                        Amount= sessionUtility.GetStringSession("PayeeAmount"),
-                        Status="Successfully Transferred."
+                        Amount = sessionUtility.GetStringSession("PayeeAmount"),
+                        PayeeName = sessionUtility.GetStringSession("PayeeName"),
+                        StatusId = 1,
+                        Status = "Successfully Transferred."
                     };
                     return PartialView("AckView", ackResp);
-                //}
+                }
+                else
+                {
+                    var ackResp = new PaymentTransferAck
+                    {
+                        PayeeMobileNumber = sessionUtility.GetStringSession("PayeeMobileNo"),
+                        PayeeWalletBal = Convert.ToString(new WalletDetails().GetBalanceByCustomerID(sessionUtility.GetStringSession("PayeeCustomerID"))),
+                        Amount = sessionUtility.GetStringSession("PayeeAmount"),
+                        PayeeName = sessionUtility.GetStringSession("PayeeName"),
+                        StatusId = 0,
+                        Status = errorMessage
+                    };
+                    return PartialView("AckView", ackResp);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                return Json(new { success = false, errorMessage=ex.Message });
             }
-            return PartialView("AckView");
         }
 
         public void GetNetworkChain()

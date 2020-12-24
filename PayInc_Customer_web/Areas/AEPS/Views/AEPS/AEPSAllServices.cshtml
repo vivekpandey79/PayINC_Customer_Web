@@ -1,6 +1,6 @@
 ﻿@model PayInc_Customer_web.Areas.AEPS.Models.AEPSInput
 @{
-    ViewData["Title"] = "AEPSAllServices";
+    ViewData["Title"] = "AEPS Services";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -100,35 +100,35 @@
                 </div>
             </div>
             <div class="card-body px-0">
-                <div class="tab-content pt-5">
+                <div class="tab-content pt-5 pl-3">
                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_4" role="tabpanel">
                         <form action="@Url.Action("CaptureBalanceEnquiry","AEPS")" method="post" id="form_balance_enq" class="m-2">
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(m => m.PidData, new { @class = "PidData" })
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Select Bank</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     @Html.DropDownListFor(m => m.BankName, new SelectList(ViewBag.BankList, "bankNBIN", "bankName"), "--Select Bank--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
                                     @Html.ValidationMessageFor(m => m.BankName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Aadhar Number</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <i class="flaticon2-hospital"></i>
                                             </span>
                                         </div>
-                                        @Html.TextBoxFor(m => m.AadharNumber, "", new { @class = "form-control", placeholder = "Enter Aadhar Number", maxlength="12", onkeypress = "return NumericKey(event);" })
+                                        @Html.TextBoxFor(m => m.AadharNumber, "", new { @class = "form-control aadhar-input", placeholder = "Enter Aadhar Number", maxlength="14", onkeypress = "return NumericKey(event);" })
                                     </div>
                                     @Html.ValidationMessageFor(m => m.AadharNumber, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Customer Number</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="flaticon2-phone"></i></span>
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-10 ml-lg-auto">
+                                <div class="col-lg-6 ml-lg-auto">
                                     <button type="submit" id="btn_bal_enq" class="btn btn-primary font-weight-bold mr-2">Capture and Balance Enquiry</button>
                                 </div>
                             </div>
@@ -164,28 +164,28 @@
                             @Html.HiddenFor(m => m.PidData, new { @class = "PidData" })
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Select Bank</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     @Html.DropDownListFor(m => m.BankName, new SelectList(ViewBag.BankList, "bankNBIN", "bankName"), "--Select Bank--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
                                     @Html.ValidationMessageFor(m => m.BankName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Aadhar Number</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <i class="flaticon2-hospital"></i>
                                             </span>
                                         </div>
-                                        @Html.TextBoxFor(m => m.AadharNumber, "", new { @class = "form-control", placeholder = "Enter Aadhar Number", maxlength = "12", onkeypress = "return NumericKey(event);" })
+                                        @Html.TextBoxFor(m => m.AadharNumber, "", new { @class = "form-control aadhar-input", placeholder = "Enter Aadhar Number", maxlength = "14", onkeypress = "return NumericKey(event);" })
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AadharNumber, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Customer Number</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="flaticon2-phone"></i></span>
@@ -197,10 +197,10 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label text-left col-lg-2 col-sm-12">Amount</label>
-                                <div class="col-lg-10 col-md-9 col-sm-12">
+                                <div class="col-lg-6 col-md-9 col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="flaticon2-envelope"></i></span>
+                                            <span class="input-group-text"><i class="flaticon2-telegram-logo"></i></span>
                                         </div>
                                         @Html.TextBoxFor(m => m.Amount, "", new { @class = "form-control", placeholder = "Enter Amount", maxlength = "5", onkeypress = "return NumericKey(event);" })
                                     </div>
@@ -284,7 +284,7 @@
                     </div>
 
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
-                        <form action="@Url.Action("CaptureWithdrawal","AEPS")" id="form_aadharpay" class="m-2">
+                        <form action="@Url.Action("CaptureAadharPay","AEPS")" id="form_aadharpay" class="m-2">
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(m => m.PidData, new { @class = "PidData" })
                             <div class="form-group row">
@@ -366,6 +366,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="AVDMPort"/>
 </div>
 <style>
     th {
@@ -395,37 +396,46 @@
 </div>
 
 <script>
-    $(".searchable-dropdown").select2();
     $(document).ready(function () {
         $(".searchable-dropdown").select2();
+        $(".aadhar-input").inputmask({
+            "mask": "9999-9999-9999",
+        });
 
         $("#form_withdraw").submit(function (e) {
             e.preventDefault();
             if (!$(this).valid()) {
                 return;
             }
-            captureCW();
+            CaptureMantra("W");
+            //captureCW();
         });
         $("#form_balance_enq").submit(function (e) {
             e.preventDefault();
             if (!$(this).valid()) {
                 return;
             }
-            captureEnquiry();
+            //$("#btn_bal_enq").addClass("spinner spinner-white spinner-right");
+            //$("#btn_bal_enq").attr("disabled", "disabled");
+
+            CaptureMantra("BE");
+            //captureEnquiry();
         });
         $("#form_ministatement").submit(function (e) {
             e.preventDefault();
             if (!$(this).valid()) {
                 return;
             }
-            captureMiniStatement();
+            CaptureMantra("M");
+            //captureMiniStatement();
         });
         $("#form_aadharpay").submit(function (e) {
             e.preventDefault();
             if (!$(this).valid()) {
                 return;
             }
-            captureCW();
+            CaptureMantra("AP");
+            //captureCW();
         });
     });
 </script>
@@ -773,6 +783,167 @@
             myWindow.print();
             myWindow.close();
         };
+    }
+</script>
+
+<script>
+    var finalUrl = "";
+    var MethodInfo = "";
+    var MethodCapture = "";
+    var CmbData1 = "";
+    var CmbData2 = "";
+    function discoverAvdm() {
+        try {
+            var primaryUrl = "http://127.0.0.1:";
+            url = "";
+            for (var i = 11100; i <= 11120; i++) {
+                var err = "";
+                var res;
+                $.support.cors = true;
+                var httpStaus = false;
+                var jsonstr = "";
+                var data = new Object();
+                var obj = new Object();
+                $.ajax({
+                    type: "RDSERVICE",
+                    async: false,
+                    crossDomain: true,
+                    url: primaryUrl + i.toString(),
+                    contentType: "text/xml; charset=utf-8",
+                    processData: false,
+                    cache: false,
+                    async: false,
+                    crossDomain: true,
+                    beforeSend: function () { StartLoading("Checking Device"); },
+                    success: function (data) {
+                        httpStaus = true;
+                        res = { httpStaus: httpStaus, data: data };
+                        finalUrl = primaryUrl + i.toString();
+                        var $doc = $.parseXML(data);
+                        if (typeof $($doc).find('Interface').eq(1).attr('path') !== "undefined" && $($doc).find('RDService').attr('status') !== "undefined" && $($doc).find('RDService').attr('info') !== "undefined") {
+                            MethodCapture = $($doc).find('Interface').eq(1).attr('path');
+                            CmbData1 = $($doc).find('RDService').attr('status');
+                            CmbData2 = $($doc).find('RDService').attr('info');
+                        }
+                        $("#AVDMPort").val(i.toString());
+                    },
+                    error: function (jqXHR, ajaxOptions, thrownError) {
+                        res = { httpStaus: httpStaus, err: getHttpError(jqXHR) };
+                    },
+                });
+            }
+            return res;
+        } catch (e) {
+
+        }
+    }
+
+    function CaptureMantra(serviceType) {
+        try {
+            
+            $("#fvalue").val("");
+            discoverAvdm();
+            StartLoading("Capture your Finger");
+            if (typeof CmbData1 !== "undefined") {
+                if (CmbData1 != "NOTREADY") {
+                    finalUrl = "http://127.0.0.1:" + $("#AVDMPort").val();
+                    var XML = '<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="1" fType="0" iCount="0" pCount="0" format="0" pidVer="2.0" timeout="10000" wadh="" posh="LEFT_INDEX" env="P" /> <CustOpts><Param name="mantrakey" value="" /></CustOpts> </PidOptions>';
+                    //var XML ='<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="1" fType="0" iCount="0" pCount="0" pgCount="2" format="0"   pidVer="2.0" timeout="10000" pTimeout="20000" posh="UNKNOWN" env="PP" /> <CustOpts><Param name="mantrakey" value="" /></CustOpts> </PidOptions>'
+                    var res;
+                    $.support.cors = true;
+                    var httpStaus = false;
+                    $.ajax({
+                        type: "CAPTURE",
+                        async: true,
+                        crossDomain: true,
+                        url: finalUrl + MethodCapture,
+                        data: XML,
+                        contentType: "text/xml; charset=utf-8",
+                        processData: false,
+                        success: function (data) {
+                            httpStaus = true;
+                            res = { httpStaus: httpStaus, data: data };
+                            if (res.httpStaus == true) {
+                                var $doc = $.parseXML(data);
+                                if ($($doc).find('Resp').attr('errCode') == "0") {
+                                    $('.PidData').val(data);
+                                    StartLoading("Fetch");
+                                    var url = "";
+                                    var formData="";
+                                    if (serviceType === "BE") {
+                                        StartLoading("Loading Balance Enquiry");
+                                        url = $("#form_balance_enq").attr("action");
+                                        formData = $("#form_balance_enq").serialize()
+                                    }
+                                    else if (serviceType === "W") {
+                                        StartLoading("Loading Cash Withdraw");
+                                        url = $("#form_withdraw").attr("action");
+                                        formData = $("#form_withdraw").serialize()
+                                    }
+                                    else if (serviceType === "M") {
+                                        StartLoading("Loading MINI STATEMENT");
+                                        url = $("#form_ministatement").attr("action");
+                                        formData = $("#form_ministatement").serialize()
+                                    }
+                                    else if (serviceType === "AP") {
+                                        StartLoading("Loading Aadhar Pay");
+                                        url = $("#form_aadharpay").attr("action");
+                                        formData = $("#form_aadharpay").serialize()
+                                    }
+                                    $.ajax({
+                                        url: url,
+                                        type: "POST",
+                                        data: formData,
+                                        success: function (data) {
+                                            StopLoading();
+                                            try {
+                                                var checkError = data.errorMessage;
+                                                if (typeof (checkError) !== "undefined") {
+                                                    toastr.error(checkError, "Alert");
+                                                    return false;
+                                                }
+                                                else {
+                                                    $("#ack_section").html(data);
+                                                    $("#mymodal").modal("show");
+                                                }
+                                            }
+                                            catch (error) {
+                                                $("#ack_section").html(data);
+                                                $("#mymodal").modal("show");
+                                            }
+                                        },
+                                        error: function (er) {
+                                            StopLoading();
+                                        }
+                                    });
+                                }
+                                else {
+                                    StopLoading();
+                                    toastr.info($($doc).find('Resp').attr('errInfo'));
+                                }
+                            }
+                            
+                        },
+                        error: function (jqXHR, ajaxOptions, thrownError) {
+                            StopLoading();
+                            toastr.error(thrownError);
+                        },
+                    });
+                }
+                else {
+                    StopLoading();
+                    toastr.info("Device is Not Ready");
+                }
+            }
+            else {
+                StopLoading();
+                toastr.info("Please Connect Device");
+            }
+        }
+        catch (e) {
+            StopLoading();
+            toastr.info(e);
+        }
     }
 </script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

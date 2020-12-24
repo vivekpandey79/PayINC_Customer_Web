@@ -17,9 +17,9 @@ namespace PayInc_Customer_web.Models
         public string middleName { get; set; }
         public string lastName { get; set; }
         public string emailAddress { get; set; }
-        public int customerCategoryId { get; set; }
-        public int customerWalletId { get; set; }
-        public int customerAccountTypeId { get; set; }
+        public int? customerCategoryId { get; set; }
+        public int? customerWalletId { get; set; }
+        public int? customerAccountTypeId { get; set; }
         public decimal customerMainAccountBalance { get; set; }
         public decimal customerFundsInClearing { get; set; }
         public double customerFloatBalance { get; set; }
@@ -28,6 +28,9 @@ namespace PayInc_Customer_web.Models
         public decimal customerUnclearBalance { get; set; }
         public decimal customerSystemReservedBalance { get; set; }
         public decimal customerEffectiveBalance { get; set; }
+        public int? walletTypeId { get; set; }
+        public string walletType { get; set; }
+        public decimal aepsBalance { get; set; }
     }
     public class WalletDetails
     {
@@ -36,8 +39,8 @@ namespace PayInc_Customer_web.Models
             var listParam = new List<KeyValuePair<string, string>>();
             listParam.Add(new KeyValuePair<string, string>("CustomerId", customerId));
             string errorMessage = string.Empty;
-            var response = new CallService().GetResponse<WalletRes>(APIMethodConst.GetBalanceByCustomerId, listParam, ref errorMessage);
-            return response.customerEffectiveBalance;
+            var response = new CallService().GetResponse<List<WalletRes>>(APIMethodConst.GetBalanceByCustomerId, listParam, ref errorMessage);
+            return response[0].customerEffectiveBalance;
         }
     }
 }

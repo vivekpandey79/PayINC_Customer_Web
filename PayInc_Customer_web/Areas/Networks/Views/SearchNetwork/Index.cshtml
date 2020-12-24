@@ -10,111 +10,22 @@
         <!--begin::Card-->
         <div class="card card-custom">
             <div class="card-body px-2">
-                <form action="@Url.Action("VerifyMobileNumber","ManualForm")" method="post">
+                <form action="@Url.Action("ViewProfile","SearchNetwork")" method="post">
+                    @Html.AntiForgeryToken()
                     <div class="row">
                         <label class="col-lg-2 col-form-label text-lg-right">Mobile Number:</label>
                         <div class="col-lg-3 col-md-12 col-sm-12">
-                            <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-user"></i></span></div>
-                                <input type="text" class="form-control" placeholder="Mobile Number" maxlength="10"/>
-                            </div>
+                            @if (ViewBag.NetworkChain != null)
+                            {
+                                @Html.DropDownListFor(m => m.MobileNumber, new SelectList(ViewBag.NetworkChain, "mobileNumber", "customerAccountStatus"), "--Select Mobile Number--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
+                            }
+                            @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-lg-3 col-md-12 col-sm-12">
                             <input type="submit" class="btn btn-block btn-primary" value="Search" />
                         </div>
                     </div>
                 </form>
-                <div class="separator separator-dashed my-10"></div>
-                <div style="display:none;">
-                    <form class="form">
-                        <div class="card-body">
-                            <div class="form-group row mt-3">
-                                <label class="col-lg-1 col-form-label text-lg-right">Full Name:</label>
-                                <div class="col-lg-3">
-                                    <input type="email" class="form-control" placeholder="Full name" />
-                                    <span class="form-text text-muted">Please enter your full name</span>
-                                </div>
-                                <label class="col-lg-1 col-form-label text-lg-right">Email:</label>
-                                <div class="col-lg-3">
-                                    <input type="email" class="form-control" placeholder="Email" />
-                                    <span class="form-text text-muted">Please enter your email</span>
-                                </div>
-                                <label class="col-lg-1 col-form-label text-lg-right">Username:</label>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend"><span class="input-group-text"><i class="la la-user"></i></span></div>
-                                        <input type="text" class="form-control" placeholder="" />
-                                    </div>
-                                    <span class="form-text text-muted">Please enter your username</span>
-                                </div>
-                            </div>
-
-                            <div class="separator separator-dashed my-10"></div>
-
-                            <div class="form-group row">
-                                <label class="col-lg-1 col-form-label text-lg-right">Contact:</label>
-                                <div class="col-lg-3">
-                                    <input type="email" class="form-control" placeholder="Enter contact number" />
-                                    <span class="form-text text-muted">Please enter your contact</span>
-                                </div>
-                                <label class="col-lg-1 col-form-label text-lg-right">Fax:</label>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Fax number" />
-                                        <div class="input-group-append"><span class="input-group-text"><i class="la la-info-circle"></i></span></div>
-                                    </div>
-                                    <span class="form-text text-muted">Please enter fax</span>
-                                </div>
-                                <label class="col-lg-1 col-form-label text-lg-right">Address:</label>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Enter your address" />
-                                        <div class="input-group-append"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
-                                    </div>
-                                    <span class="form-text text-muted">Please enter your address</span>
-                                </div>
-                            </div>
-
-                            <div class="separator separator-dashed my-10"></div>
-
-                            <div class="form-group row">
-                                <label class="col-lg-1 col-form-label text-lg-right">Postcode:</label>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Enter your postcode" />
-                                        <div class="input-group-append"><span class="input-group-text"><i class="la la-bookmark-o"></i></span></div>
-                                    </div>
-                                    <span class="form-text text-muted">Please enter your postcode</span>
-                                </div>
-                                <label class="col-lg-1 col-form-label text-lg-right">User Group:</label>
-                                <div class="col-lg-3">
-                                    <div class="radio-inline">
-                                        <label class="radio radio-solid">
-                                            <input type="radio" name="example_2" checked="checked" value="2" />
-                                            <span></span>
-                                            Sales Person
-                                        </label>
-                                        <label class="radio radio-solid">
-                                            <input type="radio" name="example_2" value="2" />
-                                            <span></span>
-                                            Customer
-                                        </label>
-                                    </div>
-                                    <span class="form-text text-muted">Please select user group</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="col-lg-5"></div>
-                                <div class="col-lg-7">
-                                    <button type="reset" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn btn-secondary">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

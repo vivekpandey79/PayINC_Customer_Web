@@ -294,19 +294,7 @@
                                         <span class="menu-text">Social Presence</span>
                                         <i class="menu-arrow"></i>
                                     </a>
-                                    <div class="menu-submenu menu-submenu-classic menu-submenu-right">
-                                        <ul class="menu-subnav">
-                                           
-                                            <li class="menu-item" aria-haspopup="true">
-                                                <a href="javascript:;" class="menu-link">
-                                                    <i class="menu-bullet menu-bullet-dot">
-                                                        <span></span>
-                                                    </i>
-                                                    <span class="menu-text">Opportunity Growth</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    
                                 </li>
                                 <li class="menu-item" aria-haspopup="true">
                                     <a href="javascript:;" class="menu-link">
@@ -358,27 +346,7 @@
                                         <span class="menu-text">Deployment Center</span>
                                         <i class="menu-arrow"></i>
                                     </a>
-                                    <div class="menu-submenu menu-submenu-classic menu-submenu-right">
-                                        <ul class="menu-subnav">
-                                            
-                                            <li class="menu-item" aria-haspopup="true">
-                                                <a href="javascript:;" class="menu-link">
-                                                    <i class="menu-bullet menu-bullet-line">
-                                                        <span></span>
-                                                    </i>
-                                                    <span class="menu-text">Database Manager</span>
-                                                </a>
-                                            </li>
-                                            <li class="menu-item" aria-haspopup="true">
-                                                <a href="javascript:;" class="menu-link">
-                                                    <i class="menu-bullet menu-bullet-line">
-                                                        <span></span>
-                                                    </i>
-                                                    <span class="menu-text">System Settings</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    
                                 </li>
                             </ul>
                         </div>
@@ -397,16 +365,22 @@
             <div class="dropdown mr-25 bg-hover-light">
                 <!--begin::Toggle-->
                 <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
-                    <div class="col-md-2 d-flex align-items-stretch">
+                    <div class="d-flex align-items-stretch">
                         <div class="d-flex flex-grow-1 align-items-center bg-hover-light p-4 rounded">
-                            <div class="mr-4 flex-shrink-0 text-center" style="width: 40px;">
-                                <i class="icon-xl fas fa-wallet mr-2 text-muted"></i>
+                            <div class="mr-4 flex-shrink-0 text-center">
+                                Main Balance:
                             </div><span class="icon-xl fas fa-xs fa-rupee-sign text-muted"></span>
-                            <div class="text-muted"><span id="wallet_balance" class="text-muted"><span class="fa fa-spinner"></span></span></div>
+                            <div class="text-muted"><span id="wallet_balance" class="text-muted"> &nbsp;  <i class="fas fa-circle-notch fa-spin"></i></span></div>
+                        </div>
+                        <div class="d-flex flex-grow-1 align-items-center bg-hover-light p-4 rounded">
+                            <div class="mr-4 flex-shrink-0 text-center">
+                                AEPS Balance:
+                            </div><span class="icon-xl fas fa-xs fa-rupee-sign text-muted"></span>
+                            <div class="text-muted"><span id="aeps_balance" class="text-muted">&nbsp; <i class="fas fa-circle-notch fa-spin"></i></span></div>
                         </div>
                     </div>
-                    <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1 border-1"> 
-                        
+                    <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1 border-1">
+
                     </div>
                 </div>
                 <!--end::Toggle-->

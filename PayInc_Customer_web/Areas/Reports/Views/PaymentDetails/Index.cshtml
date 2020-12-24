@@ -10,7 +10,7 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.AddDays(-1).Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-lg-4 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("MM-dd-yyyy")" placeholder="to date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -94,10 +94,7 @@
         </div>
     </div>
 </div>
-@*<script>
-    document.getElementById("kt_datepicker_2").valueAsDate = new Date("@System.DateTime.Now.Date");
-    document.getElementById("kt_datepicker_3").valueAsDate = new Date("@System.DateTime.Now.Date");
-</script>*@
+
 <script>
     var arrows = {
         leftArrow: '<i class="la la-angle-left"></i>',
@@ -106,14 +103,14 @@
     $('#datepicker_1').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });
     $('#datepicker_2').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });

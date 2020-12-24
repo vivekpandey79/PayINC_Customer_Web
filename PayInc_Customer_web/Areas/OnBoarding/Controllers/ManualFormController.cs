@@ -680,7 +680,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     new SessionUtility().SetSession("PANCroppedUrl", response.response.result.cropped);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

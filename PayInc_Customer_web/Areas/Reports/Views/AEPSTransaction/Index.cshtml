@@ -1,7 +1,147 @@
-﻿
+﻿@model PayInc_Customer_web.Areas.Reports.Models.AEPSTransactionModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AEPS Transaction Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
 
+<form class="form" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-lg-2 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="transactiontype" placeholder="Transaction Type" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-tag"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TransactionType, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-2 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="sendermobilenumber" placeholder="Sender Mobile Number" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-phone"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.SenderMobileNumber, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-2 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="aadharnumber" placeholder="Aadhar  Number" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-address-card"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.AadharNumber, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-2 col-md-9 col-sm-12">
+                    <div class="input-group date">
+                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-2 col-md-9 col-sm-12">
+                    <div class="input-group date">
+                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ToDate, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-lg-2 col-md-9 col-sm-12">
+                    <button type="submit" class="btn btn-primary mr-2">View Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@{
+    var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.AEPSTransactionRes>)ViewBag.AEPSTransactionReport;
+}
+<div class="mt-2">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Customer Number</td>
+                        <td>Aadhar Number</td>
+                        <td>Amount</td>
+                        <td>Service Charge</td>
+                        <td>Trnx Id</td>
+                        <td>Settlement TrnxId</td>
+                        <td>Commission</td>
+                        <td>Opening Bal</td>
+                        <td>Closing Bal</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.AEPSTransactionReport != null)
+                    {
+                        foreach (var item in listReport)
+                        {
+                    <tr>
+                        <td>@item.customerNumber</td>
+                        <td>@item.adhaarNumber</td>
+                        <td>₹ @item.transactionAmount</td>
+                        <td>@item.transactionId</td>
+                        <td>@item.settlementTransactionId</td>
+                        <td>₹ @item.serviceCharge</td>
+                        <td>₹ @item.commission</td>
+                        <td>₹ @item.customeropBal</td>
+                        <td>₹ @item.customerclBal</td>
+                        <td>@item.transactionStatusDescription</td>
+                    </tr>
+                        }
+                    }
+                    <tr>
+                       <td colspan="8">
+                            <div class="d-flex-in justify-content-between">
+                                <span class="text-center text-dark">@ViewData["ErrorMessage"]</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var arrows = {
+        leftArrow: '<i class="la la-angle-left"></i>',
+        rightArrow: '<i class="la la-angle-right"></i>'
+    }
+    $('#datepicker_1').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'dd-mm-yyyy',
+        templates: arrows,
+        autoclose: true,
+    });
+    $('#datepicker_2').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'dd-mm-yyyy',
+        templates: arrows,
+        autoclose: true,
+    });
+</script>

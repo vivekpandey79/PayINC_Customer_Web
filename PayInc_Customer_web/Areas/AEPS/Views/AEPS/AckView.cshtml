@@ -23,27 +23,34 @@
             </tr>
             <tr>
                 <th>Status </th>
-                <td>@Model.Status</td>
+                <td><span class="@(Model.Status == 1 ? "text-success": "text-danger")">@Model.ResponseMessage</span></td>
             </tr>
-            <tr>
-                <th>Request Type </th>
-                <td>@Model.AEPSModeType</td>
-            </tr>
-            <tr>
-                <th>Transfer Amount</th>
-                <td>@Model.Amount</td>
-            </tr>
+            @if (Model.AEPSModeType != "Balance Enquiry")
+            {
+                <tr>
+                    <th>Transaction Amount</th>
+                    <td><span class="text-primary"><i class="fa fa-inr"></i> @Model.Amount</span></td>
+                </tr>
+            }
             <tr>
                 <th>Account Balance</th>
-                <td>@Model.BalanceAmount</td>
+                <td><span class="text-primary"><i class="fa fa-inr"></i> @Model.BalanceAmount</span></td>
             </tr>
             <tr>
                 <th>Client Transaction Id</th>
                 <td>@Model.ClientTransactionId</td>
             </tr>
             <tr>
+                <th>Bank Transaction Id</th>
+                <td>@Model.TransactionReference</td>
+            </tr>
+            <tr>
                 <th>Transaction Date</th>
                 <td>@System.DateTime.Now</td>
+            </tr>
+            <tr>
+                <th>Aadhar Number</th>
+                <td>@Model.AadhaarNumber</td>
             </tr>
             <tr>
                 <th>Customer Number</th>
@@ -51,11 +58,11 @@
             </tr>
             <tr>
                 <th>Bank RRN</th>
-                <td>7897987987987</td>
+                <td>@Model.BankReferenceNumber</td>
             </tr>
             <tr>
-                <th>Status</th>
-                <td><span class="text-success">@Model.ResponseMessage</span></td>
+                <th>Bank Status</th>
+                <td><span class="@(Model.Status == 1 ? "text-success": "text-danger")">@Model.BankResponseMessage</span></td>
             </tr>
         </tbody>
 

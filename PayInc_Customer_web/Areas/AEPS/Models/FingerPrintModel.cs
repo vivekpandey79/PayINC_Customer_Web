@@ -102,13 +102,12 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
 
     #region Request ICICI AEPS
 
-    public class DetailsAepsRequestsReq
+    public class DetailsBalanceEnqAepsReq
     {
         public long customerId { get; set; }
         public string agentId { get; set; }
         public string customerNumber { get; set; }
         public string adhaarNumber { get; set; }
-        public decimal transactionAmount { get; set; }
         public string transactionType { get; set; }
         public string accessModeType { get; set; }
         public string nbin { get; set; }
@@ -124,6 +123,27 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
         public string requestRemarks { get; set; }
     }
 
+    public class DetailsAepsRequestsReq
+    {
+        public long customerId { get; set; }
+        public string agentId { get; set; }
+        public string customerNumber { get; set; }
+        public string adhaarNumber { get; set; }
+        public double transactionAmount { get; set; }
+        public string transactionType { get; set; }
+        public string accessModeType { get; set; }
+        public string nbin { get; set; }
+        public string req_Timestamp { get; set; }
+        public string longitude { get; set; }
+        public string latitude { get; set; }
+        public string ipAddress { get; set; }
+        public string deviceSerialNumber { get; set; }
+        public string deviceTransactionId { get; set; }
+        public string clientTransactionId { get; set; }
+        public string merchantTransactionId { get; set; }
+        public long vendorId { get; set; }
+        public string requestRemarks { get; set; }
+    }
 
     public class cardnumberORUID
     {
@@ -170,6 +190,96 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
         public captureResponse captureResponse;
         public string subMerchantId;
         public string merchantTransactionId;
+    }
+    public class AepsCashWithdrawalInput
+    {
+        public cardnumberORUID cardnumberORUID;
+        public string mobileNumber;
+        public string paymentType;// LU - Last Used Bank, Bank- B,PayTM - P, Mpesa - M, Mobikwik - K, Bitcoin - C        
+        public string timestamp;// dd/MM/yyyy HH:mm:ss
+        public string transactionType;// Merchant - M, Cash withdraw - C, Bill Payments Prepaid Phone - P, Postpaid Phone- Q, Electricity- E
+        public string requestRemarks;
+        public string deviceTransactionId;
+        public captureResponse captureResponse;
+        public int transactionAmount { get; set; }
+        public string subMerchantId;
+        public string merchantTransactionId;
+    }
+    #endregion
+
+
+    #region new AEPS
+    public class DetailsAepReq
+    {
+        public long customerId { get; set; }
+        public int serviceChannelId { get; set; }
+        public string agentId { get; set; }//subMerchantId
+        public string customerNumber { get; set; }
+        public string adhaarNumber { get; set; }
+        public int transactionAmount { get; set; }
+        public string transactionType { get; set; }
+        public string accessModeType { get; set; }
+        public string nbin { get; set; }
+        public string longitude { get; set; }
+        public string latitude { get; set; }
+        public string ipAddress { get; set; }
+        public string deviceSerialNumber { get; set; }
+        public string deviceTransactionId { get; set; }
+        public string merchantTransactionId { get; set; }
+        public string requestRemarks { get; set; }
+        public int indicatorforUID { get; set; }
+        public string paymentType { get; set; }
+        public string virtualId { get; set; }
+        public IciciCaptureInternalResponse iciciAepsCaptureRes { get; set; }
+    }
+
+    public class IciciCaptureInternalResponse
+    {
+        public string errCode { get; set; }
+        public string errInfo { get; set; }
+        public string fCount { get; set; }
+        public string fType { get; set; }
+        public string iCount { get; set; }
+        public string iType { get; set; }
+        public string pCount { get; set; }
+        public string pType { get; set; }
+        public string nmPoints { get; set; }
+        public string qScore { get; set; }
+        public string dpID { get; set; }
+        public string rdsID { get; set; }
+        public string rdsVer { get; set; }
+        public string dc { get; set; }
+        public string mi { get; set; }
+        public string mc { get; set; }
+        public string ci { get; set; }
+        public string sessionKey { get; set; }
+        public string hmac { get; set; }
+        public string PidDatatype { get; set; }
+        public string Piddata { get; set; }
+    }
+
+    #endregion
+
+    #region aeps response
+    public class AEPSData
+    {
+        public string terminalId { get; set; }
+        public string requestTransactionTime { get; set; }
+        public double transactionAmount { get; set; }
+        public string transactionStatus { get; set; }
+        public double balanceAmount { get; set; }
+        public string bankRRN { get; set; }
+        public string transactionType { get; set; }
+        public string fpTransactionId { get; set; }
+        public object merchantTxnId { get; set; }
+    }
+
+    public class AEPSResponse
+    {
+        public bool status { get; set; }
+        public string message { get; set; }
+        public AEPSData data { get; set; }
+        public int statusCode { get; set; }
     }
     #endregion
 }

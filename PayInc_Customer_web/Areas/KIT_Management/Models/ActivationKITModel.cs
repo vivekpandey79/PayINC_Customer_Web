@@ -7,6 +7,7 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Models
 {
     public class ActivationKITModel
     {
+        public string NoOfStocks { get; set; }
     }
     public class ActivationKitRes
     {

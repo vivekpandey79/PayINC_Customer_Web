@@ -12,15 +12,10 @@
     <meta name="description" content="Login page example" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-    <!--end::Fonts-->
-    <!--begin::Page Custom Styles(used by this page)-->
     <link href="~/assets/css/pages/login/classic/login-4.css" rel="stylesheet" type="text/css" />
-    <!--end::Page Custom Styles-->
-    <!--begin::Global Theme Styles(used by all pages)-->
     <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <!--end::Layout Themes-->
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
 </head>
 <!--end::Head-->
@@ -32,22 +27,20 @@
         <div class="login login-4 login-signin-on d-flex flex-row-fluid" id="kt_login">
             <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat" style="background-image: url('assets/media/bg/bg-3.jpg');">
                 <div class="login-form text-center p-7 position-relative overflow-hidden">
-                    <!--begin::Login Header-->
                     <div class="d-flex flex-center mb-10">
                         <a href="#">
                             <img src="~/assets/media/logos/logo_rnfi.png" class="max-h-lg-150px max-h-sm-75px" alt="" />
                         </a>
                     </div>
-                    <!--end::Login Header-->
-                    <!--begin::Login Sign in form-->
                     <div class="login-signin">
                         <div class="mb-20">
                             <h3>Sign In To RNFI</h3>
                             <div class="text-muted font-weight-bold">Enter your credential to login your account:</div>
                         </div>
                         <form class="form" asp-controller="login" asp-action="index" method="post">
+                            @Html.AntiForgeryToken()
                             <div class="form-group mb-5">
-                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" autocomplete="off" value="cust1000" />
+                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" value="9800570709" />
                                 <span asp-validation-for="UserName" class="text-danger"></span>
 
                             </div>
@@ -68,12 +61,8 @@
                             <button type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4">Sign In</button>
                         </form>
                         <div class="mt-10">
-                            <!-- <span class="opacity-70 mr-4">Don't have an account yet?</span>
-                            <a href="javascript:;" id="kt_login_signup" class="text-muted text-hover-primary font-weight-bold">Sign Up!</a>-->
                         </div>
                     </div>
-                    <!--end::Login Sign in form-->
-                    <!--begin::Login Sign up form-->
                     <div class="login-signup">
                         <div class="mb-20">
                             <h3>Sign Up</h3>
@@ -126,13 +115,13 @@
                         <form class="form digit-group" id="kt_login_forgot_otp" style="display:none" data-group-name="digits" data-autosubmit="false" autocomplete="off">
                             <div class="text-muted font-weight-bold">ENTER OTP</div>
                             <div class="form-group mb-10">
-                                <input type="text" id="digit-1" name="digit-1" data-next="digit-2" class="form-control-solid" />
-                                <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
-                                <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
+                                <input type="text" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" />
+                                <input type="text" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
+                                <input type="text" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
                                 <span class="splitter">&ndash;</span>
-                                <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" /> 
-                                <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
-                                <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" class="form-control-solid" />
+                                <input type="text" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" /> 
+                                <input type="text" id="digit-5" name="digit5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
+                                <input type="text" id="digit-6" name="digit6" data-previous="digit-5" class="form-control-solid" />
                             </div> 
                             <div class="form-group d-flex flex-wrap flex-center mt-10">
                                 <button id="kt_login_forgot_submit" type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Change</button>
@@ -143,7 +132,6 @@
                 </div>
             </div>
         </div>
-        <!--end::Login-->
     </div>
     <style>
         .digit-group input {
@@ -162,17 +150,12 @@
             font-size: 24px;
         }
     </style>
-    <!--end::Main-->
     <script>var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";</script>
-    <!--begin::Global Config(global config for global JS scripts)-->
     <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1400 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#3699FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#E4E6EF", "dark": "#181C32" }, "light": { "white": "#ffffff", "primary": "#E1F0FF", "secondary": "#EBEDF3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#3F4254", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#EBEDF3", "gray-300": "#E4E6EF", "gray-400": "#D1D3E0", "gray-500": "#B5B5C3", "gray-600": "#7E8299", "gray-700": "#5E6278", "gray-800": "#3F4254", "gray-900": "#181C32" } }, "font-family": "Poppins" };</script>
     <script src="~/assets/plugins/global/plugins.bundle.js"></script>
     <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     <script src="~/assets/js/scripts.bundle.js"></script>
-    <!--end::Global Theme Bundle-->
-    <!--begin::Page Scripts(used by this page)-->
     <script src="~/assets/js/pages/custom/login/login-general.js"></script>
-    <!--end::Page Scripts-->
     <script>
         $(document).ready(function () {
             $("#kt_login_forgot").click(function () {
@@ -246,5 +229,4 @@
         </script>
     }
 </body>
-<!--end::Body-->
 </html>

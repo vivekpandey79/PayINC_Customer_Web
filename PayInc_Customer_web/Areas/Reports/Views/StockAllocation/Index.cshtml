@@ -1,8 +1,9 @@
-﻿@model PayInc_Customer_web.Areas.Reports.Models.StockRequestModel
+﻿@model PayInc_Customer_web.Areas.Reports.Models.StockAllocationModel
 @{
-    ViewData["Title"] = "Stock Request Report";
+    ViewData["Title"] = "Stock Allocation Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <form class="form" method="post">
     <div class="card">
@@ -34,7 +35,7 @@
                             </span>
                         </div>
                     </div>
-                    @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.ToDate, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-lg-3 col-md-9 col-sm-12">
                     <button type="submit" class="btn btn-primary mr-2">View Report</button>
@@ -49,40 +50,43 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>Request ID</td>
-                        <td>Count</td>
-                        <td>Type</td>
-                        <td>Request Date</td>
-                        <td>Approve Date</td>
-                        <td>Processed Date</td>
-                        <td>Status</td>
+                        <td>Allocation Id</td>
+                        <td>Allocated To</td>
+                        <td>Total Allocated</td>
+                        <td>Available Stocks</td>
+                        <td>Used Stocks</td>
+                        <td>Allocation Date</td>
+                        <td>Stock Type</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (ViewBag.StockReqReport != null)
+                    @if (ViewBag.StockAllocationReport != null)
                     {
-                        var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.StockReqRes>)ViewBag.StockReqReport;
+
+                        var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.StockAllocationRes>)ViewBag.StockAllocationReport;
+
                         foreach (var item in listReport)
                         {
                             <tr>
-                                <td>@item.stockRequestId</td>
-                                <td>@item.stockCount</td>
+                                <td>@item.stockAllocationId</td>
+                                <td>@item.stockAllocatedTo</td>
+                                <td>@item.totalStockAllocated</td>
+                                <td>@item.availableStocks</td>
+                                <td>@item.usedStocks</td>
+                                <td>@item.stockAllocatedDate</td>
                                 <td>@item.stockType</td>
-                                <td>@item.stockRequestedDate</td>
-                                <td>@item.stockApprovedDate</td>
-                                <td>@item.stockProcessedDate</td>
-                                <td>@item.stockStatus</td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="7">
+                            <td colspan="8">
                                 <span class="text-center">@ViewData["ErrorMessage"]</span>
                             </td>
                         </tr>
                     }
+
                 </tbody>
             </table>
         </div>
@@ -109,3 +113,4 @@
         autoclose: true,
     });
 </script>
+<partial name="_ValidationScriptsPartial">

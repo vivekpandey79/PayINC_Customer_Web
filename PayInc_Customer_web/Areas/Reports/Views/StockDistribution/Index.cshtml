@@ -1,6 +1,6 @@
 ﻿@model PayInc_Customer_web.Areas.Reports.Models.StockDistributionReq
 @{
-    ViewData["Title"] = "Stock Distribution";
+    ViewData["Title"] = "Stock Distribution Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,9 +9,15 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group row">
-                <div class="col-lg-4 col-md-9 col-sm-12">
+                <div class="col-lg-3 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        @Html.DropDownListFor(m => m.StockType, new SelectList(ViewBag.StockType, "stockTypeId", "stockType"), new { @class = "form-control"})
+                    </div>
+                    @Html.ValidationMessageFor(m => m.StockType, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-3 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")"  placeholder="from date" readonly/>
+                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.AddDays(-1).Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         @*@Html.TextBoxFor(m => m.FromDate, new { placeholder = "From Date", @class = "form-control", id = "datepicker_1", value = "12-12-2020", data_value = "12-12-2020" })*@
                         <div class="input-group-append">
                             <span class="input-group-text">
@@ -21,9 +27,9 @@
                     </div>
                     @Html.ValidationMessageFor(m => m.FromDate, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-lg-4 col-md-9 col-sm-12">
+                <div class="col-lg-3 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -32,7 +38,7 @@
                     </div>
                     @Html.ValidationMessageFor(m => m.ToDate, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-lg-4 col-md-9 col-sm-12">
+                <div class="col-lg-3 col-md-9 col-sm-12">
                     <button type="submit" class="btn btn-primary mr-2">View Report</button>
                 </div>
             </div>
@@ -45,35 +51,45 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>Request ID</td>
-                        <td>Amount</td>
-                        <td>Bank Ref No</td>
-                        <td>Deposit Date</td>
-                        <td>Status</td>
+                        <td>Transfer To</td>
+                        <td>Role</td>
+                        <td>Type</td>
+                        <td>Stock Count</td>
+                        <td>Date</td>
+                        <td>Opening Stock</td>
+                        <td>Closing Stock</td>
+                        <td>Remarks</td>
                     </tr>
                 </thead>
                 <tbody>
                     @if (ViewBag.StockDistReport != null)
                     {
 
-                        var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.PaymentReportRes>)ViewBag.StockDistReport;
+                        var listReport = (List<PayInc_Customer_web.Areas.Reports.Models.StockDistRes>)ViewBag.StockDistReport;
 
                         foreach (var item in listReport)
                         {
-                            <tr>
-                                <td>@item.lLoadRequestId</td>
-                                <td>@item.loadAmount</td>
-                                <td>@item.bankRefNo</td>
-                                <td>@item.loadDepositDate</td>
-                                <td><span class="text-success">@item.loadStatusDescription</span></td>
-                            </tr>
+                    <tr>
+                        <td>@item.transferTo</td>
+                        <td>@item.customerRoleDesc</td>
+                        <td>@item.stockType</td>
+                        <td>@item.stockCount</td>
+                        <td>@item.txnDate</td>
+                        <td>@item.openingStock</td>
+                        <td>@item.closingStock</td>
+                        <td>@item.remarks</td>
+                    </tr>
                         }
                     }
-                    <tr>
-                        <td colspan="6">
-                            <span class="text-center">@ViewData["ErrorMessage"]</span>
-                        </td>
-                    </tr>
+                    else
+                    {
+                <tr>
+                    <td colspan="8">
+                        <span class="text-center">@ViewData["ErrorMessage"]</span>
+                    </td>
+                </tr>
+                    }
+                    
                 </tbody>
             </table>
         </div>
@@ -88,18 +104,17 @@
     $('#datepicker_1').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });
     $('#datepicker_2').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });
-    $('#datepicker_1').datepicker("setValue", '01/10/2014');
 
 </script>
 <partial name="_ValidationScriptsPartial">

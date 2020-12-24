@@ -111,6 +111,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
         {
             try
             {
+                input.AadharNumber = input.AadharNumber.Replace("-", "").ToString();
                 var sessionUtility = new SessionUtility();
                 var pidData = new PidData();
                 XmlSerializer serializer = new XmlSerializer(typeof(PidData));
@@ -118,14 +119,8 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                 {
                     pidData = (PidData)serializer.Deserialize(reader);
                 }
-                var pktlocation = new LocationDatum()
-                {
-                    Latitude = "26.125321647834",
-                    Longitude = "78.09278884562441",
-                    IpAddress = "176.9.24.146"
-                };
-                var objCaptureResponse = new captureResponse()
-                {
+
+                var captureReq = new IciciCaptureInternalResponse {
                     ci = pidData.Skey.Ci,
                     dc = pidData.DeviceInfo.Dc,
                     dpID = pidData.DeviceInfo.DpId,
@@ -146,74 +141,69 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     qScore = pidData.Resp.QScore,
                     rdsID = pidData.DeviceInfo.RdsId,
                     rdsVer = pidData.DeviceInfo.RdsVer,
-                    sessionKey = pidData.Skey.Text
+                    sessionKey = pidData.Skey.Text,
+                    
                 };
-                var reqInput = new DetailsAepsRequestsReq
-                {
-                    customerId=sessionUtility.GetLoginSession().customerId,
-                    adhaarNumber= input.AadharNumber,
-                    accessModeType="",
-                    agentId=Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
-                    nbin= input.BankName,
-                    clientTransactionId="",
-                    customerNumber=input.CustomerNumber,
-                    deviceSerialNumber="",
-                    deviceTransactionId="",
-                    ipAddress= pktlocation.IpAddress,
-                    latitude=pktlocation.Latitude,
-                    longitude=pktlocation.Longitude,
-                    merchantTransactionId="",
-                    requestRemarks="",
-                    req_Timestamp="",
-                    transactionAmount=1,
-                    transactionType="BE",
-                    vendorId=1
-                };
-                var objCardnumberORUID = new cardnumberORUID()
-                {
+                var allReqInput = new DetailsAepReq {
+                    accessModeType = "",
                     adhaarNumber = input.AadharNumber,
+                    agentId = Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
+                    customerId = sessionUtility.GetLoginSession().customerId,
+                    customerNumber = input.CustomerNumber,
+                    deviceSerialNumber = pidData.DeviceInfo.Mi,
+                    deviceTransactionId = "",
+                    iciciAepsCaptureRes = captureReq,
                     indicatorforUID = 0,
-                    nationalBankIdentificationNumber = input.BankName,
-                };
-                var pktAEPS = new AepsBalanceEnquiryInput()
-                {
-                    cardnumberORUID = objCardnumberORUID,
-                    mobileNumber = input.CustomerNumber,
-                    //paymentType = "B",// LU - Last Used Bank, Bank- B,PayTM - P, Mpesa - M, Mobikwik - K, Bitcoin - C        
-                    timestamp = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),// dd/MM/yyyy HH:mm:ss
-                    transactionType = "BE",// Merchant - M, Cash withdraw - C, Bill Payments Prepaid Phone - P, Postpaid Phone- Q, Electricity- E                
+                    ipAddress = "176.9.24.146",
+                    latitude = "26.125321647834",
+                    longitude = "78.09278884562441",
+                    merchantTransactionId = GetOrderID(),
+                    nbin = input.BankName,
+                    paymentType = "B",
                     requestRemarks = "Balance Enquiry Web",
-                    deviceTransactionId = "Test",
-                    captureResponse = objCaptureResponse,
-                    merchantTransactionId = new Random().Next(10000,99999).ToString(),
-                    subMerchantId = Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
+                    serviceChannelId = 2,
+                    transactionAmount = 0,
+                    transactionType = "BE",
+                    virtualId = string.Empty
+                    
                 };
-                var listParams = new List<KeyValuePair<string, string>>();
-                listParams.Add(new KeyValuePair<string, string>("detailsAepsRequestsData",JsonConvert.SerializeObject(reqInput)));
+                var sting = JsonConvert.SerializeObject(allReqInput);
                 string errorMessage = string.Empty;
-                //var response = new CallService().PostResponse<string>("iciciAepsBalanceEnq", pktAEPS,ref errorMessage);
-                var response = new CallService().PostWithParams<resAEPSTransaction>("puticiciAepsBalanceEnq", listParams, pktAEPS,ref errorMessage);
+                var response = new CallService().PostResponse<AEPSResponse>("puticiciAepsBalanceEnq", allReqInput, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     var response1 = new resAEPSTransaction();
-                    response1.AadhaarNumber = input.AadharNumber;
+                    response1.AadhaarNumber = "XXXXXXXXX" + input.AadharNumber.Substring(input.AadharNumber.ToString().Length - 4, 4); ;
                     response1.Amount = Convert.ToDecimal(input.Amount);
-                    response1.ClientTransactionId = pktAEPS.merchantTransactionId;
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.TransactionReference = response.data.fpTransactionId;
                     response1.AEPSModeType = "Balance Enquiry";
                     response1.MobileNumber = input.CustomerNumber;
-                    response1.BalanceAmount = 2930;
+                    response1.BalanceAmount =Convert.ToDecimal(response.data.balanceAmount);
+                    response1.Status = 1;
+                    response1.BankReferenceNumber = input.BankName;
+                    response1.BankResponseMessage = response.data.transactionStatus;
                     response1.ResponseMessage = "Successfully retrived";
                     return PartialView("AckView", response1);
                 }
                 else
                 {
-                    return Json(new { success = false, errorMessage= errorMessage });
+                    var response1 = new resAEPSTransaction();
+                    response1.AadhaarNumber = input.AadharNumber;
+                    response1.Amount = Convert.ToDecimal(input.Amount);
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.AEPSModeType = "Balance Enquiry";
+                    response1.MobileNumber = input.CustomerNumber;
+                    response1.BalanceAmount = 0;
+                    response1.Status = 0;
+                    response1.ResponseMessage = errorMessage;
+                    return PartialView("AckView", response1);
                 }
                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
             return PartialView("AckView");
         }
@@ -224,6 +214,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
         {
             try
             {
+                input.AadharNumber = input.AadharNumber.Replace("-", "").ToString();
                 var sessionUtility = new SessionUtility();
                 var pidData = new PidData();
                 XmlSerializer serializer = new XmlSerializer(typeof(PidData));
@@ -231,13 +222,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                 {
                     pidData = (PidData)serializer.Deserialize(reader);
                 }
-                var pktlocation = new LocationDatum()
-                {
-                    Latitude = "26.125321647834",
-                    Longitude = "78.09278884562441",
-                    IpAddress = "176.9.24.146"
-                };
-                var objCaptureResponse = new captureResponse()
+                var captureReq = new IciciCaptureInternalResponse
                 {
                     ci = pidData.Skey.Ci,
                     dc = pidData.DeviceInfo.Dc,
@@ -259,67 +244,59 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     qScore = pidData.Resp.QScore,
                     rdsID = pidData.DeviceInfo.RdsId,
                     rdsVer = pidData.DeviceInfo.RdsVer,
-                    sessionKey = pidData.Skey.Text
+                    sessionKey = pidData.Skey.Text,
+
                 };
-                var objCardnumberORUID = new cardnumberORUID()
+                var allReqInput = new DetailsAepReq
                 {
-                    adhaarNumber = input.AadharNumber,
-                    indicatorforUID = 0,
-                    nationalBankIdentificationNumber = input.BankName,
-                };
-                var reqInput = new DetailsAepsRequestsReq
-                {
-                    customerId = sessionUtility.GetLoginSession().customerId,
-                    adhaarNumber = input.AadharNumber,
                     accessModeType = "",
+                    adhaarNumber = input.AadharNumber,
                     agentId = Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
-                    nbin = input.BankName,
-                    clientTransactionId = "",
+                    customerId = sessionUtility.GetLoginSession().customerId,
                     customerNumber = input.CustomerNumber,
-                    deviceSerialNumber = "test",
-                    deviceTransactionId = "test",
-                    ipAddress = pktlocation.IpAddress,
-                    latitude = pktlocation.Latitude,
-                    longitude = pktlocation.Longitude,
-                    merchantTransactionId = "",
+                    deviceSerialNumber = pidData.DeviceInfo.Mi,
+                    deviceTransactionId = "",
+                    iciciAepsCaptureRes = captureReq,
+                    indicatorforUID = 0,
+                    ipAddress = "176.9.24.146",
+                    latitude = "26.125321647834",
+                    longitude = "78.09278884562441",
+                    merchantTransactionId = GetOrderID(),
+                    nbin = input.BankName,
+                    paymentType = "B",
                     requestRemarks = "Cash Withdrawal",
-                    req_Timestamp = DateTime.Now.ToString("yyyyMMddHHmmss"),
-                    transactionAmount =Convert.ToDecimal(input.Amount),
+                    serviceChannelId = 2,
+                    transactionAmount = Convert.ToInt32(input.Amount),
                     transactionType = "CW",
-                    vendorId = 1
-                };
-                var pktAEPS = new AepsBalanceEnquiryInput()
-                {
-                    cardnumberORUID = objCardnumberORUID,
-                    mobileNumber = input.CustomerNumber,
-                    //paymentType = "B",// LU - Last Used Bank, Bank- B,PayTM - P, Mpesa - M, Mobikwik - K, Bitcoin - C        
-                    timestamp = DateTime.Now.ToString("yyyyMMddHHmmss"),// dd/MM/yyyy HH:mm:ss
-                    transactionType = "CW",// Merchant - M, Cash withdraw - C, Bill Payments Prepaid Phone - P, Postpaid Phone- Q, Electricity- E                
-                    requestRemarks = "Cash Withdrawal",
-                    deviceTransactionId = "Test",
-                    captureResponse = objCaptureResponse,
-                    merchantTransactionId = new Random().Next(10000, 99999).ToString(),
-                    subMerchantId = Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
+                    virtualId = string.Empty
+
                 };
                 string errorMessage = string.Empty;
-                var listParams = new List<KeyValuePair<string, string>>();
-                listParams.Add(new KeyValuePair<string, string>("detailsAepsRequestsData", JsonConvert.SerializeObject(reqInput)));
-                var response = new CallService().PostWithParams<resAEPSTransaction>("puticiciAepsCashWithdrawal", listParams, pktAEPS, ref errorMessage);
+                var response = new CallService().PostResponse<AEPSResponse>("puticiciAepsCashWithdrawal", allReqInput, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     var response1 = new resAEPSTransaction();
                     response1.AadhaarNumber = input.AadharNumber;
                     response1.Amount = Convert.ToDecimal(input.Amount);
-                    response1.ClientTransactionId = pktAEPS.merchantTransactionId;
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
                     response1.AEPSModeType = "Cash Withdrawal";
                     response1.MobileNumber = input.CustomerNumber;
+                    response1.BalanceAmount = Convert.ToDecimal(response.data.balanceAmount);
                     response1.ResponseMessage = "Successfully transferred.";
                     response1.Status = 1;
                     return PartialView("AckView", response1);
                 }
                 else
                 {
-                    return Json(new { success = false, errorMessage = errorMessage });
+                    var response1 = new resAEPSTransaction();
+                    response1.AadhaarNumber = input.AadharNumber;
+                    response1.Amount = Convert.ToDecimal(input.Amount);
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.AEPSModeType = "Cash Withdrawal";
+                    response1.MobileNumber = input.CustomerNumber;
+                    response1.ResponseMessage = errorMessage;
+                    response1.Status = 0;
+                    return PartialView("AckView", response1);
                 }
                 
             }
@@ -343,13 +320,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                 {
                     pidData = (PidData)serializer.Deserialize(reader);
                 }
-                var pktlocation = new LocationDatum()
-                {
-                    Latitude = "26.125321647834",
-                    Longitude = "78.09278884562441",
-                    IpAddress = "176.9.24.146"
-                };
-                var objCaptureResponse = new captureResponse()
+                var captureReq = new IciciCaptureInternalResponse
                 {
                     ci = pidData.Skey.Ci,
                     dc = pidData.DeviceInfo.Dc,
@@ -371,65 +342,53 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     qScore = pidData.Resp.QScore,
                     rdsID = pidData.DeviceInfo.RdsId,
                     rdsVer = pidData.DeviceInfo.RdsVer,
-                    sessionKey = pidData.Skey.Text
+                    sessionKey = pidData.Skey.Text,
+
                 };
-                var objCardnumberORUID = new cardnumberORUID()
+                var allReqInput = new DetailsAepReq
                 {
-                    adhaarNumber = input.AadharNumber,
-                    indicatorforUID = 0,
-                    nationalBankIdentificationNumber = input.BankName,
-                };
-                var reqInput = new DetailsAepsRequestsReq
-                {
-                    customerId = sessionUtility.GetLoginSession().customerId,
-                    adhaarNumber = input.AadharNumber,
                     accessModeType = "",
-                    agentId = Convert.ToString(DateTime.Now.ToString("yyyyMMddHHmmss")),
-                    nbin = input.BankName,
-                    clientTransactionId = "",
+                    adhaarNumber = input.AadharNumber,
+                    agentId = Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
+                    customerId = sessionUtility.GetLoginSession().customerId,
                     customerNumber = input.CustomerNumber,
-                    deviceSerialNumber = "test",
+                    deviceSerialNumber = pidData.DeviceInfo.Mi,
                     deviceTransactionId = "test",
-                    ipAddress = pktlocation.IpAddress,
-                    latitude = pktlocation.Latitude,
-                    longitude = pktlocation.Longitude,
-                    merchantTransactionId = "",
+                    iciciAepsCaptureRes = captureReq,
+                    indicatorforUID = 0,
+                    ipAddress = "176.9.24.146",
+                    latitude = "26.125321647834",
+                    longitude = "78.09278884562441",
+                    merchantTransactionId = GetOrderID(),
+                    nbin = input.BankName,
+                    paymentType = "B",
                     requestRemarks = "Mini Statement",
-                    req_Timestamp = DateTime.Now.ToString("yyyyMMddHHmmss"),
-                    transactionAmount = Convert.ToDecimal(input.Amount),
-                    transactionType = "B",
-                    vendorId = 1
-                };
-                var pktAEPS = new AepsBalanceEnquiryInput()
-                {
-                    cardnumberORUID = objCardnumberORUID,
-                    mobileNumber = input.CustomerNumber,
-                    //paymentType = "B",// LU - Last Used Bank, Bank- B,PayTM - P, Mpesa - M, Mobikwik - K, Bitcoin - C        
-                    timestamp = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),// dd/MM/yyyy HH:mm:ss
-                    transactionType = "B",// Merchant - M, Cash withdraw - C, Bill Payments Prepaid Phone - P, Postpaid Phone- Q, Electricity- E                
-                    requestRemarks = "Mini Statement",
-                    deviceTransactionId = "Test",
-                    captureResponse = objCaptureResponse,
-                    merchantTransactionId = new Random().Next(10000, 99999).ToString(),
-                    subMerchantId = sessionUtility.GetLoginSession().customerId.ToString(),
+                    serviceChannelId = 2,
+                    transactionAmount = Convert.ToInt32(input.Amount),
+                    transactionType = "MS",
+                    virtualId = string.Empty
                 };
                 string errorMessage = string.Empty;
-                var listParams = new List<KeyValuePair<string, string>>();
-                listParams.Add(new KeyValuePair<string, string>("detailsAepsRequestsData", JsonConvert.SerializeObject(reqInput)));
-                var response = new CallService().PostWithParams<resAEPSTransaction>("puticiciAepsCashWithdrawal", listParams, pktAEPS, ref errorMessage);
+                var response = new CallService().PostResponse<AEPSResponse>("puticiciAepsMiniStatement", allReqInput, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     var response1 = new resAEPSTransaction();
                     response1.AadhaarNumber = input.AadharNumber;
                     response1.Amount = Convert.ToDecimal(input.Amount);
-                    response1.ClientTransactionId = pktAEPS.merchantTransactionId;
-                    response1.AEPSModeType = "Mini Statement";
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.AEPSModeType = "Mini Statement Web";
                     response1.MobileNumber = input.CustomerNumber;
                     return PartialView("AckView", response1);
                 }
                 else
                 {
-                    return Json(new { success = false, errorMessage = errorMessage });
+                    var response1 = new resAEPSTransaction();
+                    response1.AadhaarNumber = input.AadharNumber;
+                    response1.Amount = Convert.ToDecimal(input.Amount);
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.AEPSModeType = "Mini Statement Web";
+                    response1.MobileNumber = input.CustomerNumber;
+                    return PartialView("AckView", response1);
                 }
             }
             catch (Exception)
@@ -437,6 +396,121 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
 
             }
             return PartialView("AckView");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CaptureAadharPay(AEPSInput input)
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var pidData = new PidData();
+                XmlSerializer serializer = new XmlSerializer(typeof(PidData));
+                using (TextReader reader = new StringReader(input.PidData))
+                {
+                    pidData = (PidData)serializer.Deserialize(reader);
+                }
+                var captureReq = new IciciCaptureInternalResponse
+                {
+                    ci = pidData.Skey.Ci,
+                    dc = pidData.DeviceInfo.Dc,
+                    dpID = pidData.DeviceInfo.DpId,
+                    errCode = pidData.Resp.ErrCode,
+                    errInfo = pidData.Resp.ErrInfo,
+                    fCount = pidData.Resp.FCount,
+                    fType = pidData.Resp.FType,
+                    hmac = pidData.Hmac,
+                    iCount = "0",
+                    iType = "0",
+                    mc = pidData.DeviceInfo.Mc,
+                    mi = pidData.DeviceInfo.Mi,
+                    nmPoints = pidData.Resp.NmPoints,
+                    pCount = "0",
+                    Piddata = pidData.Data.Text,
+                    PidDatatype = pidData.Data.Type,
+                    pType = "0",
+                    qScore = pidData.Resp.QScore,
+                    rdsID = pidData.DeviceInfo.RdsId,
+                    rdsVer = pidData.DeviceInfo.RdsVer,
+                    sessionKey = pidData.Skey.Text,
+
+                };
+                var allReqInput = new DetailsAepReq
+                {
+                    accessModeType = "",
+                    adhaarNumber = input.AadharNumber,
+                    agentId = Convert.ToString(sessionUtility.GetStringSession("AEPSAgentID")),
+                    customerId = sessionUtility.GetLoginSession().customerId,
+                    customerNumber = input.CustomerNumber,
+                    deviceSerialNumber = pidData.DeviceInfo.Mi,
+                    deviceTransactionId = "",
+                    iciciAepsCaptureRes = captureReq,
+                    indicatorforUID = 0,
+                    ipAddress = "176.9.24.146",
+                    latitude = "26.125321647834",
+                    longitude = "78.09278884562441",
+                    merchantTransactionId = GetOrderID(),
+                    nbin = input.BankName,
+                    paymentType = "B",
+                    requestRemarks = "Mini Statement",
+                    serviceChannelId = 2,
+                    transactionAmount = Convert.ToInt32(input.Amount),
+                    transactionType = "MS",
+                    virtualId = string.Empty
+
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<AEPSResponse>("puticiciAepsMiniStatement", allReqInput, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    var response1 = new resAEPSTransaction();
+                    response1.AadhaarNumber = input.AadharNumber;
+                    response1.Amount = Convert.ToDecimal(input.Amount);
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.AEPSModeType = "Mini Statement Web";
+                    response1.MobileNumber = input.CustomerNumber;
+                    return PartialView("AckView", response1);
+                }
+                else
+                {
+                    var response1 = new resAEPSTransaction();
+                    response1.AadhaarNumber = input.AadharNumber;
+                    response1.Amount = Convert.ToDecimal(input.Amount);
+                    response1.ClientTransactionId = allReqInput.merchantTransactionId;
+                    response1.AEPSModeType = "Mini Statement Web";
+                    response1.MobileNumber = input.CustomerNumber;
+                    return PartialView("AckView", response1);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return PartialView("AckView");
+        }
+
+        public string GetOrderID()
+        {
+            try
+            {
+                DateTime date = System.DateTime.Now;
+                string nofoday = Convert.ToString(System.DateTime.Now.DayOfYear);
+                if ((nofoday).Length == 1)
+                {
+                    nofoday = "00" + nofoday;
+                }
+                else if ((nofoday).Length == 2)
+                {
+                    nofoday = "0" + nofoday;
+                }
+                string orderid = date.Year % 10 + "" + nofoday + System.DateTime.Now.Hour + "" + System.DateTime.Now.Minute + "" + System.DateTime.Now.Second + System.DateTime.Now.Millisecond;
+                return orderid;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

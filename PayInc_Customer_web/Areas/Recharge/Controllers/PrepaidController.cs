@@ -67,7 +67,7 @@ namespace PayInc_Customer_web.Areas.Recharge.Controllers
                     return PartialView("ViewPlans");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return PartialView("ViewPlans");
             }

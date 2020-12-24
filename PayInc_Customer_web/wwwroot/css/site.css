@@ -1,71 +1,41 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+*{box-sizing: border-box;}
+.loader-container {
+	display: flex;
+	align-items: center;
+  	justify-content: center;
+	position: fixed;
+	top: 0;
+	width: 100%; 
+	height: 100%;
+	background-color: #00000080;
+	z-index:9999;
 }
-
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+.loader-content {
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 4px #0000008f;
+	background-color: white;
+	text-align: center;
 }
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.loader-title {
+	font-size: 15pt;
+	font-weight: bold;
 }
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.loader-msg {
+	font-size: 12pt;
 }
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
+.loader-loader {
+  display: block;
+  border: 15px solid #d3d3d380;
+  border-left-color: #a9a9a994;
+  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+  margin: 25px auto;
+  animation: spin 1.25s linear infinite;
 }
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
-}
+@keyframes spin {
+   to{transform: rotate(360deg);}
+ }

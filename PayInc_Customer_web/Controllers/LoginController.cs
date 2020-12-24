@@ -17,6 +17,7 @@ namespace PayInc_Customer_web.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Index(LoginModelReq req)
         {
             var values = new { userName = req.UserName, password = new PasswordHash().HashShA1(req.Password) };
@@ -31,15 +32,15 @@ namespace PayInc_Customer_web.Controllers
                         ViewData["ErrorMessage"] = "NO response from server.";
                         return View();
                     }
-                    var listParams = new List<KeyValuePair<string, string>>();
-                    listParams.Add(new KeyValuePair<string, string>("customerId", Convert.ToString(response.customerId)));
-                    var response1 = new CallService().GetResponse<List<ProfileResponse>>("geCustomerProfile", listParams, ref errorMessage);
-                    if (response1 == null)
-                    {
-                        ViewData["ErrorMessage"] = "NO response from server.";
-                        return View();
-                    }
-                    response.Address = response1[0].permAddressLine1 + ", " + response1[0].permAddressLine2;
+                    //var listParams = new List<KeyValuePair<string, string>>();
+                    //listParams.Add(new KeyValuePair<string, string>("customerId", Convert.ToString(response.customerId)));
+                    //var response1 = new CallService().GetResponse<List<ProfileResponse>>("geCustomerProfile", listParams, ref errorMessage);
+                    //if (response1 == null)
+                    //{
+                    //    ViewData["ErrorMessage"] = "NO response from server.";
+                    //    return View();
+                    //}
+                    //response.Address = response1[0].permAddressLine1 + ", " + response1[0].permAddressLine2;
                     HttpContext.Session.SetString("LoginDetails", JsonConvert.SerializeObject(response));
                     var menuList = new MenuBinding().BindSideMenu();
                     HttpContext.Session.SetString("menuList", JsonConvert.SerializeObject(menuList));
@@ -79,6 +80,7 @@ namespace PayInc_Customer_web.Controllers
                     var response = new CallService().GetResponse<string>("getForgotPassword", listParam, ref errorMessage);
                     if (string.IsNullOrEmpty(response))
                     {
+                        new SessionUtility().SetSession("otpId", response);
                         return Json(new { success = true });
                     }
                     return Json(new { success = false, errorMessage = errorMessage });
@@ -94,28 +96,27 @@ namespace PayInc_Customer_web.Controllers
             }
         }
         [HttpPost]
-        public IActionResult  VerifyOTP(LoginModelReq req)
+        public IActionResult  VerifyOTP(IFormCollection fc)
         {
             try
             {
-                if (req.MobileNumber != null)
+                string otp = Convert.ToString(fc["digit1"]) + Convert.ToString(fc["digit2"]) + Convert.ToString(fc["digit3"]) + Convert.ToString(fc["digit4"]) + Convert.ToString(fc["digit5"]) + Convert.ToString(fc["digit6"]);
+                if (otp.Length != 6)
                 {
-                    var listParam = new List<KeyValuePair<string, string>>();
-                    listParam.Add(new KeyValuePair<string, string>("mobileNumber", req.MobileNumber));
-                    listParam.Add(new KeyValuePair<string, string>("passwordType", "1"));
-                    listParam.Add(new KeyValuePair<string, string>("serviceChannelId", "2"));
-                    string errorMessage = string.Empty;
-                    var response = new CallService().GetResponse<string>("getForgotPassword", listParam, ref errorMessage);
-                    if (string.IsNullOrEmpty(response))
-                    {
-                        return Json(new { success = true });
-                    }
-                    return Json(new { success = false, errorMessage = errorMessage });
+                    return Json(new { success = false, errorMessage = "Please enter 6 digit otp" });
                 }
-                else
+                var listParam = new List<KeyValuePair<string, string>>();
+                listParam.Add(new KeyValuePair<string, string>("otp", otp));
+                listParam.Add(new KeyValuePair<string, string>("OtpId", new SessionUtility().GetStringSession("otpId")));
+                listParam.Add(new KeyValuePair<string, string>("passwordType", "1"));
+                listParam.Add(new KeyValuePair<string, string>("serviceChannelId", "2"));
+                string errorMessage = string.Empty;
+                var response = new CallService().GetResponse<string>("verifyForgotPasswordOtp", listParam, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
                 {
-                    return Json(new { success = false, errorMessage = "Please enter mobile Number" });
+                    return Json(new { success = true });
                 }
+                return Json(new { success = false, errorMessage = errorMessage });
             }
             catch (Exception ex)
             {

@@ -42,6 +42,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
         public decimal BalanceAmount { get; set; }
         public decimal Amount { get; set; }
         public string ResponseMessage { get; set; }
+        public string BankResponseMessage { get; set; }
 
         public string AEPSModeType { get; set; }
         public string MobileNumber { get; set; }

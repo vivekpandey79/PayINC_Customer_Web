@@ -10,7 +10,7 @@
     <tbody>
         <tr>
             <th>Payee </th>
-            <td>@Model.PayeeMobileNumber</td>
+            <td>@Model.PayeeName (@Model.PayeeMobileNumber)</td>
         </tr>
         <tr>
             <th>Payee Wallet Balance</th>
@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <th>Status</th>
-            <td><span class="text-success">@Model.Status</span></td>
+            <td><span class="@(Model.StatusId==1 ? "text-success": "text-danger")">@Model.Status</span></td>
         </tr>
     </tbody>
 

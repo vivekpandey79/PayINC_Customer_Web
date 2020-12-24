@@ -1,0 +1,68 @@
+﻿@model PayInc_Customer_web.Areas.KIT_Management.Models.StockDistributionInput
+@{
+    ViewData["Title"] = "Stock Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card">
+    <div class="card-body">
+        <form action="@Url.Action("ShowProfile","StockDistribution")" method="post">
+            <div class="form-group row">
+                <label class="col-form-label text-left col-lg-2 col-sm-12">Stock Type</label>
+                <div class="col-lg-6 col-md-9 col-sm-12">
+                    @if (ViewBag.StockType != null)
+                    {
+                        @Html.DropDownListFor(m => m.StockType, new SelectList(ViewBag.StockType, "stockTypeId", "stockType"), "--Select Stock Type --", new { @class = "form-control" })
+                    }
+                    @Html.ValidationMessageFor(m => m.StockType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label text-left col-lg-2 col-sm-12">Mobile Number</label>
+                <div class="col-lg-6 col-md-9 col-sm-12">
+                    @if (ViewBag.NetworkChain != null)
+                    {
+                        @Html.DropDownListFor(m => m.MobileNumber, new SelectList(ViewBag.NetworkChain, "mobileNumber", "customerAccountStatus"), "--Select Mobile Number--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
+                    }
+                    @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label text-left col-lg-2 col-sm-12">Number of stock</label>
+                <div class="col-lg-6 col-md-9 col-sm-12">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="flaticon2-hospital"></i></span>
+                        </div>
+                        @Html.TextBoxFor(m => m.NumberOfStock, "", new { @class = "form-control", placeholder = "Enter number of stock", maxlength = "5" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.NumberOfStock, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*<div class="form-group row">
+                <label class="col-form-label text-left col-lg-2 col-sm-12"></label>
+                <div class="col-lg-6 col-md-9 col-sm-12">
+                    <div class="radio-inline">
+                        <label class="radio radio-outline radio-success">
+                            <input type="radio" name="mode" />
+                            <span></span>
+                            REVERSE
+                        </label>
+                        <label class="radio radio-outline radio-success">
+                            <input type="radio" name="mode" checked="checked" />
+                            <span></span>
+                            TRANSFER
+                        </label>
+
+                    </div>
+                </div>
+            </div>*@
+            <div class="form-group row">
+                <div class="col-lg-6 ml-lg-auto">
+                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Submit</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

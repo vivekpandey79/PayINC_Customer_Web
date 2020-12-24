@@ -26,15 +26,15 @@ namespace PayInc_Customer_web.Areas.Reports.Models
         public object loadDescription { get; set; }
         public int loadRequestedBy { get; set; }
         public string loadRequestedDate { get; set; }
-        public int loadProcessedBy { get; set; }
-        public int loadProcessedDate { get; set; }
-        public int loadProcessedTime { get; set; }
-        public int loadApprovedBy { get; set; }
-        public int loadApprovedDate { get; set; }
-        public int loadApprovedTime { get; set; }
-        public int loadDepositDate { get; set; }
-        public int loadDepositTime { get; set; }
-        public int loadStatus { get; set; }
+        public int? loadProcessedBy { get; set; }
+        public DateTime? loadProcessedDate { get; set; }
+        public string loadProcessedTime { get; set; }
+        public int? loadApprovedBy { get; set; }
+        public string loadApprovedDate { get; set; }
+        public string loadApprovedTime { get; set; }
+        public DateTime? loadDepositDate { get; set; }
+        public string loadDepositTime { get; set; }
+        public int? loadStatus { get; set; }
         public string bankRefNo { get; set; }
         public int customerId { get; set; }
         public int serviceChannelId { get; set; }

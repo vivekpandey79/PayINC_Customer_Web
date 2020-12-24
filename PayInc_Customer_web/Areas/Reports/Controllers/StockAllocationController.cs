@@ -9,7 +9,7 @@ using PayInc_Customer_web.Utility;
 namespace PayInc_Customer_web.Areas.Reports.Controllers
 {
     [Area("Reports")]
-    public class StockReqStatusController : Controller
+    public class StockAllocationController : Controller
     {
         public IActionResult Index()
         {
@@ -17,20 +17,20 @@ namespace PayInc_Customer_web.Areas.Reports.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Index(StockRequestModel input)
+        public IActionResult Index(StockAllocationModel input)
         {
             try
             {
                 var listParam = new List<KeyValuePair<string, string>>();
+                listParam.Add(new KeyValuePair<string, string>("fromDate", Convert.ToString(Convert.ToDateTime(input.FromDate).ToString("yyyyMMdd"))));
+                listParam.Add(new KeyValuePair<string, string>("toDate", Convert.ToString(Convert.ToDateTime(input.ToDate).ToString("yyyyMMdd"))));
                 listParam.Add(new KeyValuePair<string, string>("customerId", Convert.ToString(new SessionUtility().GetLoginSession().customerId)));
-                listParam.Add(new KeyValuePair<string, string>("fromDate", Convert.ToString(input.FromDate.ToString("yyyyMMdd"))));
-                listParam.Add(new KeyValuePair<string, string>("toDate", Convert.ToString(input.ToDate.ToString("yyyyMMdd"))));
-                listParam.Add(new KeyValuePair<string, string>("StockTypeId", input.StockType));
+                listParam.Add(new KeyValuePair<string, string>("stockTypeId", input.StockType));
                 string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<List<StockReqRes>>("getStockRequestStatus", listParam, ref errorMessage);
+                var response = new CallService().GetResponse<List<StockAllocationRes>>("getDetailsStockAllocation", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
-                    ViewBag.StockReqReport = response;
+                    ViewBag.StockAllocationReport = response;
                 }
                 else
                 {
@@ -44,6 +44,7 @@ namespace PayInc_Customer_web.Areas.Reports.Controllers
             GetStockType();
             return View(input);
         }
+
         public void GetStockType()
         {
             try
@@ -59,7 +60,7 @@ namespace PayInc_Customer_web.Areas.Reports.Controllers
                 }
                 else
                 {
-                    ViewBag.StockType = response;
+                    ViewBag.StockType =response;
                 }
             }
             catch (Exception)
