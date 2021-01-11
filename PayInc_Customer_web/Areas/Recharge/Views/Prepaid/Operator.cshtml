@@ -1,0 +1,49 @@
+﻿
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="text" class="form-control form-control-solid" name="mobilenumbers" maxlength="10" id="txtShowMobileNo" readonly />
+        </div>
+        @{
+            var list = new List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>();
+            if (ViewBag.Operator != null)
+            {
+                list = (List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>)ViewBag.Operator;
+            }
+        }
+        <div class="form-group">
+            <label>Operator</label>
+            <select name="operator" id="ddlOperator" class="form-control">
+                <option value="">Select Operator</option>
+                @foreach (var item in list)
+                {
+                    <option value="@item.serviceProviderId">@item.serviceProviderName</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Amount</label>
+            <input type="text" class="form-control" name="amount" placeholder="Enter Amount" id="txtamount" />
+        </div>
+    </div>
+    <div class="col-6">
+        <section id="plan_panel">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="viewplan_panel" data-scroll="true" data-height="300" class="d-flex justify-content-center">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="d-flex justify-content-between border-top pt-10 mt-15">
+    <div class="mr-2">
+        <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+    </div>
+    <div>
+        <button type="button" id="enter_tpin" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+    </div>
+</div>

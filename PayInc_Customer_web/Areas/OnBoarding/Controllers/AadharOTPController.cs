@@ -45,11 +45,11 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             var sessionUtilty = new SessionUtility();
                             sessionUtilty.SetSession("BoardingPAN", reponse1[0].PanCardNumber);
                             sessionUtilty.SetSession("BoardingFatherName", reponse1[0].FatherName);
-                            sessionUtilty.SetSession("BoardingName", reponse1[0].FirstName + " " + reponse1[0].LastName);
+                            sessionUtilty.SetSession("BoardingName", reponse1[0].FirstName + " "+ reponse1[0].MiddleName + " " + reponse1[0].LastName);
                             sessionUtilty.SetSession("BoardingDob", Convert.ToString(reponse1[0].Dob));
                             sessionUtilty.SetSession("BoardedMobile", Convert.ToString(reponse1[0].CustomerNumber));
                             sessionUtilty.SetSession("BoardingId", Convert.ToString(reponse1[0].OnboardingId));
-                            ViewData["BoardedName"] = reponse1[0].FirstName + " " + reponse1[0].LastName;
+                            ViewData["BoardedName"] = reponse1[0].FirstName + " " + reponse1[0].MiddleName + " " + reponse1[0].LastName;
                             ViewData["BoardedMobile"] = reponse1[0].CustomerNumber;
                         }
                         else
@@ -175,38 +175,48 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         [HttpPost]
         public IActionResult SubmitPAN(IFormCollection fc)
         {
+            string mobileNumber = string.Empty;
+            string redirectUrl = string.Empty;
             try
             {
-
+                var sessionUtility = new SessionUtility();
+                mobileNumber = sessionUtility.GetStringSession("BoardedMobile");
+                redirectUrl = Startup.AppSetting["AadharOTP_RedirectURL"] + "?mob=" + mobileNumber+"&targetUrl="+ Startup.AppSetting["Aadhar_ReturnBackURL"];
             }
             catch (Exception)
             {
 
             }
-            return Json(new { success = true });
+            return Json(new { success = true, redirect_url = redirectUrl });
         }
         
         [HttpPost]
-        public IActionResult GetAadharOTP()
+        public IActionResult GetAadharDetails(IFormCollection fc)
         {
+            var sessionUtility = new SessionUtility();
             try
             {
-                var listParam = new List<KeyValuePair<string, string>>();
-                listParam.Add(new KeyValuePair<string, string>("redirecturl", ""));
-                listParam.Add(new KeyValuePair<string, string>("otp", ""));
-                listParam.Add(new KeyValuePair<string, string>("mobile", ""));
-                string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<string>("getKLinitWebViKyc", listParam, ref errorMessage);
-                if (string.IsNullOrEmpty(errorMessage))
+                sessionUtility.SetSession("Aadhar_panel","true");
+                string status = Convert.ToString(fc["status"]);
+                if (status=="SUCCESS")
                 {
-
+                    string response = Convert.ToString(fc["response"]);
+                    sessionUtility.SetSession("Aadhar_Details", response);
+                    var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(response);
+                    ViewData["Status"] = status;
+                    ViewData["AadharOTPRes"] = aadharDetails;
+                }
+                else
+                {
+                    ViewData["Status"] = status;
+                    ViewData["AadharOTPRes"] = null;
                 }
             }
             catch (Exception)
             {
 
             }
-            return Json(new { success=true });
+            return View("Index");
         }
 
         [HttpPost]
@@ -215,8 +225,12 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
+                var sessionUtility = new SessionUtility();
+                var aadharData = sessionUtility.GetStringSession("Aadhar_Details");
+                var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(aadharData);
                 var getValue = GetAllValues();
-                return Json(new { success = true, responseData = getValue });
+
+                return Json(new { success = true, responseData = aadharDetails.original_kyc_info });
             }
             catch (Exception)
             {
@@ -254,9 +268,15 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
+                var bankName = Convert.ToString(fc["ddlBank"]);
+                var bankAccount = Convert.ToString(fc["bankaccount"]);
+                string bankIFSCCode = Convert.ToString(fc["bankifsccode"]);
                 var sessionUtility = new SessionUtility();
                 var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
                 var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
+                mainDetails.BankName = bankName;
+                mainDetails.BankAccount = bankAccount;
+                mainDetails.BankIFSCCode = bankIFSCCode;
                 var overviewDtls = new OverviewDetails();
                 overviewDtls.allDetails = allBasicDetails;
                 overviewDtls.allValue = mainDetails;
@@ -456,7 +476,6 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
 
             }
         }
-
         public SetAllValue GetAllValues()
         {
             try
@@ -467,10 +486,11 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 setValues.FatherName = sessionUtility.GetStringSession("BoardingFatherName");
                 setValues.DateOfBirth = sessionUtility.GetStringSession("BoardingDob");
                 setValues.MobileNumber = sessionUtility.GetStringSession("BoardedMobile");
-                setValues.Address = sessionUtility.GetStringSession("dlAddress");
-                setValues.City = sessionUtility.GetStringSession("dlCity");
-                setValues.State = sessionUtility.GetStringSession("dlState");
-
+                var aadharData = sessionUtility.GetStringSession("Aadhar_Details");
+                var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(aadharData);
+                setValues.Address = aadharDetails.original_kyc_info.address;
+                setValues.City = aadharDetails.original_kyc_info.dist;
+                setValues.State = aadharDetails.original_kyc_info.state;
                 new SessionUtility().SetSession("MainDetails", JsonConvert.SerializeObject(setValues));
                 return setValues;
             }
@@ -480,8 +500,6 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             }
             return null;
         }
-
-
         public void InsertCustomerKyc(int kycProofId, string kycProofValue1, string kycProofValue2, string kycProofImagePath, int kycStatus, string responseObject, string matchingCriteria, string kycRemarks)
         {
             try
@@ -513,38 +531,121 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
 
             }
         }
+        [HttpPost]
         public IActionResult VideoVerification()
         {
             try
             {
                 var req = new
                 {
-                    task = "videoVerfication",
+                    task = "url",
                     essentials = new
                     {
-                        matchImage = new List<string> { },
-                        customVideoRecordTime = "",
-                        hideTopLogo = "",
-                        hideBottomLogo = "",
-                        callbackUrl = "",
-                        redirectUrl = "",
-                        idCardVerification = "",
+                        matchImage = new List<string> { new SessionUtility().GetStringSession("PANCroppedUrl") },
+                        customVideoRecordTime = "6",
+                        hideTopLogo = "false",
+                        hideBottomLogo = "false",
+                        callbackUrl = Startup.AppSetting["AadharVideoVerifyUrl"],
+                        redirectUrl = Startup.AppSetting["AadharVideoVerifyUrl"],
+                        idCardVerification = "false",
                         customizations = new { }
                     }
                 };
                 string errorMessage = string.Empty;
-                var response = new CallService().PostResponse<string>("getSignzyVideoVerification", req, ref errorMessage);
+                var response = new CallService().PostResponse<VideoVerificationResponse>("getSignzyVideoVerification", req, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
-
+                    if (response.result != null)
+                    {
+                        new SessionUtility().SetSession("VideoToken", response.result.token);
+                    }
+                    return Json(new { success = true, responseData = response });
                 }
-                return Json(new { success = true });
+                return Json(new { success = false, responseData = "" });
             }
             catch (Exception)
             {
 
             }
-            return Json(new { success = true });
+            return Json(new { success = false });
+        }
+
+        [HttpGet]
+        public IActionResult GetVideoVerification()
+        {
+            try
+            {
+                System.Threading.Thread.Sleep(5000);
+                var sessionUtility = new SessionUtility();
+                string tokenId = sessionUtility.GetStringSession("VideoToken");
+                var listParam = new List<KeyValuePair<string, string>>();
+                listParam.Add(new KeyValuePair<string, string>("task", tokenId));
+                string errorMessage = string.Empty;
+                var response = new CallService().GetResponse<FinalVideoVerifyResp>("getSignzyGetVideoVerification", listParam, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    response.PanImage = new SessionUtility().GetStringSession("PANCroppedUrl");
+                    var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                    var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
+                    var panDOB = new DateTime();
+                    int dob = 0;
+                    if (DateTime.TryParse(mainDetails.DateOfBirth, out panDOB))
+                    {
+                        dob = Convert.ToInt32(Convert.ToDateTime(mainDetails.DateOfBirth).ToString("yyyyMMdd"));
+                    }
+                    if (sessionUtility.GetStringSession("isInserted") == null)
+                    {
+                        var req = new
+                        {
+                            onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                            dob = dob,
+                            emailId = allBasicDetails.personalDetails.EmailAddress,
+                            genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender.Split('~')[0]),
+                            maritalStatusId = Convert.ToInt32(allBasicDetails.personalDetails.MaritialStatus.Split('~')[0]),
+                            casteCategory = allBasicDetails.personalDetails.Caste,
+                            qualification = allBasicDetails.personalDetails.EducationalQualification,
+                            serviceProviderId = 1,
+                            physicalStatus = allBasicDetails.personalDetails.IsPhysicallyDisabled,
+                            occupationType = allBasicDetails.personalDetails.OccupationType,
+                            occupationDuration = "",
+                            entityType = allBasicDetails.personalDetails.EntityType,
+                            districtId = 1,
+                            areaId = 1,
+                            pinCode = Convert.ToInt32(sessionUtility.GetStringSession("dlPinCode")),
+                            landmark = allBasicDetails.addressDetails.landmark,
+                            address = allBasicDetails.addressDetails.address,
+                            outletName = allBasicDetails.basicInput.firmname,
+                            outletCategoryId = 1,
+                            outletDistrictId = 1,
+                            outletAreaId = 1,
+                            outletPinCode = Convert.ToInt32(allBasicDetails.basicInput.firmPinCode),
+                            outletLandmark = allBasicDetails.basicInput.firmLandmark,
+                            outletAddress = allBasicDetails.basicInput.firmaddress,
+                            bankAccountTypeId = 1,
+                            bankId = 1,
+                            accountName = mainDetails.BankName,
+                            accountNumber = mainDetails.BankAccount,
+                            ifscCode = mainDetails.BankIFSCCode,
+                            status = 0
+                        };
+                        string errorMessage1 = string.Empty;
+                        var insertKyc = new CallService().PostResponse<string>("putDetailsCustomerOnbBoardingKyc", req, ref errorMessage1);
+                        if (string.IsNullOrEmpty(errorMessage1))
+                        {
+                            InsertCustomerKyc(10, null, null, null, 1, JsonConvert.SerializeObject(response), null, "Video Verifyication");
+                        }
+                        sessionUtility.SetSession("isInserted", "true");
+                    }
+
+                    return View("Response", response);
+                }
+                return View("Response");
+            }
+            catch (Exception)
+            {
+
+            }
+            return View("Response");
         }
     }
 }

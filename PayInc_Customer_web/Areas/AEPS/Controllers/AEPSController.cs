@@ -369,7 +369,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     virtualId = string.Empty
                 };
                 string errorMessage = string.Empty;
-                var response = new CallService().PostResponse<AEPSResponse>("puticiciAepsMiniStatement", allReqInput, ref errorMessage);
+                var response = new CallService().PostResponse<MINIStatementResponse>("puticiciAepsMiniStatement", allReqInput, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     var response1 = new resAEPSTransaction();
@@ -378,6 +378,11 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     response1.ClientTransactionId = allReqInput.merchantTransactionId;
                     response1.AEPSModeType = "Mini Statement Web";
                     response1.MobileNumber = input.CustomerNumber;
+                    if (response.data!=null)
+                    {
+                        response1.ministatementList = response.data.miniStatementStructureModel;
+                    }
+                    
                     return PartialView("AckView", response1);
                 }
                 else

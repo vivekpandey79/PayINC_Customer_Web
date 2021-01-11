@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     var _validations = [];
     var _formEl = KTUtil.getById('kt_form');
     _validations.push(FormValidation.formValidation(
@@ -161,32 +161,31 @@
     $('.prev-step').click(function (e) {
         _wizard1.goPrev();
     });
-    $("#enter_tpin").click(function (e) {
+
+    $("#form_recharge").submit(function (e) {
         e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
         $("#lblMobileNo").text($("#txtMobileNo").val());
         $("#lblOperator").text($("#ddlOperator option:selected").text());
         $("#lblAmount").text($("#txtamount").val());
+        $("#hdnMobileNumber").val($("#txtMobileNo").val());
+        $("#hdnOperatorId").val($("#ddlOperator").val());
+        $("#hdnAmount").val($("#txtamount").val());
         $('#mymodal').modal('show');
     });
-    $("#btn_step3").click(function (e) {
-        e.preventDefault();
-        $('#mymodal').modal('hide');
-        var validator = _validations[2]; // get validator for currnt step
-        validator.validate().then(function (status) {
-            if (status === 'Valid') {
 
-                _wizard1.goNext();
-
-            }
-        });
-    });
-   
+    
     $(".select-plan").click(function (e) {
         $(this).html('<i class="text-white fa fa-check"></i>');
         $("#txtamount").val($(this).attr("data-amt"));
         $("#lblMobileNo").text($("#txtMobileNo").val());
         $("#lblOperator").text($("#ddlOperator option:selected").text());
         $("#lblAmount").text($("#txtamount").val());
+        $("#hdnMobileNumber").val($("#txtMobileNo").val());
+        $("#hdnOperatorId").val($("#ddlOperator").val());
+        $("#hdnAmount").val($("#txtamount").val());
         $('#mymodal').modal('show');
     });
 
@@ -195,3 +194,4 @@
     });
     
 })
+

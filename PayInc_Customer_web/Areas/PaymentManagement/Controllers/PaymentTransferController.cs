@@ -59,7 +59,7 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                     payerMobileNumber= sessionUtility.GetLoginSession().mobileNumber,
                     payeeMobileNumber= Convert.ToInt64(sessionUtility.GetStringSession("PayeeMobileNo")),
                     transferAmount= Convert.ToInt64(sessionUtility.GetStringSession("PayeeAmount")),
-                    transferType=1,
+                    transferType=0,
                     transactionRequestedBy= sessionUtility.GetLoginSession().customerId,
                     serviceChannelId=1,
                     transactionRemarks= inputReq.Remarks

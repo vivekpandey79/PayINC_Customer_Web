@@ -79,9 +79,9 @@
         }
     ));
 
-    var _wizard1 = new KTWizard("kt_wizard", {
+    var _wizard1 = new KTWizard("kt_wizard_v1", {
         startStep: 1, // initial active step number
-        clickableSteps: true  // allow step clicking
+        clickableSteps: false  // allow step clicking
     });
 
     $("#kt_form").submit(function (e) {
@@ -171,7 +171,7 @@
                 try {
                     var checkError = result.errorMessage;
                     if (typeof (checkError) != "undefined") {
-
+                        toastr.error("checkError","Alert")
                         return false;
                     }
                     else {

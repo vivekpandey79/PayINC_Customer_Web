@@ -35,4 +35,6 @@
     <Folder Include="wwwroot\assets\plugins\custom\velocity\" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/asmdef" /></VisualStudio></ProjectExtensions>
+
 </Project>

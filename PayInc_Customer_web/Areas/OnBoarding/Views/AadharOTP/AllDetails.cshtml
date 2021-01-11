@@ -1,0 +1,107 @@
+﻿@model PayInc_Customer_web.Areas.OnBoarding.Models.OverviewDetails
+
+@if (Model != null)
+{
+    <table class="table table-bordered">
+        <tbody>
+            <tr class="text-center bg-dark text-white">
+                <td colspan="2"><b>Personal Details</b></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>@Model.allValue.FullName</td>
+            </tr>
+            <tr>
+                <td>Father Name</td>
+                <td>@Model.allValue.FatherName</td>
+            </tr>
+            <tr>
+                <td>Mobile Number</td>
+                <td>@Model.allValue.MobileNumber</td>
+            </tr>
+            <tr>
+                <td>Email Address</td>
+                <td>@Model.allDetails.personalDetails.EmailAddress</td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>@Model.allDetails.personalDetails.Gender</td>
+            </tr>
+            <tr>
+                <td>Maritial Status</td>
+                <td>@Model.allDetails.personalDetails.MaritialStatus</td>
+            </tr>
+            <tr>
+                <td>Schedule Caste</td>
+                <td>@Model.allDetails.personalDetails.Caste</td>
+            </tr>
+            <tr>
+                <td>Education Qualification</td>
+                <td>@Model.allDetails.personalDetails.EducationalQualification</td>
+            </tr>
+            <tr>
+                <td>Mobile Operator</td>
+                <td>@Model.allDetails.personalDetails.MobileOperator</td>
+            </tr>
+            <tr>
+                <td>Is Physically Disabled</td>
+                <td>@Model.allDetails.personalDetails.IsPhysicallyDisabled</td>
+            </tr>
+            <tr>
+                <td>Occupation Type</td>
+                <td>@Model.allDetails.personalDetails.OccupationType</td>
+            </tr>
+            <tr>
+                <td>Entity Type</td>
+                <td>@Model.allDetails.personalDetails.EntityType</td>
+            </tr>
+            <tr class="text-center bg-dark text-white">
+                <td colspan="2"><b>Address Details</b></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>@Model.allDetails.addressDetails.address</td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>@Model.allDetails.addressDetails.city</td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td>@Model.allDetails.addressDetails.state</td>
+            </tr>
+            <tr class="text-center bg-dark text-white">
+                <td colspan="2"><b>Outlet Details</b></td>
+            </tr>
+            <tr>
+                <td>Firm Name</td>
+                <td>@Model.allDetails.basicInput.firmname</td>
+            </tr>
+            <tr>
+                <td>Firm Address</td>
+                <td>@Model.allDetails.basicInput.firmaddress</td>
+            </tr>
+            <tr>
+                <td>Firm State</td>
+                <td>@Model.allDetails.basicInput.firmstate</td>
+            </tr>
+            <tr class="text-center bg-dark text-white">
+                <td colspan="2">
+                    <b>Bank Details</b>
+                </td>
+            </tr>
+            <tr>
+                <td>Bank Name</td>
+                <td>@Model.allValue.BankName</td>
+            </tr>
+            <tr>
+                <td>Account Number</td>
+                <td>@Model.allValue.BankAccount</td>
+            </tr>
+            <tr>
+                <td>IFSC Code</td>
+                <td>@Model.allValue.BankIFSCCode</td>
+            </tr>
+        </tbody>
+    </table>
+}

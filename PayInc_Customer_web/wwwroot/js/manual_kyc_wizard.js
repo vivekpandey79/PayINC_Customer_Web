@@ -1,7 +1,7 @@
 ﻿$(document).ready(function (e) {
 	var _wizard1 = new KTWizard("kt_wizard", {
 		startStep: 1,
-		clickableSteps: true
+		clickableSteps: false
 	});
 
 	var _validations = [];
@@ -164,6 +164,7 @@
 					$("#txtBasicFatherName").val(data.responseData.fatherName);
 					$("#txtBasicDateOfBirth").val(data.responseData.dateOfBirth);
 					$("#txtBasicMobileNumber").val(data.responseData.mobileNumber);
+
 					$("#txtBasicAddress").val(data.responseData.address);
 					$("#txtBasicCity").val(data.responseData.city);
 					$("#txtBasicState").val(data.responseData.state);
@@ -183,8 +184,7 @@
 		$.ajax({
 			url: url,
 			type: "POST",
-			data: { addressDetails: $("#form_address_panel").serialize(),personalDetails: $("#form_personal_details").serialize()  },
-			//data:  $("#form_personal_details").serialize(),
+			data: { addressDetails: $("#form_address_panel").serialize(), personalDetails: $("#form_personal_details").serialize(), basicDetails: $("#form_basic_details").serialize()  },
 			success: function (data) {
 				KTUtil.btnRelease(btn);
 				GetBankList();
@@ -218,7 +218,7 @@
 				$("#ddlBank").empty();
 				$("#ddlBank").append($("<option></option>").val('').html('-- Select Bank --'));
 				$.each(res, function (data, value) {
-					$("#ddlBank").append($("<option></option>").val(value.bankId).html(value.bankName));
+					$("#ddlBank").append($("<option></option>").val(value.bankName).html(value.bankName));
 				})
 			}
 		});
@@ -268,6 +268,33 @@
 		if ($("#form_address_panel").valid()) {
 			$("#collapseThree4").collapse("show");
 		}
+	});
+
+	$("#txtBasicPinCode").on("keyup change", function (e) {
+		e.preventDefault();
+		$("#pincode_div").removeClass("spinner spinner-success spinner-right");
+		if ($("#txtBasicPinCode").val().length === 6) {
+			$("#pincode_div").addClass("spinner spinner-success spinner-right");
+			$("#lbl_pincode_validation").text("");
+			$.ajax({
+				url: '/OnBoarding/ManualForm/GetAreaPinCode',
+				type: "POST",
+				data: { pincode: $("#txtBasicPinCode").val() },
+				success: function (res) {
+					$("#pincode_div").removeClass("spinner spinner-success spinner-right");
+					if (res.success) {
+						$("#ddlBasicArea").empty();
+						$("#ddlBasicArea").append($("<option></option>").val('').html('-- Select Area --'));
+						$.each(res.responseData, function (data, value) {
+							$("#ddlBasicArea").append($("<option></option>").val(value.areaId).html(value.area));
+						});
+					}
+					else {
+						$("#lbl_pincode_validation").text("Invalid Pincode");
+					}
+				}
+			});
+        }
 	});
 
 	$("#form_video_verification").submit(function (e) {

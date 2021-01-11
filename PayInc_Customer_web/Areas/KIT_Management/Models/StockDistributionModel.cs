@@ -28,6 +28,7 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Models
         public decimal customerEffectiveBalance { get; set; }
         public string customerRole { get; set; }
         public string customerRoleDesc { get; set; }
+        public string StockType { get; set; }
 
         public int NumberOfStock { get; set; }
         [Required]

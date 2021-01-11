@@ -60,6 +60,10 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             try
             {
                 SetSession("panCardNumber", fc["panNumber"]);
+                if (string.IsNullOrEmpty(Convert.ToString(fc["panNumber"])))
+                {
+                    return Json(new { success = false, errorMessage="Please enter pan card number", data = "" });
+                }
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("panCardNumber", fc["panNumber"]));
                 string errorMessage = string.Empty;
@@ -131,6 +135,10 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                         }
                         ViewBag.ADList = response.ToList();
                     }
+                    else
+                    {
+                        return Json(new { success = false, errorMessage ="Distributor list not found. Please try again." });
+                    }
                 }
                 else
                 {
@@ -140,7 +148,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = true, errorMessage = ex.Message });
+                return Json(new { success = false, errorMessage = ex.Message });
             }
         }
 
@@ -170,11 +178,12 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
+                string verifyMode = Convert.ToString(fc["vmode"]);
                 var param = new
                 {
                     customerId = GetSession<LoginResData>("LoginDetails").customerId,
-                    customerNumber =Convert.ToInt64(GetStringSession("custMobileNumber")),
-                    panCardNumber= GetStringSession("panCardNumber"),
+                    customerNumber = Convert.ToInt64(GetStringSession("custMobileNumber")),
+                    panCardNumber = GetStringSession("panCardNumber"),
                     firstName = GetStringSession("panName"),
                     middleName = "",
                     lastName = "",
@@ -182,8 +191,9 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     dob = 0,
                     parentCustomerId = Convert.ToInt64(GetStringSession("distributorId") ?? Convert.ToString(GetSession<LoginResData>("LoginDetails").customerId)),
                     submittedBy = GetSession<LoginResData>("LoginDetails").customerId,
-                    kycChannel = "Manual",
-                    remarks = "OnBoarding Request"
+                    kycChannel = verifyMode =="1" ? "Manual Kyc": "Aadhar OTP",
+                    remarks = "OnBoarding Request",
+                    kycChannelId = Convert.ToInt32(verifyMode)
                 };
                 string errorMessage = string.Empty;
                 var response = new CallService().PostResponse<string>("putDetailsCustomerOnbBoarding", param, ref errorMessage);

@@ -1,12 +1,12 @@
 ﻿
 <div class="flex-center ml-3 mr-3">
     <form action="@Url.Action("SubmitOnBoarding","OnBoardingForm")" method="post" id="form_onboarding">
-        <div class="form-group row">
+        <div class="form-group row" id="verify_method_panel">
             <label class="col-3 col-form-label">Verify Method</label>
             <div class="col-9 col-form-label">
                 <div class="radio-list">
                     <label class="radio">
-                        <input type="radio" name="vmode" value="1" />
+                        <input type="radio" name="vmode" value="2" />
                         <span></span>
                         Adhaar OTP
                     </label>
@@ -16,7 +16,7 @@
                         Adhaar Biometrics
                     </label>
                     <label class="radio">
-                        <input type="radio" name="vmode" value="3" checked="checked" />
+                        <input type="radio" name="vmode" value="1" checked="checked" />
                         <span></span>
                         Manual Form
                     </label>
@@ -56,9 +56,11 @@
             data: $("#form_onboarding").serialize(),
             success: function (data) {
                 $(".loader").hide();
+                $("#verify_method_panel").hide();
                 $("#btn_request_submission").removeAttr("disabled");
                 $("#lbl_success").show();
                 $("#btn_request_submission").hide();
+                window.location.reload();
             },
             error: function(err){
             }

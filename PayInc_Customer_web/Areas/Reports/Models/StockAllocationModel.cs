@@ -23,7 +23,7 @@ namespace PayInc_Customer_web.Areas.Reports.Models
         public int availableStocks { get; set; }
         public int usedStocks { get; set; }
         public string stockAllocatedDate { get; set; }
-        public int stockAllocatedTime { get; set; }
+        public string stockAllocatedTime { get; set; }
         public int stockTypeId { get; set; }
         public string stockType { get; set; }
     }

@@ -1,8 +1,7 @@
-﻿@model PayInc_Customer_web.Models.PasswordSettingReq
+@model PayInc_Customer_web.Models.PasswordSettingReq
 @{
     ViewData["Title"] = "Password Setting";
 }
-
 <div class="d-flex flex-row">
     <!--begin::Aside-->
     <!--end::Aside-->
@@ -89,21 +88,21 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">Old MPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m=>m.oldPassword,new { @class= "form-control form-control-lg form-control-solid",  placeholder = "Old Password", maxlength="8" })
+                                        @Html.PasswordFor(m=>m.oldPassword,new { @class= "form-control form-control-lg form-control-solid",  placeholder = "Old MPIN", maxlength="8" })
                                         @Html.ValidationMessageFor(m=>m.oldPassword,"",new { @class="text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">New MPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m => m.newPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "New Password", maxlength = "8" })
+                                        @Html.PasswordFor(m => m.newPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "New MPIN", maxlength = "8" })
                                         @Html.ValidationMessageFor(m => m.newPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">Confirm MPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m => m.confirmPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Confirm Password", maxlength = "8" })
+                                        @Html.PasswordFor(m => m.confirmPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Confirm MPIN", maxlength = "8" })
                                         @Html.ValidationMessageFor(m => m.confirmPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -131,21 +130,21 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">Old TPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m => m.oldPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Old Password", maxlength = "8" })
+                                        @Html.PasswordFor(m => m.oldPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Old TPIN", maxlength = "8" })
                                         @Html.ValidationMessageFor(m => m.oldPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">New TPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m => m.newPassword,  new { @class = "form-control form-control-lg form-control-solid", placeholder = "New Password", maxlength = "8" })
+                                        @Html.PasswordFor(m => m.newPassword,  new { @class = "form-control form-control-lg form-control-solid", placeholder = "New TPIN", maxlength = "8" })
                                         @Html.ValidationMessageFor(m => m.newPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">Confirm TPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m => m.confirmPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Confirm Password", maxlength = "8" })
+                                        @Html.PasswordFor(m => m.confirmPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Confirm TPIN", maxlength = "8" })
                                         @Html.ValidationMessageFor(m => m.confirmPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -183,7 +182,7 @@
                                     </div>
                                 </div>
                                 <!--end::Timeline-->
-                            </div>
+                            </div> 
                         </form>
                     </div>
                     <!--end::Tab Content-->
@@ -335,4 +334,4 @@
         });
     });
 </script>
-@Html.PartialAsync("_ValidationScriptsPartial")
+@*@Html.PartialAsync("_ValidationScriptsPartial")*@

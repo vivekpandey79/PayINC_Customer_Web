@@ -3,66 +3,142 @@
     ViewData["Title"] = "Stock Transfer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link href="~/css/paymenttransfer_wizard.css" rel="stylesheet" />
 <div class="card">
     <div class="card-body">
-        <form action="@Url.Action("ShowProfile","StockDistribution")" method="post">
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Stock Type</label>
-                <div class="col-lg-6 col-md-9 col-sm-12">
-                    @if (ViewBag.StockType != null)
-                    {
-                        @Html.DropDownListFor(m => m.StockType, new SelectList(ViewBag.StockType, "stockTypeId", "stockType"), "--Select Stock Type --", new { @class = "form-control" })
-                    }
-                    @Html.ValidationMessageFor(m => m.StockType, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Mobile Number</label>
-                <div class="col-lg-6 col-md-9 col-sm-12">
-                    @if (ViewBag.NetworkChain != null)
-                    {
-                        @Html.DropDownListFor(m => m.MobileNumber, new SelectList(ViewBag.NetworkChain, "mobileNumber", "customerAccountStatus"), "--Select Mobile Number--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
-                    }
-                    @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "text-danger" })
-
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Number of stock</label>
-                <div class="col-lg-6 col-md-9 col-sm-12">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="flaticon2-hospital"></i></span>
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
+            <div class="wizard-nav">
+                <div class="wizard-steps">
+                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">1</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Mobile Number</div>
+                            </div>
                         </div>
-                        @Html.TextBoxFor(m => m.NumberOfStock, "", new { @class = "form-control", placeholder = "Enter number of stock", maxlength = "5" })
                     </div>
-                    @Html.ValidationMessageFor(m => m.NumberOfStock, "", new { @class = "text-danger" })
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">2</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Enter TPIN</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">3</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Acknowledgement</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            @*<div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12"></label>
-                <div class="col-lg-6 col-md-9 col-sm-12">
-                    <div class="radio-inline">
-                        <label class="radio radio-outline radio-success">
-                            <input type="radio" name="mode" />
-                            <span></span>
-                            REVERSE
-                        </label>
-                        <label class="radio radio-outline radio-success">
-                            <input type="radio" name="mode" checked="checked" />
-                            <span></span>
-                            TRANSFER
-                        </label>
+        </div>
+        <div class="card card-custom card-shadowless rounded-top-0">
+            <div class="card-body p-0">
+                <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                    <div class="col-xl-12 col-xxl-10">
+                        <form class="form" id="kt_form">
+                        </form>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-12">
+                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                    <section id="first_step">
+                                        <form action="@Url.Action("ShowProfile","StockDistribution")" id="form_stock_dist" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <div class="form-group row">
+                                                <label class="col-form-label text-left col-lg-2 col-sm-12">Stock Type</label>
+                                                <div class="col-lg-6 col-md-9 col-sm-12">
+                                                    @if (ViewBag.StockType != null)
+                                                    {
+                                                        @Html.DropDownListFor(m => m.StockType, new SelectList(ViewBag.StockType, "stockTypeId", "stockType"), "--Select Stock Type --", new { @class = "form-control" })
+                                                    }
+                                                    @Html.ValidationMessageFor(m => m.StockType, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-form-label text-left col-lg-2 col-sm-12">Mobile Number</label>
+                                                <div class="col-lg-6 col-md-9 col-sm-12">
+                                                    @if (ViewBag.NetworkChain != null)
+                                                    {
+                                                        @Html.DropDownListFor(m => m.MobileNumber, new SelectList(ViewBag.NetworkChain, "mobileNumber", "customerAccountStatus"), "--Select Mobile Number--", new { @class = "form-control searchable-dropdown", style = "width:100%" })
+                                                    }
+                                                    @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-form-label text-left col-lg-2 col-sm-12">Number of stock</label>
+                                                <div class="col-lg-6 col-md-9 col-sm-12">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="flaticon2-hospital"></i></span>
+                                                        </div>
+                                                        @Html.TextBoxFor(m => m.NumberOfStock, "", new { @class = "form-control", placeholder = "Enter number of stock", maxlength = "5" })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.NumberOfStock, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-lg-6 ml-lg-auto">
+                                                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </section>
+                                </div>
+                                <div class="pb-5" data-wizard-type="step-content">
+                                    <section id="view_profile">
+                                    </section>
+                                </div>
+                                <div class="pb-5" data-wizard-type="step-content">
+                                    <section id="acknowledge1">
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
-            </div>*@
-            <div class="form-group row">
-                <div class="col-lg-6 ml-lg-auto">
-                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Submit</button>
-                </div>
             </div>
-        </form>
+        </div>
+
 
     </div>
 </div>
+<script>
+    
+    $(document).ready(function () {
+        var _wizard1 = new KTWizard("kt_wizard", {
+            startStep: 1,
+            clickableSteps: false
+        });
+        $("#form_stock_dist").submit(function (e) {
+            e.preventDefault();
+            if (!$(this).valid()) {
+                return;
+            }
+            var url = this.action;
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (data) {
+                    _wizard1.goTo(2);
+                    $("#first_step").hide();
+                    $("#view_profile").html(data);
+                   
+                },
+                error: function (er) {
+
+                }
+            });
+        });
+    });
+</script>
+<script src="~/js/paymenttransfer_wizard.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

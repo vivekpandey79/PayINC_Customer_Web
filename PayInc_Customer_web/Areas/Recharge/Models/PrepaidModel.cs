@@ -27,7 +27,26 @@ namespace PayInc_Customer_web.Areas.Recharge.Models
         public string serviceProviderImage { get; set; }
     }
 
+    public class TransactionResult
+    {
+        public bool status { get; set; }
+        public int errorCode { get; set; }
+        public DoTransactionRes response { get; set; }
+        public string message { get; set; }
+    }
 
+    public class DoTransactionRes
+    {
+        public string statusCode { get; set; }
+        public string clientTransactionId { get; set; }
+        public string vendorTransactionId { get; set; }
+        public string operatorId { get; set; }
+        public string amount { get; set; }
+        public string customerNumber { get; set; }
+        public string txnId { get; set; }
+        public string message { get; set; }
+        public object addlParameters { get; set; }
+    }
     public class PlanRecord
     {
         public string rs { get; set; }
@@ -43,5 +62,5 @@ namespace PayInc_Customer_web.Areas.Recharge.Models
         public double time { get; set; }
     }
 
-
+    
 }

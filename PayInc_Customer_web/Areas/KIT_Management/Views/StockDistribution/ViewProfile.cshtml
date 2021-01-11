@@ -2,75 +2,94 @@
 
 @{
     ViewData["Title"] = "Stock distribution";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
-<div class="card">
-    <div class="card-body">
-        <form class="form" method="post" action="@Url.Action("TransferStock","StockDistribution")" id="form_showprofile">
-            @Html.AntiForgeryToken()
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Mobile Number:</label>
-                <div class="col-lg-8 col-md-9 col-sm-12">
-                    <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.mobileNumber</label>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Name:</label>
-                <div class="col-lg-8 col-md-9 col-sm-12">
-                    <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.firstName</label>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Balance:</label>
-                <div class="col-lg-8 col-md-9 col-sm-12">
-                    <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.customerEffectiveBalance</label>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Number of Stocks:</label>
-                <div class="col-lg-8 col-md-9 col-sm-12">
-                    <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.NumberOfStock</label>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Mode:</label>
-                <div class="col-lg-8 col-md-9 col-sm-12">
-                    <label class="col-form-label text-left col-lg-4 col-sm-12">Transfer</label>
-                </div>
-            </div>
 
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">Remarks:</label>
-                <div class="col-lg-4 col-md-9 col-sm-12">
-                    <div class="input-group">
-                        @Html.TextAreaFor(m => m.Remarks, 2, 1, new { @class = "form-control", placeholder = "Enter Remarks", maxlength = "100" })
-                    </div>
-                    @Html.ValidationMessageFor(m => m.Remarks, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label text-left col-lg-2 col-sm-12">TPIN:</label>
-                <div class="col-lg-4 col-md-9 col-sm-12">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="flaticon-lock text-primary"></i></span>
-                        </div>
-                        @Html.PasswordFor(m => m.TPIN, new { @class = "form-control", placeholder = "Enter TPIN", maxlength = "8" })
-                    </div>
-                    @Html.ValidationMessageFor(m => m.TPIN, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-lg-10 ml-lg-auto">
-                    <div class="btn btn-light-primary font-weight-bold mr-2 prev-step" data-wizard-type="action-prev">Back</div>
-                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Transfer Now</button>
-                </div>
-            </div>
-        </form>
+<form class="form" method="post" action="@Url.Action("TransferStock","StockDistribution")" id="form_showprofile_stock">
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Mobile Number:</label>
+        <div class="col-lg-8 col-md-9 col-sm-12">
+            <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.mobileNumber</label>
+        </div>
     </div>
-</div>
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Name:</label>
+        <div class="col-lg-8 col-md-9 col-sm-12">
+            <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.firstName</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Balance:</label>
+        <div class="col-lg-8 col-md-9 col-sm-12">
+            <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.customerEffectiveBalance</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Number of Stocks:</label>
+        <div class="col-lg-8 col-md-9 col-sm-12">
+            <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.NumberOfStock</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Mode:</label>
+        <div class="col-lg-8 col-md-9 col-sm-12">
+            <label class="col-form-label text-left col-lg-4 col-sm-12">Transfer</label>
+        </div>
+    </div>
 
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Remarks:</label>
+        <div class="col-lg-4 col-md-9 col-sm-12">
+            <div class="input-group">
+                @Html.TextAreaFor(m => m.Remarks, 2, 1, new { @class = "form-control", placeholder = "Enter Remarks", maxlength = "100" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Remarks, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">TPIN:</label>
+        <div class="col-lg-4 col-md-9 col-sm-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="flaticon-lock text-primary"></i></span>
+                </div>
+                @Html.PasswordFor(m => m.TPIN, new { @class = "form-control", placeholder = "Enter TPIN", maxlength = "8" })
+            </div>
+            @Html.ValidationMessageFor(m => m.TPIN, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-10 ml-lg-auto">
+            <div class="btn btn-light-primary font-weight-bold mr-2 prev-step" data-wizard-type="action-prev">Back</div>
+            <button type="submit" class="btn btn-primary font-weight-bold mr-2">Transfer Now</button>
+        </div>
+    </div>
+</form>
+<script>
+    $("#form_showprofile_stock").submit(function (e) {
+        e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
+        var url = this.action;
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (data) {
+                _wizard1.goTo(3);
+                $("#first_step").hide();
+                $("#view_profile").hide();
+                $("#acknowledge1").html(data);
 
+            },
+            error: function (er) {
+
+            }
+        });
+    });
+</script>
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

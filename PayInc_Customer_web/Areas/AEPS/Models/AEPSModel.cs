@@ -46,7 +46,8 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
 
         public string AEPSModeType { get; set; }
         public string MobileNumber { get; set; }
-        public AdditionalDataDatum AdditionalData { get; set; }
+        public List<MiniStatementStructureModel> ministatementList { get; set; }
+        //public AdditionalDataDatum AdditionalData { get; set; }
     }
     public class AdditionalDataDatum
     {

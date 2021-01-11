@@ -32,6 +32,33 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string MobileOperator { get; set; }
         [Required(ErrorMessage = "Please select physically disabled or not")]
         public string IsPhysicallyDisabled { get; set; }
+
+        [Required(ErrorMessage = "Please enter pincode")]
+        public string pincode { get; set; }
+
+        [Required(ErrorMessage = "Please select area")]
+        public int? areaId { get; set; }
+
+        [Required(ErrorMessage = "Please enter landmarks")]
+        public string landmark { get; set; }
+        [Required(ErrorMessage = "Please enter landmarks")]
+        public string firmLandmark { get; set; }
+        [Required(ErrorMessage = "Please enter pincode")]
+        public string firmPinCode { get; set; }
+    }
+
+    public class AreaByPinCodeRes
+    {
+        public int areaId { get; set; }
+        public int pinCode { get; set; }
+        public string area { get; set; }
+        public string taluka { get; set; }
+        public int districtId { get; set; }
+        public int pincodeStatus { get; set; }
+        public string districtShortCode { get; set; }
+        public string stateShortCode { get; set; }
+        public string countryShortCode { get; set; }
+        public string districtName { get; set; }
     }
 
     public class PersonalDetailsInput
@@ -56,11 +83,23 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string district { get; set; }
         public string landmark { get; set; }
     }
+    public class BasicInput
+    {
+        public string firmname { get; set; }
+        public string firmaddress { get; set; }
+        public string firmstate { get; set; }
+        public string firmcity { get; set; }
+        public string firmdist { get; set; }
+        public string firmLandmark { get; set; }
+        public string firmPinCode { get; set; }
+    }
 
     public class AllBasicDetailsInput
     {
         public PersonalDetailsInput personalDetails { get; set; }
         public AddressInput addressDetails { get; set; }
+
+        public BasicInput basicInput { get; set; }
     }
 
     public class OverviewDetails
@@ -353,6 +392,9 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string State { get; set; }
         public string City { get; set; }
         public string District { get; set; }
+        public string BankName { get; set; }
+        public string BankAccount { get; set; }
+        public string BankIFSCCode { get; set; }
     }
 
     #endregion

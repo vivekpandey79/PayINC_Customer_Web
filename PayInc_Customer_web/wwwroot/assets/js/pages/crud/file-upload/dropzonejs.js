@@ -43,8 +43,10 @@ var KTDropzoneDemo = function () {
                     $("#txtPanFullName").val(response.responseData.name);
                     $("#txtPanFatherName").val(response.responseData.fatherName);
                     $("#txtPanDOB").val(response.responseData.dob);
-                    $("#dl_dob").val(response.responseData.dob);
-                    document.getElementById("dl_dob").valueAsDate = new Date(response.responseData.dob);
+                    //$("#dl_dob").val(response.responseData.dob);
+                    //var d= new Date(response.responseData.dob);
+                    //d.setDate(d.getDate() + 1);
+                    //document.getElementById("dl_dob").value = d.toDateString();
                     $("#pan_fetch_section").show();
                     $("#upload_section").hide();
                 }
@@ -130,9 +132,22 @@ var KTDropzoneDemo = function () {
                     $("#dl_section").hide();
                     $("#txtFetchDLNo").val(response.responseData.dlNumber);
                     $("#txtFetchDLName").val(response.responseData.name);
+                    if (response.responseData.address.address === "") {
+                        $("#txtFetchAddress").removeAttr("readonly");
+                    }
                     $("#txtFetchAddress").val(response.responseData.address.address);
+                    if (response.responseData.address.city === "") {
+                        $("#txtFetchCity").removeAttr("readonly");
+                    }
                     $("#txtFetchCity").val(response.responseData.address.city);
+                    if (response.responseData.address.state === "") {
+                        $("#txtFetchState").removeAttr("readonly");
+                    }
                     $("#txtFetchState").val(response.responseData.address.state);
+                    if (response.responseData.address.pincode==="") {
+                        $("#txtFetchPinCode").removeAttr("readonly");
+                    }
+                    $("#txtFetchPinCode").val(response.responseData.address.pincode);
                 }
                 else {
                     toastr.error(response.errorMessage, "Alert");

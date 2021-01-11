@@ -91,7 +91,7 @@ namespace PayInc_Customer_web.Utility
             return response;
         }
 
-        public string HttpPostImage(string serviceUrl, string payLoad, ref string error)
+        private string HttpPostImage(string serviceUrl, string payLoad, ref string error)
         {
             string response = null;
             int timedout = 0;
@@ -126,7 +126,7 @@ namespace PayInc_Customer_web.Utility
 
             return response;
         }
-        public string HttpGetRS(string serviceUrl, List<KeyValuePair<string, string>> parameter, ref string error)
+        private string HttpGetRS(string serviceUrl, List<KeyValuePair<string, string>> parameter, ref string error)
         {
             string response = null;
             int timedout = 0;
@@ -186,6 +186,29 @@ namespace PayInc_Customer_web.Utility
                     return default(T);
                 }
                 return Convert.ToString(apiResponse.response) == null ? default(T) : JsonConvert.DeserializeObject<T>(Convert.ToString(apiResponse.response));
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return default(T);
+            }
+        }
+
+        public T PostTransaction<T>(string methodName, object requestParam, ref string errorMessage)
+        {
+            //ApiResponse apiResponse = new ApiResponse();
+            try
+            {
+                var response = HttpPostRS(methodName, Newtonsoft.Json.JsonConvert.SerializeObject(requestParam), ref errorMessage);
+                if (response == null) { return default(T); }
+                var apiResponse = JsonConvert.DeserializeObject<T>(Convert.ToString(response));
+                if (apiResponse == null) { return default(T); }
+                //if (apiResponse.status != true)
+                //{
+                //    errorMessage = apiResponse.message;
+                //    return default(T);
+                //}
+                return (apiResponse);
             }
             catch (Exception ex)
             {

@@ -2,7 +2,9 @@
 @{
     Layout = null;
 }
-
+@{
+    string isAadharPanel = new PayInc_Customer_web.Utility.SessionUtility().GetStringSession("Aadhar_panel");
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +28,7 @@
 
     @if (ViewData["ErrorMessage"] == null)
     {
+        <input type="hidden" id="hdnAadharValue" value="@isAadharPanel"/>
         <div class="card card-custom">
             <!--begin::Card Body-->
             <div class="card-body p-0">
@@ -34,13 +37,9 @@
                     Aadhar OTP - On-Boarding Retailer Activation Form
                 </h1>
                 <div class="wizard wizard-5 d-flex flex-column flex-lg-row flex-row-fluid" id="kt_wizard">
-                    <!--begin::Aside-->
                     <div class="wizard-aside bg-white d-flex flex-column flex-row-auto w-100 w-lg-300px w-xl-400px w-xxl-500px">
-                        <!--begin::Aside Top-->
                         <div class="d-flex flex-column-fluid flex-column px-xxl-30 px-10">
-                            <!--begin: Wizard Nav-->
                             <div class="wizard-nav d-flex d-flex justify-content-center pt-10 pt-lg-20 pb-5">
-                                <!--begin::Wizard Steps-->
                                 <div class="wizard-steps">
                                     <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" data-wizard-clickable="false">
                                         <div class="wizard-wrapper">
@@ -142,8 +141,8 @@
                             <a href="/Login" class="font-weight-bolder text-primary font-size-h4" id="kt_login_signup">Login Here</a>
                         </div>
                         <div class="justify-content-center pl-10 pr-10">
-                            <form class="form" action="@Url.Action("VerifyMobileNumber","AadharOTP")" method="post" id="form_verify_mobile">
-                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                            <form class="form" action="@Url.Action("VerifyMobileNumber", "AadharOTP")" method="post" id="form_verify_mobile">
+                                <div class="pb-5" data-wizard-type="step-content" @(isAadharPanel==null ? "data-wizard-state='current'":"data-wizard-state='done'")>
                                     <div class="pb-10 pb-lg-15">
                                         <h3 class="font-weight-bolder text-dark font-size-h2">Start On-Boarding - Verify Mobile Number</h3>
                                     </div>
@@ -188,9 +187,8 @@
                                 </div>
                             </form>
 
-
-                            <form id="form_upload_pan_verify" class="form" action="@Url.Action("SubmitPAN","AadharOTP")" method="post" enctype="multipart/form-data">
-                                <div class="pb-5" data-wizard-type="step-content">
+                            <form id="form_upload_pan_verify" class="form" action="@Url.Action("SubmitPAN", "AadharOTP")" method="post" enctype="multipart/form-data">
+                                <div class="pb-5" data-wizard-type="step-content" @(isAadharPanel==null ? "data-wizard-state='current'":"data-wizard-state='done'")>
                                     <div class="pb-10 pb-lg-15">
                                         <h3 class="font-weight-bolder text-dark font-size-h2">Upload PAN</h3>
                                     </div>
@@ -263,96 +261,65 @@
                                 </div>
                             </form>
 
-
-
-                            <div class="pb-5" data-wizard-type="step-content">
-                                <div class="pb-10 pb-lg-15">
-                                    <h3 class="font-weight-bolder text-dark font-size-h2">Address Proof</h3>
-                                    <div class="text-muted font-weight-bold font-size-h4">Aadhar Number and OTP</div>
+                            <form id="form_aadhar_details" class="form" action="@Url.Action("SubmitAddressProof", "AadharOTP")" method="post">
+                                <div class="pb-5 card" data-wizard-type="step-content" @(isAadharPanel != null ? "data-wizard-state='current'" : "")>
+                                    <div class="pb-10 pb-lg-15">
+                                        <h3 class="font-weight-bolder text-dark font-size-h2">Address Proof</h3>
+                                    </div>
+                                    @if (ViewData["AadharOTPRes"] != null)
+                                    {
+                                        var aadharDetails = (PayInc_Customer_web.Areas.OnBoarding.Models.AadharOTPRes)ViewData["AadharOTPRes"];
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="text-center bg-dark text-white">
+                                                <td colspan="2"><b>Personal Details</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name</td>
+                                                <td>@aadharDetails.original_kyc_info.name</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Date Of Birth</td>
+                                                <td>@aadharDetails.original_kyc_info.dob</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gender</td>
+                                                <td>@aadharDetails.original_kyc_info.gender</td>
+                                            </tr>
+                                            <tr class="text-center bg-dark text-white">
+                                                <td colspan="2"><b>Address Details</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Address</td>
+                                                <td>@aadharDetails.original_kyc_info.address</td>
+                                            </tr>
+                                            <tr>
+                                                <td>State</td>
+                                                <td>@aadharDetails.original_kyc_info.state</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Landmark</td>
+                                                <td>@aadharDetails.original_kyc_info.landmark</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    }
+                                    <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_aadhar_details">
+                                        Next Step
+                                        <span class="svg-icon svg-icon-md ml-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </button>
                                 </div>
-                                <section id="aadhar_section">
-                                    <div class="form-group">
-                                        <label class="font-size-h6 font-weight-bolder text-dark">Aadhaar Number/VID</label>
-                                        @Html.TextBoxFor(m => m.DLNumber, new { @class = "form-control h-auto p-5 border-0 rounded-lg font-size-h6", id = "txtdlnumber",autocomplete="off" ,placeholder = "Enter your Aadhaar Number/ VID" })
-                                        @Html.ValidationMessageFor(m => m.DLNumber, "", new { @class = "text-danger" })
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <div class="col-lg-4 col-md-9 col-sm-12">
-                                            <a href="javascript:;" id="btn_fetch_otp" class="btn btn-block btn-primary font-weight-bolder">
-                                                Get Aadhar OTP
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </section>
-                                <section id="aadhar_otp_panel" style="display:none;">
-                                    <div class="d-flex justify-content-center">
-                                        <form class="form digit-group" id="form_aadhar_otp" data-group-name="digits" data-autosubmit="false" autocomplete="off" action="@Url.Action("GetAadharOTP","AadharOTP")">
-                                            <div class="text-muted font-weight-bold text-center">Enter Aadhar OTP</div>
-                                            <div class="form-group mb-10">
-                                                <input type="text" id="digit-1" name="digit-1" data-next="digit-2" class="form-control-solid" />
-                                                <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
-                                                <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
-                                                <span class="splitter">&ndash;</span>
-                                                <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
-                                                <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
-                                                <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" class="form-control-solid" />
-                                            </div>
-                                            <div class="form-group d-flex flex-wrap flex-center mt-10">
-                                                <button id="btn_otp_submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </section>
-                                <form id="form_address" class="form" action="@Url.Action("SubmitAddressProof","AadharOTP")" method="post">
-                                    <section id="dl_fetch_form" style="display:none">
-                                        <div class="form-group">
-                                            <label class="font-size-h6 font-weight-bolder text-dark">DL Number</label>
-                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchDLNo" readonly />
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-size-h6 font-weight-bolder text-dark">Name</label>
-                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchDLName" readonly />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="font-size-h6 font-weight-bolder text-dark">Address</label>
-                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchAddress" readonly />
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-size-h6 font-weight-bolder text-dark">City</label>
-                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchCity" readonly />
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-size-h6 font-weight-bolder text-dark">State</label>
-                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlnumber" id="txtFetchState" readonly />
-                                        </div>
-                                        <div class="d-flex justify-content-between pt-3">
-                                            <div>
-                                                <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_upld_address">
-                                                    Next Step
-                                                    <span class="svg-icon svg-icon-md ml-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                                <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
-                                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </form>
-                            </div>
-
-
+                            </form>
 
                             <div data-wizard-type="step-content">
-                                <!--begin::Title-->
-                                @* <form id="form_basic_details" action="@Url.Action("BasicDetails","ManualForm")">*@
                                 <div class="pb-10 pb-lg-15">
                                     <h3 class="font-weight-bolder text-dark font-size-h2">Basic Details</h3>
                                     <div class="text-muted font-weight-bold font-size-h4">Personal details</div>
@@ -365,112 +332,116 @@
                                             </div>
                                         </div>
                                         <div id="collapseOne4" class=" collapse show" data-parent="#accordionExample4">
-                                            <div class="pl-5 pr-5">
-                                                <div class="form-group">
-                                                    <label class="font-weight-bolder text-dark">Name:</label>
-                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Name" id="txtBasicName" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="font-weight-bolder text-dark">Father Name:</label>
-                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Father Name" id="txtBasicFatherName" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="font-weight-bolder text-dark">Date of Birth:</label>
-                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter date of birth" id="txtBasicDateOfBirth" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="font-weight-bolder text-dark">Mobile Number</label>
-                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Mobile Number" id="txtBasicMobileNumber" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="font-weight-bolder text-dark">Email Address</label>
-                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter Email Address" />
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Gender</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- SELECT GENDER --</option>
-                                                            <option value="1">Male</option>
-                                                            <option value="2">Female</option>
-                                                        </select>
+                                            <form method="post" id="form_personal_details">
+                                                <div class="pl-5 pr-5">
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Name:</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Name" id="txtBasicName" />
                                                     </div>
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Maritial Status</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select Maritial Status --</option>
-                                                            <option value="1">Married</option>
-                                                            <option value="2">UnMarried</option>
-                                                            <option value="3">Divorced</option>
-                                                        </select>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Father Name:</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="fathername" readonly placeholder="Enter Father Name" id="txtBasicFatherName" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Date of Birth:</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter date of birth" id="txtBasicDateOfBirth" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Mobile Number</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Mobile Number" id="txtBasicMobileNumber" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Email Address</label>
+                                                        @Html.TextBoxFor(m => m.EmailAddress, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Email Address" })
+                                                        @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Gender</label>
+                                                            @Html.DropDownListFor(m => m.Gender, new List<SelectListItem> {
+                                                            new SelectListItem{ Value="1~Male", Text="Male"},
+                                                            new SelectListItem{ Value="2~Female", Text="Female"}
+                                                            }, "-- Select Gender --", new { @class = "form-control h-auto p-5 border-1 rounded-lg" })
+                                                            @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Maritial Status</label>
+                                                            @Html.DropDownListFor(m => m.MaritialStatus, new List<SelectListItem> {
+                                                            new SelectListItem{ Value="1~Single", Text="Single"},
+                                                            new SelectListItem{ Value="2~MARRIED", Text="MARRIED"},
+                                                            new SelectListItem{ Value="3~SEPARATED", Text="SEPARATED"},
+                                                            }, "-- Select Maritial Status --", new { @class = "form-control h-auto p-5 border-1 rounded-lg" })
+                                                            @Html.ValidationMessageFor(m => m.MaritialStatus, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Caste Category</label>
+                                                            @Html.DropDownListFor(m => m.Caste, new List<SelectListItem> {
+                                                            new SelectListItem{ Value="General", Text="General"},
+                                                            new SelectListItem{ Value="SC/ST", Text="SC/ST"},
+                                                            new SelectListItem{ Value="OBC", Text="OBC"},
+                                                            }, "-- Select Caste --", new { @class = "form-control h-auto p-5 border-1 rounded-lg" })
+                                                            @Html.ValidationMessageFor(m => m.Caste, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Educational Qualification</label>
+                                                            @Html.DropDownListFor(m => m.EducationalQualification, new List<SelectListItem> {
+                                                           new SelectListItem{ Value="SSC", Text="SSC"},
+                                                           new SelectListItem{ Value="HSC", Text="HSC"},
+                                                           new SelectListItem{ Value="Graduate", Text="Graduate"},
+                                                           new SelectListItem{ Value="Post-Graduate", Text="Post-Graduate"},
+                                                           }, "-- Select Education --", new { @class = "form-control h-auto p-5 border-1 rounded-lg" })
+                                                            @Html.ValidationMessageFor(m => m.EducationalQualification, "", new { @class = "text-danger" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Mobile Operator</label>
+                                                            <select class="form-control h-auto p-5 border-1 rounded-lg" name="MobileOperator">
+                                                                <option>-- Select Mobile Operator --</option>
+                                                                <option value="Vodafone/Idea">Vodafone/Idea</option>
+                                                                <option value="JIO">JIO</option>
+                                                                <option value="Airtel">Airtel</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Physically Disabled</label>
+                                                            <select class="form-control h-auto p-5 border-1 rounded-lg" name="IsPhysicallyDisabled">
+                                                                <option>-- Select --</option>
+                                                                <option value="Yes">Yes</option>
+                                                                <option value="No">No</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Occupation Type</label>
+                                                            <select class="form-control h-auto p-5 border-1 rounded-lg" name="OccupationType">
+                                                                <option>-- Select --</option>
+                                                                <option value="Public Sector">Public Sector</option>
+                                                                <option value="Private Sector">Private Sector</option>
+                                                                <option value="Self Employed">Self Employed</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Entity Type</label>
+                                                            <select class="form-control h-auto p-5 border-1 rounded-lg" name="EntityType">
+                                                                <option>-- Select --</option>
+                                                                <option value="Individual">Individual</option>
+                                                                <option value="Sole Properitor ship">Sole Properitor ship</option>
+                                                                <option value="Partnership firm">Partnership firm</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-4">
+                                                            <a href="javascript:;" id="btn_personal_det" class="btn btn-block btn-primary collapsed">Next</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Caste</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select Caste --</option>
-                                                            <option value="1">General</option>
-                                                            <option value="2">SC/ST</option>
-                                                            <option value="3">OBC</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Educational Qualification</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select Education --</option>
-                                                            <option value="1">SSC</option>
-                                                            <option value="2">HSC</option>
-                                                            <option value="3">Graduate</option>
-                                                            <option value="4">Post-Graduate</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Mobile Operator</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select Mobile Operator --</option>
-                                                            <option value="1">Vodafone/Idea</option>
-                                                            <option value="2">JIO</option>
-                                                            <option value="3">Airtel</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Physically Disabled</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select --</option>
-                                                            <option value="1">Yes</option>
-                                                            <option value="2">No</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Occupation Type</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select --</option>
-                                                            <option value="1">Public Sector</option>
-                                                            <option value="2">Private Sector</option>
-                                                            <option value="3">Self Employeed</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Entity Type</label>
-                                                        <select class="form-control h-auto p-5 border-1 rounded-lg">
-                                                            <option>-- Select --</option>
-                                                            <option value="1">Individual</option>
-                                                            <option value="2">Sole Properitor ship</option>
-                                                            <option value="3">Partnership firm</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-4">
-                                                        <a href="javascript:;" class="btn btn-block btn-primary collapsed" data-toggle="collapse" data-target="#collapseTwo4">Next</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="card">
@@ -480,37 +451,52 @@
                                             </div>
                                         </div>
                                         <div id="collapseTwo4" class="collapse" data-parent="#accordionExample4">
-                                            <div class="pl-5 pr-5">
-                                                <div class="form-group">
-                                                    <label class="font-weight-bolder text-dark">Address</label>
-                                                    <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="address" readonly placeholder="Enter Address" id="txtBasicAddress" />
+                                            <form method="post" id="form_address_panel">
+                                                <div class="pl-5 pr-5">
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Address</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="address" readonly placeholder="Enter Address" id="txtBasicAddress" />
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">State</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="state" readonly placeholder="Enter State" id="txtBasicState" />
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">City</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="city" readonly placeholder="Enter City" id="txtBasicCity" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">District</label>
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="district" placeholder="Enter District" id="txtBasicDist" />
+
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="font-weight-bolder text-dark">Landmark</label>
+                                                            @Html.TextBoxFor(m => m.landmark, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Landmark", id = "txtBasicLandmark" })
+                                                            @Html.ValidationMessageFor(m => m.landmark, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" id="pincode_div">
+                                                        <label class="font-weight-bolder text-dark">Pincode</label>
+                                                        @Html.TextBoxFor(m => m.pincode, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Pincode", id = "txtBasicPinCode" })
+                                                        @Html.ValidationMessageFor(m => m.pincode, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Area</label>
+                                                        @Html.DropDownListFor(m => m.areaId, new List<SelectListItem> {
+                                                           new SelectListItem{ Value="", Text="--Select Area"} }, new { @class = "form-control h-auto p-5 border-1 rounded-lg", id = "ddlBasicArea" })
+                                                        @Html.ValidationMessageFor(m => m.areaId, "", new { @class = "text-danger", id = "lbl_pincode_validation" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-4">
+                                                            <a href="javascript:;" id="btn_address_det" class="btn btn-block btn-primary collapsed">Next</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">State</label>
-                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="state" readonly placeholder="Enter State" id="txtBasicState" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">City</label>
-                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="city" readonly placeholder="Enter City" id="txtBasicCity" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">District</label>
-                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter District" id="txtBasicDist" />
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="font-weight-bolder text-dark">Landmark</label>
-                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter Landmark" id="txtBasicLandmark" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-4">
-                                                        <a href="javascript:;" class="btn btn-block btn-primary collapsed" data-toggle="collapse" data-target="#collapseThree4">Next</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="card">
@@ -520,8 +506,8 @@
                                             </div>
                                         </div>
                                         <div id="collapseThree4" class="collapse" data-parent="#accordionExample4">
-                                            <div class="pl-5 pr-5">
-                                                <form id="form_basic_details" action="@Url.Action("BasicDetails","AadharOTP")" method="post">
+                                            <form id="form_basic_details" action="@Url.Action("BasicDetails","ManualForm")" method="post">
+                                                <div class="pl-5 pr-5">
                                                     <div class="form-group">
                                                         <label class="checkbox">
                                                             <input type="checkbox" name="Checkboxes1" id="chk_same_address" />
@@ -530,28 +516,40 @@
                                                         </label>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="font-weight-bolder text-dark">Address</label>
-                                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg" name="firstname" placeholder="Enter Address" id="txtOutletAddress" />
+                                                        <label class="font-weight-bolder text-dark">Firm Name</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmname" placeholder="Enter Firm Name" id="txFirmName" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Firm Address</label>
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmaddress" placeholder="Enter Address" id="txtOutletAddress" />
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-6">
                                                             <label class="font-weight-bolder text-dark">State</label>
-                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter State" id="txtOutletState" />
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmstate" placeholder="Enter State" id="txtOutletState" />
                                                         </div>
                                                         <div class="col-6">
                                                             <label class="font-weight-bolder text-dark">City</label>
-                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter City" id="txtOutletCity" />
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmcity" placeholder="Enter City" id="txtOutletCity" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-6">
                                                             <label class="font-weight-bolder text-dark">District</label>
-                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter District" id="txtOutletDistrict" />
+                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmdist" placeholder="Enter District" id="txtOutletDistrict" />
                                                         </div>
                                                         <div class="col-6">
                                                             <label class="font-weight-bolder text-dark">Landmark</label>
-                                                            <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" placeholder="Enter Landmark" id="txtOutletLandmark" />
+                                                            @Html.TextBoxFor(m => m.firmLandmark, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Landmark", id = "txtOutletLandmark" })
+                                                            @Html.ValidationMessageFor(m => m.firmLandmark, "", new { @class = "text-danger" })
+                                                            @*<input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmLandmark" placeholder="Enter Landmark" id="txtOutletLandmark" />*@
                                                         </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Pincode</label>
+                                                        @Html.TextBoxFor(m => m.firmPinCode, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Pin Code", id = "txtOutletPinCode" })
+                                                        @Html.ValidationMessageFor(m => m.firmPinCode, "", new { @class = "text-danger" })
+                                                        @*<input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmPinCode" placeholder="Enter Pincode" id="txtOutletPinCode" />*@
                                                     </div>
                                                     <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_basic_details">
                                                         Next Step
@@ -565,31 +563,11 @@
                                                             </svg>
                                                         </span>
                                                     </button>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                @*<div class="d-flex justify-content-between pt-3">
-                                        <div>
-                                            <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_basic_details">
-                                                Next Step
-                                                <span class="svg-icon svg-icon-md ml-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                                            <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
-                                                            <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
-                                                        </g>
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>*@
-                                @* </form>*@
-
                             </div>
 
                             <div class="pb-5" data-wizard-type="step-content">
@@ -600,15 +578,17 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">Bank Name</label>
-                                        @Html.DropDownList("ddlBank", new List<SelectListItem> { new SelectListItem { Text = "Loading Bank" } }, new { @class = "form-control h-auto p-5 border-0 rounded-lg font-size-h6" })
+                                        <div class="col-12">
+                                            @Html.DropDownList("ddlBank", new List<SelectListItem> { new SelectListItem { Text = "Loading Bank" } }, new { @class = "form-control searchable-dropdown h-auto p-5 border-0 rounded-lg font-size-h6", style = "width:100%" })
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">Account Number</label>
-                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="firstname" placeholder="Enter Account Number" />
+                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="bankaccount" placeholder="Enter Account Number" />
                                     </div>
                                     <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">IFSC Code</label>
-                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="firstname" placeholder="Enter IFSC Code" />
+                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="bankifsccode" placeholder="Enter IFSC Code" />
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Upload Cancelled Cheque</label>
@@ -641,12 +621,11 @@
                                     </div>
                                 </form>
                             </div>
+
                             <div class="pb-5" data-wizard-type="step-content">
-                                <label class="radio radio-primary">
-                                    <input type="radio" name="rdbdeclaration" value="1" checked="checked" />
-                                    <span></span>
-                                    I here by declared that, all provided document is correct proof.
-                                </label>
+                                <div id="panel_all_details" class="card">
+
+                                </div>
                                 <div class="d-flex justify-content-between pt-3">
                                     <div>
                                         <button type="button" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" data-wizard-type="action-next">
@@ -663,6 +642,58 @@
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <form action="@Url.Action("VideoVerification","ManualForm")" id="form_video_verification">
+                                    <div class="card" data-scroll="true" data-height="300">
+                                        Website Terms and Conditions [Text Format]
+                                        Last updated [month day, year]
+
+                                        AGREEMENT TO TERMS
+
+                                        These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and [business entity name] (“we,” “us” or “our”), concerning your access to and use of the [website name.com] website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”).
+
+                                        You agree that by accessing the Site, you have read, understood, and agree to be bound by all of these Terms and Conditions. If you do not agree with all of these Terms and Conditions, then you are expressly prohibited from using the Site and you must discontinue use immediately.
+
+                                        Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms and Conditions at any time and for any reason.
+
+                                        We will alert you about any changes by updating the “Last updated” date of these Terms and Conditions, and you waive any right to receive specific notice of each such change.
+
+                                        It is your responsibility to periodically review these Terms and Conditions to stay informed of updates. You will be subject to, and will be deemed to have been made aware of and to have accepted, the changes in any revised Terms and Conditions by your continued use of the Site after the date such revised Terms and Conditions are posted.
+
+                                        The information provided on the Site is not intended for distribution to or use by any person or entity in any jurisdiction or country where such distribution or use would be contrary to law or regulation or which would subject us to any registration requirement within such jurisdiction or country.
+
+                                        Accordingly, those persons who choose to access the Site from other locations do so on their own initiative and are solely responsible for compliance with local laws, if and to the extent local laws are applicable.
+
+                                        These terms and conditions were generated by Termly’s Terms and Conditions Generator.
+
+                                        Option 1: The Site is intended for users who are at least 18 years old. Persons under the age of 18 are not permitted to register for the Site.
+
+                                        Option 2: [The Site is intended for users who are at least 13 years of age.] All users who are minors in the jurisdiction in which they reside (generally under the age of 18) must have the permission of, and be directly supervised by, their parent or guardian to use the Site. If you are a minor, you must have your parent or guardian read and agree to these Terms and Conditions prior to you using the Site.
+                                    </div>
+
+                                    <label class="radio radio-primary">
+                                        <input type="radio" name="rdbdeclaration" value="1" checked="checked" />
+                                        <span></span>
+                                        I here by declared that, all provided document is correct proof.
+                                    </label>
+                                    <div class="d-flex justify-content-between pt-3">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_verify_video">
+                                                Verify Video
+                                                <span class="svg-icon svg-icon-md ml-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect fill="#000000" opacity="0.3" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                                            <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="pb-5" data-wizard-type="step-content">
                                 <!--begin::Title-->
@@ -744,6 +775,7 @@
                 font-weight: 200;
                 margin: 0 2px;
             }
+
             .splitter {
                 padding: 0 5px;
                 color: black;

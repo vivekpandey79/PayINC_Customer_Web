@@ -75,11 +75,15 @@
         </tr>
         <tr>
             <td>Firm Name</td>
-            <td></td>
+            <td>@Model.allDetails.basicInput.firmname</td>
         </tr>
         <tr>
             <td>Firm Address</td>
-            <td>@Model.allDetails.addressDetails.address</td>
+            <td>@Model.allDetails.basicInput.firmaddress</td>
+        </tr>
+        <tr>
+            <td>Firm State</td>
+            <td>@Model.allDetails.basicInput.firmstate</td>
         </tr>
         <tr class="text-center bg-dark text-white">
             <td colspan="2">
@@ -88,15 +92,15 @@
         </tr>
         <tr>
             <td>Bank Name</td>
-            <td>ICICI Bank</td>
+            <td>@Model.allValue.BankName</td>
         </tr>
         <tr>
             <td>Account Number</td>
-            <td></td>
+            <td>@Model.allValue.BankAccount</td>
         </tr>
         <tr>
             <td>IFSC Code</td>
-            <td></td>
+            <td>@Model.allValue.BankIFSCCode</td>
         </tr>
     </tbody>
 </table>

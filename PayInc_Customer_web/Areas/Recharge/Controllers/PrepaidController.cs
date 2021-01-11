@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PayInc_Customer_web.Areas.Recharge.Models;
 using PayInc_Customer_web.Models;
@@ -71,6 +72,39 @@ namespace PayInc_Customer_web.Areas.Recharge.Controllers
             {
                 return PartialView("ViewPlans");
             }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DoTransaction(IFormCollection fc)
+        {
+            try
+            {
+                var tpin = Convert.ToString(fc["digit1"])+ Convert.ToString(fc["digit2"])+ Convert.ToString(fc["digit3"])+ Convert.ToString(fc["digit4"])+ Convert.ToString(fc["digit5"])+ Convert.ToString(fc["digit6"])+ Convert.ToString(fc["digit7"])+ Convert.ToString(fc["digit8"]);
+                var sessionUtility = new SessionUtility();
+                var req = new
+                {
+                    customerId = sessionUtility.GetLoginSession().customerId,
+                    rechageNumber = Convert.ToString(fc["MobileNumber"]),
+                    txnAmount = Convert.ToDecimal(fc["Amount"]),
+                    serviceProviderId = Convert.ToInt32(fc["OperatorId"]),
+                    serviceCircleId = 1,
+                    serviceChannelId = 1,
+                    remarks = "Recharge",
+                    tPin = new PasswordHash().HashShA1(tpin)
+
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostTransaction<TransactionResult>("doRecharge", req,ref errorMessage);
+                return PartialView("AckView", response);
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return PartialView("AckView");
         }
     }
 }

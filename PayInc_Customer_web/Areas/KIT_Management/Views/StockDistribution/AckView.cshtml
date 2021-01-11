@@ -1,0 +1,38 @@
+﻿@model PayInc_Customer_web.Areas.PaymentManagement.Models.PaymentTransferAck
+
+
+<style>
+    th {
+        background-color: #f8f8f9;
+    }
+</style>
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Payee </th>
+            <td>@Model.PayeeName (@Model.PayeeMobileNumber)</td>
+        </tr>
+        <tr>
+            <th>Payee Stock Balance</th>
+            <td>@Model.PayeeWalletBal</td>
+        </tr>
+        <tr>
+            <th>Mode</th>
+            <td>Stock Transfer</td>
+        </tr>
+        <tr>
+            <th>Stock Count</th>
+            <td>@Model.Amount</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td><span class="@(Model.StatusId==1 ? "text-success": "text-danger")">@Model.Status</span></td>
+        </tr>
+    </tbody>
+
+</table>
+<div class="form-group row">
+    <div class="col-lg-10 ml-lg-auto">
+        <a href="/Home" class="btn btn-primary font-weight-bold mr-2">Go To Dashboard</a>
+    </div>
+</div>

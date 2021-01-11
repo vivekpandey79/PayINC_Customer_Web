@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PayInc_Customer_web.Areas.KIT_Management.Models;
 using PayInc_Customer_web.Areas.Reports.Models;
+using PayInc_Customer_web.Models;
 using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
@@ -19,6 +20,7 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ShowProfile(StockDistributionInput input)
         {
             try
@@ -30,19 +32,21 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     response.NumberOfStock = input.NumberOfStock;
+                    response.StockType = input.StockType;
                     var sessionUtility = new SessionUtility();
                     sessionUtility.SetSession("StockTypeId", input.StockType);
                     sessionUtility.SetSession("PayeeMobileNo", Convert.ToString(response.mobileNumber));
+                    sessionUtility.SetSession("PayeeName", response.firstName + " " + response.lastName);
                     sessionUtility.SetSession("PayeeNumberOfStock", Convert.ToString(input.NumberOfStock));
                     sessionUtility.SetSession("PayeeCustomerID", Convert.ToString(response.customerId));
-                    return View("ViewProfile", response);
+                    return PartialView("ViewProfile", response);
                 }
             }
             catch (Exception)
             {
 
             }
-            return View("ViewProfile");
+            return PartialView("ViewProfile");
         }
         public void GetNetworkChain()
         {
@@ -106,19 +110,33 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
                     childMobileNumber = Convert.ToInt64(sessionUtility.GetStringSession("PayeeMobileNo")),
                     stockTypeId = Convert.ToInt32(sessionUtility.GetStringSession("stockTypeId")),
                     stockCount = Convert.ToInt32(sessionUtility.GetStringSession("PayeeNumberOfStock")),
-                    tpin = string.Empty
+                    tpin = new PasswordHash().HashShA1(input.TPIN)//input.TPIN // new PasswordHash().HashShA1(input.TPIN)
                 };
                 var response = new CallService().PostResponse<string>("putCustomerStockTransafer", req,ref errorMessage);
+                var resp = new PaymentManagement.Models.PaymentTransferAck()
+                {
+                    PayeeMobileNumber = sessionUtility.GetStringSession("PayeeMobileNo"),
+                    PayeeName = sessionUtility.GetStringSession("PayeeName"),
+                    Amount = sessionUtility.GetStringSession("PayeeNumberOfStock"),
+                    PayeeWalletBal = Convert.ToString(new PayInc_Customer_web.Models.WalletDetails().GetBalanceByCustomerID(sessionUtility.GetStringSession("PayeeCustomerID"))),
+                };
                 if (string.IsNullOrEmpty(errorMessage))
                 {
-
+                    resp.Status = "Stock transferred.";
+                    resp.StatusId = 1;
                 }
+                else
+                {
+                    resp.Status = errorMessage;
+                    resp.StatusId = 0;
+                }
+                return PartialView("AckView", resp);
             }
             catch (Exception)
             {
 
             }
-            return View();
+            return PartialView("AckView");
         }
     }
 }

@@ -1,8 +1,18 @@
 ﻿$(document).ready(function (e) {
-	var _wizard1 = new KTWizard("kt_wizard", {
-		startStep: 1,
-		clickableSteps: true
-	});
+	var _wizard1 = "";
+	if ($("#hdnAadharValue").val() === "") {
+		_wizard1 = new KTWizard("kt_wizard", {
+			startStep: 1,
+			clickableSteps: false
+		});
+	}
+	else {
+		_wizard1 = new KTWizard("kt_wizard", {
+			startStep: 3,
+			clickableSteps: false
+		});
+	}
+
 
 	var _validations = [];
 	var initValidation = function () {
@@ -107,17 +117,6 @@
 				data: $("#form_verify_mobile").serialize(),
 				success: function (data) {
 					KTUtil.btnRelease(btn);
-					//if (data.success) {
-					//	$(".loader").hide();
-					//	$("#btn_verify_mobile").removeAttr("disabled");
-					//	_wizard.goNext();
-					//}
-					//else {
-					//	$(".loader").hide();
-					//	$("#txtPanNumber").val('');
-					//	$("#btn_submit_pan").removeAttr("disabled");
-					//	toastr.error(data.errorMessage, "Alert");
-					//}
 					_wizard1.goNext();
 				}
 			});
@@ -136,10 +135,11 @@
 			type: "POST",
 			data: $("#form_upload_pan_verify").serialize(),
 			success: function (data) {
+				window.location.href = data.redirect_url;
 				$("#btn_upload_pan").removeClass("spinner");
 				$("#btn_upload_pan").text("Next");
 				$("#btn_upload_pan").removeAttr("disabled");
-				_wizard1.goNext();
+				//_wizard1.goNext();
 			}
 		});
 	});
@@ -175,8 +175,7 @@
 		$.ajax({
 			url: url,
 			type: "POST",
-			data: { addressDetails: $("#form_address_panel").serialize(), personalDetails: $("#form_personal_details").serialize() },
-			//data:  $("#form_personal_details").serialize(),
+			data: { addressDetails: $("#form_address_panel").serialize(), personalDetails: $("#form_personal_details").serialize(), basicDetails: $("#form_basic_details").serialize() },
 			success: function (data) {
 				KTUtil.btnRelease(btn);
 				GetBankList();
@@ -220,7 +219,6 @@
 		e.preventDefault();
 		$("#aadhar_otp_panel").show();
 		$("#aadhar_section").hide();
-
 	})
 	$('#chk_same_address').change(function () {
 		if (this.checked) {
@@ -261,7 +259,32 @@
 			$("#collapseThree4").collapse("show");
 		}
 	});
-
+	$("#txtBasicPinCode").on("keyup change", function (e) {
+		e.preventDefault();
+		$("#pincode_div").removeClass("spinner spinner-success spinner-right");
+		if ($("#txtBasicPinCode").val().length === 6) {
+			$("#pincode_div").addClass("spinner spinner-success spinner-right");
+			$("#lbl_pincode_validation").text("");
+			$.ajax({
+				url: '/OnBoarding/ManualForm/GetAreaPinCode',
+				type: "POST",
+				data: { pincode: $("#txtBasicPinCode").val() },
+				success: function (res) {
+					$("#pincode_div").removeClass("spinner spinner-success spinner-right");
+					if (res.success) {
+						$("#ddlBasicArea").empty();
+						$("#ddlBasicArea").append($("<option></option>").val('').html('-- Select Area --'));
+						$.each(res.responseData, function (data, value) {
+							$("#ddlBasicArea").append($("<option></option>").val(value.areaId).html(value.area));
+						});
+					}
+					else {
+						$("#lbl_pincode_validation").text("Invalid Pincode");
+					}
+				}
+			});
+		}
+	});
 	$("#form_video_verification").submit(function (e) {
 		e.preventDefault();
 		var btn = KTUtil.getById("btn_verify_video");
@@ -275,7 +298,9 @@
 			data: $("#form_video_verification").serialize(),
 			success: function (data) {
 				KTUtil.btnRelease(btn);
-				window.location = "https://webcamera.io/";
+				if (data.success) {
+					window.location = data.responseData.result.videoUrl;
+				}
 
 			}
 		});
@@ -298,6 +323,29 @@
 						parent.submit();
 					}
 				}
+			}
+		});
+	});
+
+	$("#form_aadhar_details").submit(function (e) {
+		e.preventDefault();
+		$("#btn_aadhar_details").attr("disabled","disabled");
+		$("#btn_aadhar_details").addClass("spinner spinner-right spinner-white pr-15");
+		var url = this.action;
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: $("#form_aadhar_details").serialize(),
+			success: function (data) {
+				$("#txtBasicName").val(data.responseData.name);
+				$("#txtBasicFatherName").val(data.responseData.name);
+				$("#txtBasicDateOfBirth").val(data.responseData.dob);
+				$("#txtBasicMobileNumber").val(data.responseData.mobile);
+				$("#txtBasicAddress").val(data.responseData.address);
+				$("#txtBasicState").val(data.responseData.state);
+				$("#btn_aadhar_details").removeAttr("disabled");
+				$("#btn_aadhar_details").removeClass("spinner spinner-right spinner-white pr-15");
+				_wizard1.goNext();
 			}
 		});
 	});

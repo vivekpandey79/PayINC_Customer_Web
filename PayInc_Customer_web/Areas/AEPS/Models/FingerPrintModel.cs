@@ -282,4 +282,47 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
         public int statusCode { get; set; }
     }
     #endregion
+
+    #region MINI Statement
+    public class MiniStatementStructureModel
+    {
+        public string date { get; set; }
+        public string txnType { get; set; }
+        public string amount { get; set; }
+        public string narration { get; set; }
+    }
+
+    public class MINIStatementData
+    {
+        public string terminalId { get; set; }
+        public string requestTransactionTime { get; set; }
+        public string transactionStatus { get; set; }
+        public double balanceAmount { get; set; }
+        public string bankRRN { get; set; }
+        public string transactionType { get; set; }
+        public string fpTransactionId { get; set; }
+        public object merchantTxnId { get; set; }
+        public List<MiniStatementStructureModel> miniStatementStructureModel { get; set; }
+        public object miniOffusStatementStructureModel { get; set; }
+        public bool miniOffusFlag { get; set; }
+    }
+
+    public class MINIStatementResponse
+    {
+        public bool status { get; set; }
+        public string message { get; set; }
+        public MINIStatementData data { get; set; }
+        public int statusCode { get; set; }
+    }
+
+    public class MINIStatRoot
+    {
+        public bool status { get; set; }
+        public int errorCode { get; set; }
+        public MINIStatementResponse response { get; set; }
+        public string message { get; set; }
+    }
+
+
+    #endregion
 }

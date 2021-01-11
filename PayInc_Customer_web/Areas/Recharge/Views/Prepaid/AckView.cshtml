@@ -1,0 +1,150 @@
+﻿@model PayInc_Customer_web.Areas.Recharge.Models.TransactionResult
+@{
+    Layout = null;
+}
+
+@{
+    var loginRes = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
+}
+<div class="row justify-content-center bgi-size-cover bgi-no-repeat bg-gray-400">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between pb-0 pb-md-5 flex-column flex-md-row">
+            <img alt="Logo" src="/assets/media/logos/logo_rnfi.png" style="width:130px;" />
+            <span class="text-white d-flex flex-column align-items-md-end">
+                <span class="font-size-h3">Invoice Receipt</span>
+            </span>
+            <div class="d-flex flex-column align-items-md-end px-0">
+                <a href="#" class="text-center text-white text-uppercase mb-5">
+                    @(loginRes.firstName+ " "+ loginRes.lastName )
+                </a>
+                <span class="text-white d-flex flex-column align-items-md-end">
+                    <span>@loginRes.mobileNumber</span>
+                    <span>@loginRes.Address</span>
+                    <span>@System.DateTime.Now</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center bgi-size-cover bgi-no-repeat py-5 px-5 py-md-5 px-md-0 @(Model.errorCode==0 ?"bg-success": "")  @(Model.errorCode==1 ? "bg-warning":"bg-danger")">
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between pb-5 pb-md-5 flex-column flex-md-row">
+            @Model.message
+        </div>
+        <div class="border-bottom w-100 opacity-20"></div>
+    </div>
+</div>
+
+<div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+    <div class="col-md-9">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="pl-0 font-weight-bold text-muted text-uppercase">Operator</th>
+                        <th class="text-right font-weight-bold text-muted text-uppercase">Transaction Id</th>
+                        <th class="text-right font-weight-bold text-muted text-uppercase">Mobile Number</th>
+                        <th class="text-right font-weight-bold text-muted text-uppercase">Status</th>
+                        <th class="text-right pr-0 font-weight-bold text-muted text-uppercase">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="font-weight-boldest font-size-sm">
+                        <td class="pl-0 pt-7">@Model.response.operatorId</td>
+                        <td class="text-right pt-7">@Model.response.clientTransactionId</td>
+                        <td class="text-right pt-7">@Model.response.customerNumber</td>
+                        <td class="text-right pt-7"><span class="badge badge-success text-white">@Model.response.message</span></td>
+                        <td class="text-danger pr-0 pt-7 text-right">₹ @Model.response.amount</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-right bg-gray-100 py-8 px-8 py-md-10 px-md-0">
+    <div class="col-md-10">
+        <div class="font-size-lg">
+            <div class="d-flex dt-right flex-column text-md-right">
+                <span class="font-size-lg font-weight-bolder mb-1">TOTAL AMOUNT</span>
+                <span class="font-size-h2 font-weight-boldest text-danger mb-1">₹ @Model.response.amount</span>
+                <span>Taxes Included</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-light-primary font-weight-bold" onclick="PrintElem();">Download Invoice</button>
+            <button type="button" class="btn btn-primary font-weight-bold" id="print_receipt" onclick="PrintElem();">Print Invoice</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="hidden_recipt" style="display:none">
+    <center>
+        PAY INC
+    </center>
+    <center>
+        @(loginRes.firstName+ " "+ loginRes.lastName )<br />
+        @loginRes.mobileNumber<br />
+        @loginRes.Address<br />
+        @System.DateTime.Now
+    </center>
+    <center>
+        <table style="width:80%;">
+            <thead style="border:dashed;">
+                <tr>
+                    <td style="border:dashed;">
+                        Operator
+                    </td>
+                    <td style="border:dashed;">
+                        TransactionID
+                    </td>
+                    <td style="border:dashed;">
+                        Amount
+                    </td>
+                    <td style="border:dashed;">
+                        Status
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border:dashed;">Airtel</td>
+                    <td style="border:dashed;">98798716546</td>
+                    <td style="border:dashed;">Success</td>
+                    <td style="border:dashed;">₹ 40.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+    <center>
+        ** MINI Pritable Receipt **<br />
+        ** THANK YOU VISIT AGAIN **
+    </center>
+</div>
+
+<script>
+    var html = $('#hidden_recipt').html();
+    function PrintElem() {
+        Popup(html);
+    }
+    function Popup(data) {
+        var myWindow = window.open('', 'Receipt', 'height=400,width=600');
+        myWindow.document.write('<html><head><title>Receipt</title>');
+        myWindow.document.write('<style type="text/css"> *, html {margin:2px;padding:0;} </style>');
+        myWindow.document.write('</head><body>');
+        myWindow.document.write(data);
+        myWindow.document.write('</body></html>');
+        myWindow.document.close();
+        myWindow.onload = function () {
+            myWindow.focus();
+            myWindow.print();
+            myWindow.close();
+        };
+    }
+</script>

@@ -47,6 +47,8 @@ namespace PayInc_Customer_web
             AppSetting.Add("WebApiUrl", Configuration.GetSection("AppSettings").GetSection("WebApiUrl").Value);
             AppSetting.Add("FileUploadUrl", Configuration.GetSection("AppSettings").GetSection("FileUploadUrl").Value);
             AppSetting.Add("ManualVideoVerifyUrl", Configuration.GetSection("AppSettings").GetSection("ManualVideoVerifyUrl").Value);
+            AppSetting.Add("AadharOTP_RedirectURL", Configuration.GetSection("AppSettings").GetSection("AadharOTP_RedirectURL").Value);
+            AppSetting.Add("Aadhar_ReturnBackURL", Configuration.GetSection("AppSettings").GetSection("Aadhar_ReturnBackURL").Value);
             #endregion
             services.AddMvc(option => option.EnableEndpointRouting = false);
 
