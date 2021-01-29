@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -351,6 +352,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             };
                         }
                     }
+
                     string errorMessage = string.Empty;
                     var savedImageUrl = new CallService().PostImage("saveImageBase64", paramater, ref errorMessage);
                     if (string.IsNullOrEmpty(errorMessage))
@@ -381,6 +383,9 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                                     var dlFetchResponse = new CallService().GetResponse<Models.DLFetchResponse>("getsignzyDLNumberBasedSearch", listParamDL, ref errorMsg);
                                     if (string.IsNullOrEmpty(errorMsg))
                                     {
+                                        var sessionUtility = new SessionUtility();
+                                        sessionUtility.SetSession("BoardingDob", dldob);
+
                                         if (dlFetchResponse != null)
                                         {
                                             if (dlFetchResponse.response.result != null)
@@ -420,7 +425,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                                                     state = dlState,
                                                     pincode= pinCode
                                                 };
-                                                var sessionUtility = new SessionUtility();
+                                                
                                                 sessionUtility.SetSession("dlAddress", dlFetchResponse.response.result.detailsOfDrivingLicence.splitAddress.addressLine==""? "": dlFetchResponse.response.result.detailsOfDrivingLicence.splitAddress.addressLine);
                                                 sessionUtility.SetSession("dlCity", dlFetchResponse.response.result.detailsOfDrivingLicence.splitAddress.city.Count > 0 ? dlFetchResponse.response.result.detailsOfDrivingLicence.splitAddress.city[0] : "");
                                                 sessionUtility.SetSession("dlState", dlState);
@@ -438,7 +443,8 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                                             state = "",
                                             pincode = ""
                                         };
-                                        
+                                        GetCroppedPANPhoto();
+
                                     }
                                     #endregion
                                 }
@@ -490,7 +496,10 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 {
                     getValue.State = dlState;
                 }
-
+                if (string.IsNullOrEmpty(getValue.PinCode))
+                {
+                    getValue.PinCode = dlPinCode;
+                }
                 return Json(new { success = true,responseData=getValue });
             }
             catch (Exception)
@@ -514,7 +523,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 string json1 = JsonConvert.SerializeObject(dict1.Cast<string>().ToDictionary(k => k, v => dict1[v]));
                 var addressDetails = JsonConvert.DeserializeObject<AddressInput>(json1);
 
-                var fc3 = fc["basicDetails"];
+                var fc3 = fc["basicDetails"];//outletdetails
                 var dict2 = HttpUtility.ParseQueryString(fc3);
                 string json2 = JsonConvert.SerializeObject(dict2.Cast<string>().ToDictionary(k => k, v => dict2[v]));
                 var basicDetails = JsonConvert.DeserializeObject<BasicInput>(json2);
@@ -536,6 +545,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             try
             {
                 var bankName = Convert.ToString(fc["ddlBank"]);
+                var accountHolderName = Convert.ToString(fc["accountname"]);
                 var bankAccount = Convert.ToString(fc["bankaccount"]);
                 string bankIFSCCode= Convert.ToString(fc["bankifsccode"]);
                 var sessionUtility = new SessionUtility();
@@ -544,6 +554,11 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 mainDetails.BankName = bankName;
                 mainDetails.BankAccount = bankAccount;
                 mainDetails.BankIFSCCode = bankIFSCCode;
+                mainDetails.AccountHolderName = accountHolderName;
+                sessionUtility.SetSession("MainDetails", JsonConvert.SerializeObject(mainDetails));
+                mainDetails.BankName = bankName.Split('~')[1];
+                allBasicDetails.personalDetails.Gender = allBasicDetails.personalDetails.Gender.Split("~")[1];
+                allBasicDetails.personalDetails.MaritialStatus = allBasicDetails.personalDetails.MaritialStatus.Split("~")[1];
                 var overviewDtls = new OverviewDetails();
                 overviewDtls.allDetails = allBasicDetails;
                 overviewDtls.allValue = mainDetails;
@@ -759,6 +774,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 setValues.Address = sessionUtility.GetStringSession("dlAddress");
                 setValues.City = sessionUtility.GetStringSession("dlCity");
                 setValues.State = sessionUtility.GetStringSession("dlState");
+                setValues.PinCode = sessionUtility.GetStringSession("dlPinCode");
 
                 new SessionUtility().SetSession("MainDetails",JsonConvert.SerializeObject(setValues));
                 return setValues;
@@ -845,7 +861,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(1000);
                 var sessionUtility = new SessionUtility();
                 string tokenId = sessionUtility.GetStringSession("VideoToken");
                 var listParam = new List<KeyValuePair<string, string>>();
@@ -863,8 +879,18 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     {
                         dob = Convert.ToInt32(Convert.ToDateTime(mainDetails.DateOfBirth).ToString("yyyyMMdd"));
                     }
+                    else
+                    {
+                        if (DateTime.TryParseExact(mainDetails.DateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture,DateTimeStyles.None,out panDOB))
+                        {
+                            DateTime dt = DateTime.ParseExact(mainDetails.DateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
+                        }
+                        
+                    }
                     if (sessionUtility.GetStringSession("isInserted")==null)
                     {
+                        var areaOutletDetails = GetAddressByPinCode(allBasicDetails.basicInput.firmPinCode);
                         var req = new
                         {
                             onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
@@ -879,32 +905,36 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             occupationType = allBasicDetails.personalDetails.OccupationType,
                             occupationDuration = "",
                             entityType = allBasicDetails.personalDetails.EntityType,
-                            districtId = 1,
-                            areaId = 1,
-                            pinCode = Convert.ToInt32(sessionUtility.GetStringSession("dlPinCode")),
+                            districtId = GetAddressByPinCode(allBasicDetails.addressDetails.pincode).districtId,
+                            areaId = Convert.ToInt32(allBasicDetails.addressDetails.areaId),
+                            pinCode = Convert.ToInt32(allBasicDetails.addressDetails.pincode),
                             landmark = allBasicDetails.addressDetails.landmark,
                             address = allBasicDetails.addressDetails.address,
                             outletName = allBasicDetails.basicInput.firmname,
                             outletCategoryId = 1,
-                            outletDistrictId = 1,
-                            outletAreaId = 1,
+                            outletDistrictId = areaOutletDetails.districtId,
+                            outletAreaId = Convert.ToInt32(allBasicDetails.basicInput.firmAreaId),
                             outletPinCode = Convert.ToInt32(allBasicDetails.basicInput.firmPinCode),
                             outletLandmark = allBasicDetails.basicInput.firmLandmark,
                             outletAddress = allBasicDetails.basicInput.firmaddress,
                             bankAccountTypeId = 1,
-                            bankId = 1,
-                            accountName = mainDetails.BankName,
+                            bankId = Convert.ToInt32(mainDetails.BankName.Split("~")[0]),
+                            accountName = mainDetails.AccountHolderName,
                             accountNumber = mainDetails.BankAccount,
                             ifscCode = mainDetails.BankIFSCCode,
-                            status = 0
+                            customerKycStatusId = 2,
+                            updateBy=0
                         };
                         string errorMessage1 = string.Empty;
                         var insertKyc = new CallService().PostResponse<string>("putDetailsCustomerOnbBoardingKyc", req, ref errorMessage1);
                         if (string.IsNullOrEmpty(errorMessage1))
                         {
-                            InsertCustomerKyc(10, null, null, null, 1, JsonConvert.SerializeObject(response), null, "Video Verifyication");
+                            sessionUtility.RemoveSession("MainDetails");
+                            sessionUtility.RemoveSession("AllBasicDetails");
+                            sessionUtility.SetSession("isInserted", "true");
+                            InsertCustomerKyc(10, null, null, null, 1, JsonConvert.SerializeObject(response), null, "Video Verification");
                         }
-                        sessionUtility.SetSession("isInserted", "true");
+                       
                     }
                     
                     return View("Response", response);
@@ -944,6 +974,32 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             }
             return Json(new { success = false });
         }
-        
+        public AreaByPinCodeRes GetAddressByPinCode(string PinCode)
+        {
+            var response = new List<AreaByPinCodeRes>();
+            try
+            {
+                if (PinCode.Length == 6)
+                {
+                    var listParam = new List<KeyValuePair<string, string>>();
+                    listParam.Add(new KeyValuePair<string, string>("pinCode", PinCode));
+                    string errorMessage = string.Empty;
+                    response = new CallService().GetResponse<List<AreaByPinCodeRes>>("getMasterAreasByPinCode", listParam, ref errorMessage);
+                    return response[0];
+                }
+                else
+                {
+                    response.Add(new AreaByPinCodeRes { areaId = 0 });
+                    return response[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                response.Add(new AreaByPinCodeRes { areaId = 0 });
+                return response[0];
+            }
+        }
+
     }
 }

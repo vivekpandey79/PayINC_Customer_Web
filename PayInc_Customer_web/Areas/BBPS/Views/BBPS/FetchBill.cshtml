@@ -1,0 +1,95 @@
+﻿@model PayInc_Customer_web.Areas.BBPS.Models.BillFetchRes
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    if (Model.addinfo != null)
+    {
+        <form action="" method="post" id="form_bill_fetch">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="row mb-10">
+                        <b class="mr-5">Bill Customer:</b> @Model.addinfo.bill_customer
+                    </div>
+                    <div class="row mb-10">
+                        <b class="mr-5">Bill Number:</b> @Model.addinfo.bill_number
+                    </div>
+                    <div class="row mb-10">
+                        <b class="mr-5">Bill Date:</b> @Model.addinfo.bill_date
+                    </div>
+                    <div class="row mb-10">
+                        <b class="mr-5">Bill Due Date:</b> <span class="text-danger">@Model.addinfo.due_date</span>
+                    </div>
+                    @if (Model.addinfo.bill_partial == "N")
+                    {
+                        <div class="row mb-10">
+                            <div class="input-group input-group-solid">
+                                <div class="input-group-prepend">
+                                    <span class="fas fa-rupee-sign font-size-h3 text-primary ml-5 mr-5"></span>
+                                </div>
+                                <input type="tel" name="billamount" class="form-control font-weight-bold font-size-h3 text-primary" value="@Model.addinfo.bill_amount" id="txtamount" readonly />
+                                @*<div class="form-control font-weight-bold font-size-h3 text-primary">
+                                        @Model.addinfo.bill_amount
+                                    </div>*@
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row mb-10">
+                            <div class="input-group input-group-solid">
+                                <div class="input-group-prepend">
+                                    <span class="fas fa-rupee-sign font-size-h3 text-primary ml-5 mr-5"></span>
+                                </div>
+                                <input type="tel" name="billamount" class="form-control font-weight-bold font-size-h3 text-primary" value="@Model.addinfo.bill_amount" id="txtamount" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row mb-10">
+                        <button type="submit" id="btn_step_3" class="btn btn-block btn-primary">Pay Bill</button>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+
+                </div>
+            </div>
+        </form>
+    }
+}
+else
+{
+    <form action="" method="post" id="form_bill_fetch">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                @if (ViewBag.InputData != null)
+                {
+                    var inputData = (List<PayInc_Customer_web.Areas.BBPS.Models.InputParamsRes>)(ViewBag.InputData);
+                    foreach (var item in inputData)
+                    {
+                        <div class="row mb-10">
+                            <b class="mr-5">@item.parameterName:</b> @item.UserInput
+                        </div>
+                    }
+                }
+                <div class="row mb-10">
+                    <div class="input-group input-group-solid">
+                        <div class="input-group-prepend">
+                            <span class="fas fa-rupee-sign font-size-h3 text-primary ml-5 mr-5"></span>
+                        </div>
+                        <input type="tel" name="billamount" placeholder="Enter Bill Amount" class="form-control font-weight-bold font-size-h3 text-primary" value="" id="txtamount" />
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <button type="submit" id="btn_step_3" class="btn btn-block btn-primary">Pay Bill</button>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+            </div>
+        </div>
+    </form>
+}
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/bbps_wizard.js"></script>

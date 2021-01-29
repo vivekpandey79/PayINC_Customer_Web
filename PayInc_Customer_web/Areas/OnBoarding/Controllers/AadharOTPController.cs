@@ -181,7 +181,17 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             {
                 var sessionUtility = new SessionUtility();
                 mobileNumber = sessionUtility.GetStringSession("BoardedMobile");
-                redirectUrl = Startup.AppSetting["AadharOTP_RedirectURL"] + "?mob=" + mobileNumber+"&targetUrl="+ Startup.AppSetting["Aadhar_ReturnBackURL"];
+                var additionalData = new AdditionalParam
+                {
+                    Name = sessionUtility.GetStringSession("BoardingName"),
+                    FatherName = sessionUtility.GetStringSession("BoardingFatherName"),
+                    PanPhoto = sessionUtility.GetStringSession("PanImageURL"),
+                    PanNumber = sessionUtility.GetStringSession("BoardingPAN"),
+                    BoardingId = sessionUtility.GetStringSession("BoardingId"),
+                    DateOfBirth = sessionUtility.GetStringSession("BoardingDob"),
+                    MobileNumber = sessionUtility.GetStringSession("BoardedMobile")
+                };
+                redirectUrl = Startup.AppSetting["AadharOTP_RedirectURL"] + "?mob=" + mobileNumber+"&targetUrl="+ Startup.AppSetting["Aadhar_ReturnBackURL"]+ "&additionalParmJson=" + JsonConvert.SerializeObject(additionalData);
             }
             catch (Exception)
             {
@@ -198,6 +208,14 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             {
                 sessionUtility.SetSession("Aadhar_panel","true");
                 string status = Convert.ToString(fc["status"]);
+                string additionalParams = Convert.ToString(fc["additionalparam"]);
+                var additionalResp = JsonConvert.DeserializeObject<AdditionalParam>(additionalParams);
+                sessionUtility.SetSession("BoardedMobile",additionalResp.MobileNumber);
+                sessionUtility.SetSession("BoardingFatherName", additionalResp.FatherName);
+                sessionUtility.SetSession("BoardingId", additionalResp.BoardingId);
+                sessionUtility.SetSession("BoardingDob", additionalResp.DateOfBirth);
+                sessionUtility.SetSession("PanImageURL", additionalResp.PanPhoto);
+                GetCroppedPANPhoto();
                 if (status=="SUCCESS")
                 {
                     string response = Convert.ToString(fc["response"]);
@@ -228,8 +246,8 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var sessionUtility = new SessionUtility();
                 var aadharData = sessionUtility.GetStringSession("Aadhar_Details");
                 var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(aadharData);
+                aadharDetails.original_kyc_info.mobile = string.IsNullOrEmpty(aadharDetails.original_kyc_info.mobile) ? sessionUtility.GetStringSession("BoardedMobile") : aadharDetails.original_kyc_info.mobile;
                 var getValue = GetAllValues();
-
                 return Json(new { success = true, responseData = aadharDetails.original_kyc_info });
             }
             catch (Exception)
@@ -274,10 +292,14 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var sessionUtility = new SessionUtility();
                 var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
                 var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
-                mainDetails.BankName = bankName;
+                mainDetails.BankName =  bankName;
                 mainDetails.BankAccount = bankAccount;
                 mainDetails.BankIFSCCode = bankIFSCCode;
+                sessionUtility.SetSession("MainDetails", JsonConvert.SerializeObject(mainDetails));
+                mainDetails.BankName = bankName.Split("~")[1];
                 var overviewDtls = new OverviewDetails();
+                allBasicDetails.personalDetails.Gender = allBasicDetails.personalDetails.Gender.Split("~")[1];
+                allBasicDetails.personalDetails.MaritialStatus = allBasicDetails.personalDetails.MaritialStatus.Split("~")[1];
                 overviewDtls.allDetails = allBasicDetails;
                 overviewDtls.allValue = mainDetails;
                 return PartialView("AllDetails", overviewDtls);
@@ -488,6 +510,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 setValues.MobileNumber = sessionUtility.GetStringSession("BoardedMobile");
                 var aadharData = sessionUtility.GetStringSession("Aadhar_Details");
                 var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(aadharData);
+                setValues.FullName = aadharDetails.original_kyc_info.name;
                 setValues.Address = aadharDetails.original_kyc_info.address;
                 setValues.City = aadharDetails.original_kyc_info.dist;
                 setValues.State = aadharDetails.original_kyc_info.state;
@@ -574,14 +597,14 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         public IActionResult GetVideoVerification()
         {
             try
-            {
-                System.Threading.Thread.Sleep(5000);
+            {                
                 var sessionUtility = new SessionUtility();
                 string tokenId = sessionUtility.GetStringSession("VideoToken");
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("task", tokenId));
                 string errorMessage = string.Empty;
                 var response = new CallService().GetResponse<FinalVideoVerifyResp>("getSignzyGetVideoVerification", listParam, ref errorMessage);
+                response = new CallService().GetResponse<FinalVideoVerifyResp>("getSignzyGetVideoVerification", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     response.PanImage = new SessionUtility().GetStringSession("PANCroppedUrl");
@@ -595,6 +618,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     }
                     if (sessionUtility.GetStringSession("isInserted") == null)
                     {
+                        var areaOutletDetails = GetAddressByPinCode(allBasicDetails.basicInput.firmPinCode);
                         var req = new
                         {
                             onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
@@ -609,24 +633,25 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             occupationType = allBasicDetails.personalDetails.OccupationType,
                             occupationDuration = "",
                             entityType = allBasicDetails.personalDetails.EntityType,
-                            districtId = 1,
-                            areaId = 1,
-                            pinCode = Convert.ToInt32(sessionUtility.GetStringSession("dlPinCode")),
+                            districtId = GetAddressByPinCode(allBasicDetails.addressDetails.pincode).districtId,
+                            areaId =Convert.ToInt32(allBasicDetails.addressDetails.areaId),
+                            pinCode = Convert.ToInt32(allBasicDetails.addressDetails.pincode),
                             landmark = allBasicDetails.addressDetails.landmark,
                             address = allBasicDetails.addressDetails.address,
                             outletName = allBasicDetails.basicInput.firmname,
                             outletCategoryId = 1,
-                            outletDistrictId = 1,
-                            outletAreaId = 1,
+                            outletDistrictId = areaOutletDetails.districtId,
+                            outletAreaId = areaOutletDetails.areaId,
                             outletPinCode = Convert.ToInt32(allBasicDetails.basicInput.firmPinCode),
                             outletLandmark = allBasicDetails.basicInput.firmLandmark,
                             outletAddress = allBasicDetails.basicInput.firmaddress,
                             bankAccountTypeId = 1,
-                            bankId = 1,
+                            bankId = Convert.ToInt32(mainDetails.BankName.Split('~')[0]),
                             accountName = mainDetails.BankName,
                             accountNumber = mainDetails.BankAccount,
                             ifscCode = mainDetails.BankIFSCCode,
-                            status = 0
+                            customerKycStatusId = 2,
+                            updateBy = 0
                         };
                         string errorMessage1 = string.Empty;
                         var insertKyc = new CallService().PostResponse<string>("putDetailsCustomerOnbBoardingKyc", req, ref errorMessage1);
@@ -646,6 +671,33 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
 
             }
             return View("Response");
+        }
+
+        public AreaByPinCodeRes GetAddressByPinCode(string PinCode)
+        {
+            var response =new List<AreaByPinCodeRes>();
+            try
+            {
+                if (PinCode.Length == 6)
+                {
+                    var listParam = new List<KeyValuePair<string, string>>();
+                    listParam.Add(new KeyValuePair<string, string>("pinCode", PinCode));
+                    string errorMessage = string.Empty;
+                    response = new CallService().GetResponse<List<AreaByPinCodeRes>>("getMasterAreasByPinCode", listParam, ref errorMessage);
+                    return response[0];
+                }
+                else
+                {
+                    response.Add(new AreaByPinCodeRes { areaId = 0 });
+                    return response[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                response.Add(new AreaByPinCodeRes { areaId = 0 });
+                return response[0];
+            }
         }
     }
 }

@@ -169,11 +169,13 @@ $(document).ready(function () {
         }
         $("#lblMobileNo").text($("#txtMobileNo").val());
         $("#lblOperator").text($("#ddlOperator option:selected").text());
+        $("#hdnOperator").val($("#ddlOperator option:selected").text());
         $("#lblAmount").text($("#txtamount").val());
         $("#hdnMobileNumber").val($("#txtMobileNo").val());
         $("#hdnOperatorId").val($("#ddlOperator").val());
         $("#hdnAmount").val($("#txtamount").val());
         $('#mymodal').modal('show');
+        $("#digit-1").focus();
     });
 
     
@@ -182,10 +184,12 @@ $(document).ready(function () {
         $("#txtamount").val($(this).attr("data-amt"));
         $("#lblMobileNo").text($("#txtMobileNo").val());
         $("#lblOperator").text($("#ddlOperator option:selected").text());
+        $("#hdnOperator").val($("#ddlOperator option:selected").text());
         $("#lblAmount").text($("#txtamount").val());
         $("#hdnMobileNumber").val($("#txtMobileNo").val());
         $("#hdnOperatorId").val($("#ddlOperator").val());
         $("#hdnAmount").val($("#txtamount").val());
+        $("#digit-1").focus();
         $('#mymodal').modal('show');
     });
 

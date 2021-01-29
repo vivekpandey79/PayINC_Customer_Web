@@ -1,0 +1,151 @@
+﻿@model PayInc_Customer_web.Areas.Recharge.Models.TransactionResult
+@{
+    Layout = null;
+}
+@{
+    var loginRes = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
+}
+
+<style>
+    th {
+        background-color: #f8f8f9;
+    }
+</style> 
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>
+                <img src="~/assets/media/logos/logo_rnfi.png" style="width:150px;" />
+            </td>
+            <td class="text-right text-muted ml-5">
+                <b>Agent Name:</b> @(loginRes.firstName+ " "+ loginRes.lastName )<br />
+                <b>Mobile Number:</b> @loginRes.mobileNumber<br />
+                <b>Address:</b> @(loginRes.Address ?? "NA")<br />
+                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy")
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-bordered">
+    <tbody>
+        <tr class="text-center @(Model.errorCode==0 ? "bg-success": "bg-warning")">
+            <td colspan="2" class="text-white">@Model.response.message</td>
+        </tr>
+        <tr>
+            <th>Operator</th>
+            <td>
+                <div class="alert alert-custom alert-white alert-shadow fade show" style="padding: 0px !important;margin: 0px !important;" role="alert">
+                    <div class="alert-icon">
+                        <img src="@("~/assets/media/operator/"+Model.response.OperatorNm+".png")" style="width:50px;" />
+                    </div>
+                    <div class="alert-text">
+                        @Model.response.OperatorNm
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>Transaction Id</th>
+            <td>@(string.IsNullOrEmpty(Model.response.txnId) ? "NA": Model.response.txnId)</td>
+        </tr>
+        <tr>
+            <th>Operator Txn Id</th>
+            <td>@(string.IsNullOrEmpty(Model.response.vendorTransactionId) ? "NA": Model.response.vendorTransactionId)</td>
+        </tr>
+        <tr>
+            <th>Txn Date</th>
+            <td>@System.DateTime.Now.ToString("dddd, dd MMMM yyyy")	</td>
+        </tr>
+        <tr>
+            <th>DTH Number</th>
+            <td>@(string.IsNullOrEmpty(Model.response.customerNumber) ? "NA": Model.response.customerNumber)</td>
+        </tr>
+        <tr>
+            <th>Amount</th>
+            <td>@Model.response.amount</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td><span class="@(Model.errorCode==0 ? "text-success": "text-danger")">@Model.message</span></td>
+        </tr>
+    </tbody>
+
+</table>
+<hr />
+<div class="text-muted">
+    This transaction is facilitated by Relipay payment services. Any disputes muste be raised on info@rnfi.com within 7 days of transaction.
+</div>
+<div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-light-primary font-weight-bold" onclick="PrintElem();">Download Invoice</button>
+            <button type="button" class="btn btn-primary font-weight-bold" id="print_receipt" onclick="PrintElem();">Print Invoice</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="hidden_recipt" style="display:none">
+    <center>
+        PAY INC
+    </center>
+    <center>
+        @(loginRes.firstName+ " "+ loginRes.lastName )<br />
+        @loginRes.mobileNumber<br />
+        @loginRes.Address<br />
+        @System.DateTime.Now
+    </center>
+    <center>
+        <table style="width:80%;">
+            <thead style="border:dashed;">
+                <tr>
+                    <td style="border:dashed;">
+                        Operator
+                    </td>
+                    <td style="border:dashed;">
+                        TransactionID
+                    </td>
+                    <td style="border:dashed;">
+                        Amount
+                    </td>
+                    <td style="border:dashed;">
+                        Status
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border:dashed;">Airtel</td>
+                    <td style="border:dashed;">98798716546</td>
+                    <td style="border:dashed;">Success</td>
+                    <td style="border:dashed;">₹ 40.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+    <center>
+        ** MINI Pritable Receipt **<br />
+        ** THANK YOU VISIT AGAIN **
+    </center>
+</div>
+
+<script>
+    var html = $('#hidden_recipt').html();
+    function PrintElem() {
+        Popup(html);
+    }
+    function Popup(data) {
+        var myWindow = window.open('', 'Receipt', 'height=400,width=600');
+        myWindow.document.write('<html><head><title>Receipt</title>');
+        myWindow.document.write('<style type="text/css"> *, html {margin:2px;padding:0;} </style>');
+        myWindow.document.write('</head><body>');
+        myWindow.document.write(data);
+        myWindow.document.write('</body></html>');
+        myWindow.document.close();
+        myWindow.onload = function () {
+            myWindow.focus();
+            myWindow.print();
+            myWindow.close();
+        };
+    }
+</script>

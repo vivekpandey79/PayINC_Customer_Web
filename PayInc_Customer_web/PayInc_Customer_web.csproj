@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\AEPS\Data\" />
+    <Folder Include="Areas\BBPS\Data\" />
     <Folder Include="Areas\BillPayments\Data\" />
     <Folder Include="Areas\BillPayments\Models\" />
     <Folder Include="Areas\DMT\Data\" />

@@ -1,0 +1,337 @@
+[
+  {
+    "transactionTypeId": 1,
+    "transactionTypeDescription": "STOCK PURCHASE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 2,
+    "transactionTypeDescription": "STOCK TRANSFER",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 3,
+    "transactionTypeDescription": "LOAD TRANSFER REQUEST",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 4,
+    "transactionTypeDescription": "LOAD TRANSFER",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 5,
+    "transactionTypeDescription": "LOAD TRANSFER RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 6,
+    "transactionTypeDescription": "PAYMENT TRANSFER",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 7,
+    "transactionTypeDescription": "PAYMENT TRANSFER RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 8,
+    "transactionTypeDescription": "SALES",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 9,
+    "transactionTypeDescription": "SALES RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 10,
+    "transactionTypeDescription": "DISCOUNT",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 11,
+    "transactionTypeDescription": "DISCOUNT RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 12,
+    "transactionTypeDescription": "COMMISSION",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 13,
+    "transactionTypeDescription": "COMMISSION RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 14,
+    "transactionTypeDescription": "SERVICE CHARGE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 15,
+    "transactionTypeDescription": "SERVICE CHARGE RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 16,
+    "transactionTypeDescription": "TDS",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 17,
+    "transactionTypeDescription": "TDS RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 18,
+    "transactionTypeDescription": "ADJUSTMENTS",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 19,
+    "transactionTypeDescription": "VENDOR PURCHASE REQUEST",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 20,
+    "transactionTypeDescription": "VENDOR PURCHASE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 21,
+    "transactionTypeDescription": "VENDOR PURCHASE RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 22,
+    "transactionTypeDescription": "SALES PURCHASE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 23,
+    "transactionTypeDescription": "EOD COMMISSION",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 24,
+    "transactionTypeDescription": "OPENING BALANCE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 25,
+    "transactionTypeDescription": "SALES PURCHASE RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 26,
+    "transactionTypeDescription": "EOD COMMISSION RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 27,
+    "transactionTypeDescription": "SALES PARTIAL RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 28,
+    "transactionTypeDescription": "SALES PURCHASE PARTIAL RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 29,
+    "transactionTypeDescription": "INCOMING COMMISSION CREDIT",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 30,
+    "transactionTypeDescription": "INCOMING COMMISSION POOLING",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 31,
+    "transactionTypeDescription": "VENDOR PURCHASE REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 32,
+    "transactionTypeDescription": "SALES RETURN REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 33,
+    "transactionTypeDescription": "SALES PURCHASE RETURN REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 34,
+    "transactionTypeDescription": "COMMISSION RETURN REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 35,
+    "transactionTypeDescription": "EOD COMMISSION RETURN REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 36,
+    "transactionTypeDescription": "SERVICE CHARGE RETURN REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 37,
+    "transactionTypeDescription": "REFUNDED REVERSE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 38,
+    "transactionTypeDescription": "LOAD COMMISSION",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 39,
+    "transactionTypeDescription": "LOAD COMMISSION RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 40,
+    "transactionTypeDescription": "SGST",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 41,
+    "transactionTypeDescription": "SGST RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 42,
+    "transactionTypeDescription": "CGST",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 43,
+    "transactionTypeDescription": "CGST RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 44,
+    "transactionTypeDescription": "IGST",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 45,
+    "transactionTypeDescription": "IGST RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 46,
+    "transactionTypeDescription": "MPOS OTI FEES",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 47,
+    "transactionTypeDescription": "MAINTENANCE FEES",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 48,
+    "transactionTypeDescription": "NUMBER CHANGE FEES",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 49,
+    "transactionTypeDescription": "MISCELLANEOUS FEES",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 50,
+    "transactionTypeDescription": "INCENTIVE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 51,
+    "transactionTypeDescription": "MPOS OTI FEES RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 52,
+    "transactionTypeDescription": "INPUT TAX CREDIT",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 53,
+    "transactionTypeDescription": "INCENTIVE RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 54,
+    "transactionTypeDescription": "MISCELLANEOUS FEES WGST",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 55,
+    "transactionTypeDescription": "CASH HANDLING CHARGES",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 56,
+    "transactionTypeDescription": "CASHBACK",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 57,
+    "transactionTypeDescription": "MISCELLANEOUS FEES RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 58,
+    "transactionTypeDescription": "CASHBACK RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 59,
+    "transactionTypeDescription": "TRANSACTION USAGE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 60,
+    "transactionTypeDescription": "CUSTOMER SERVICE CHARGE",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 61,
+    "transactionTypeDescription": "DMT COMMISSION",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 62,
+    "transactionTypeDescription": "TRANSACTION USAGE RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 63,
+    "transactionTypeDescription": "CUSTOMER SERVICE CHARGE RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 64,
+    "transactionTypeDescription": "DMT COMMISSION RETURN",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 65,
+    "transactionTypeDescription": "RECHARGE CASH BACK",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 66,
+    "transactionTypeDescription": "RECHARGE CASH BACK RETURN ",
+    "transactionTypeStatus": 1
+  },
+  {
+    "transactionTypeId": 67,
+    "transactionTypeDescription": "test transaction",
+    "transactionTypeStatus": 0
+  }
+]

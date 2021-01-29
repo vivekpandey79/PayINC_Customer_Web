@@ -74,11 +74,12 @@ namespace PayInc_Customer_web.Controllers
                 {
                     var listParam = new List<KeyValuePair<string, string>>();
                     listParam.Add(new KeyValuePair<string, string>("mobileNumber", req.MobileNumber));
-                    listParam.Add(new KeyValuePair<string, string>("passwordType", "1"));
-                    listParam.Add(new KeyValuePair<string, string>("serviceChannelId", "2"));
+                    listParam.Add(new KeyValuePair<string, string>("passwordType", "2"));
+                    listParam.Add(new KeyValuePair<string, string>("serviceChannelId", "1"));
                     string errorMessage = string.Empty;
-                    var response = new CallService().GetResponse<string>("getForgotPassword", listParam, ref errorMessage);
-                    if (string.IsNullOrEmpty(response))
+                    var response = new CallService().PostWithParams<string>("getForgotPassword",listParam,null, ref errorMessage);
+
+                    if (string.IsNullOrEmpty(errorMessage))
                     {
                         new SessionUtility().SetSession("otpId", response);
                         return Json(new { success = true });
@@ -111,7 +112,7 @@ namespace PayInc_Customer_web.Controllers
                 listParam.Add(new KeyValuePair<string, string>("passwordType", "1"));
                 listParam.Add(new KeyValuePair<string, string>("serviceChannelId", "2"));
                 string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<string>("verifyForgotPasswordOtp", listParam, ref errorMessage);
+                var response = new CallService().PostWithParams<string>("verifyForgotPasswordOtp", listParam,null, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     return Json(new { success = true });

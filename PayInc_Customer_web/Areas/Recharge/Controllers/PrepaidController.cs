@@ -90,13 +90,20 @@ namespace PayInc_Customer_web.Areas.Recharge.Controllers
                     txnAmount = Convert.ToDecimal(fc["Amount"]),
                     serviceProviderId = Convert.ToInt32(fc["OperatorId"]),
                     serviceCircleId = 1,
-                    serviceChannelId = 1,
+                    serviceChannelId = 2,
                     remarks = "Recharge",
                     tPin = new PasswordHash().HashShA1(tpin)
 
                 };
                 string errorMessage = string.Empty;
                 var response = new CallService().PostTransaction<TransactionResult>("doRecharge", req,ref errorMessage);
+                if (response!=null)
+                {
+                    if (response.response!=null)
+                    {
+                        response.response.OperatorNm = Convert.ToString(fc["OperatorNm"]).Trim();
+                    }
+                }
                 return PartialView("AckView", response);
                 
             }

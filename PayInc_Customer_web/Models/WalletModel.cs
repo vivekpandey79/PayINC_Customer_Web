@@ -40,7 +40,21 @@ namespace PayInc_Customer_web.Models
             listParam.Add(new KeyValuePair<string, string>("CustomerId", customerId));
             string errorMessage = string.Empty;
             var response = new CallService().GetResponse<List<WalletRes>>(APIMethodConst.GetBalanceByCustomerId, listParam, ref errorMessage);
-            return response[0].customerEffectiveBalance;
+            if (response!=null)
+            {
+                if (response.Count>1)
+                {
+                    return response.Where(m => m.walletTypeId == 1).FirstOrDefault().customerEffectiveBalance;
+                }
+                else
+                {
+                    return response[0].customerEffectiveBalance;
+                }
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

@@ -1,11 +1,30 @@
 ﻿@model PayInc_Customer_web.Areas.PaymentManagement.Models.PaymentTransferAck
-
-
+@{
+    Layout = null;
+}
+@{
+    var loginRes = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
+}
 <style>
     th {
         background-color: #f8f8f9;
     }
 </style>
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>
+                <img src="~/assets/media/logos/logo_rnfi.png" style="width:150px;" />
+            </td>
+            <td class="text-right text-muted ml-5">
+                <b>Agent Name:</b> @(loginRes.firstName+ " "+ loginRes.lastName )<br />
+                <b>Mobile Number:</b> @loginRes.mobileNumber<br />
+                <b>Address:</b> @(loginRes.Address ?? "NA")<br />
+                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy")
+            </td>
+        </tr>
+    </tbody>
+</table>
 <table class="table table-bordered">
     <tbody>
         <tr>

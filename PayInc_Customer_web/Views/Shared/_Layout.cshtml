@@ -232,13 +232,28 @@
       dataType: "json",
       success: function (data) {
         //debugger;
-        $("#aeps_balance").text(data.aepsBalance);
-        $(".wallet_balance").text(data.customerEffectiveBalance);
-        $("#wallet_balance").text(data.customerEffectiveBalance);
-        $("#wallet_mainbalance").text(data.customerMainAccountBalance);
-        $("#wallet_reservedbalance").text(data.customerSystemReservedBalance);
-        $("#wallet_unclearbalance").text(data.customerUnclearBalance);
-        $("#wallet_lienbalance").text(data.customerLienBalance);
+          if (data!="") {
+              $.each(data, function (key, value) {
+                  if (value.walletTypeId === 1) {
+                      $(".wallet_balance").text(value.customerEffectiveBalance);
+                      $("#wallet_balance").text(value.customerEffectiveBalance);
+                      $("#wallet_mainbalance").text(value.customerMainAccountBalance);
+                      $("#wallet_reservedbalance").text(value.customerSystemReservedBalance);
+                      $("#wallet_unclearbalance").text(value.customerUnclearBalance);
+                      $("#wallet_lienbalance").text(value.customerLienBalance);
+                  }
+                  else if (value.walletTypeId === 2) {
+                      $("#aeps_balance").text(value.customerEffectiveBalance);
+                      $("#aeps_mainbalance").text(value.customerMainAccountBalance);
+                      $("#aeps_reservedbalance").text(value.customerSystemReservedBalance);
+                      $("#aeps_unclearbalance").text(value.customerUnclearBalance);
+                      $("#aeps_lienbalance").text(value.customerLienBalance);
+                      $(".aeps_balance").text(value.customerEffectiveBalance);
+                  }
+              });
+          }
+        
+
       },
     });
   });

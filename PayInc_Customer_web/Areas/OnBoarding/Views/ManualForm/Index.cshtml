@@ -343,7 +343,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="font-size-h6 font-weight-bolder text-dark">Pincode</label>
-                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlPinCode" id="txtFetchPinCode" readonly />
+                                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="dlPinCode" id="txtFetchPinCode" maxlength="6" readonly onkeypress="return NumericKey(event);"/>
                                         </div>
                                         <div class="d-flex justify-content-between pt-3">
                                             <div>
@@ -435,11 +435,11 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="font-weight-bolder text-dark">Mobile Number</label>
-                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Mobile Number" id="txtBasicMobileNumber" />
+                                                        <input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firstname" readonly placeholder="Enter Mobile Number" id="txtBasicMobileNumber" onkeypress="return NumericKey(event);"/>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="font-weight-bolder text-dark">Email Address</label>
-                                                        @Html.TextBoxFor(m => m.EmailAddress, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Email Address" })
+                                                        @Html.TextBoxFor(m => m.EmailAddress, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg",@type="email", placeholder = "Enter Email Address" })
                                                         @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
                                                     </div>
                                                     <div class="form-group row">
@@ -568,13 +568,13 @@
                                                     </div>
                                                     <div class="form-group" id="pincode_div">
                                                         <label class="font-weight-bolder text-dark">Pincode</label>
-                                                        @Html.TextBoxFor(m => m.pincode, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Pincode", id = "txtBasicPinCode" })
+                                                        @Html.TextBoxFor(m => m.pincode, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", maxlength = "6", placeholder = "Enter Pincode", id = "txtBasicPinCode", onkeypress = "return NumericKey(event);" })
                                                         @Html.ValidationMessageFor(m => m.pincode, "", new { @class = "text-danger" })
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="font-weight-bolder text-dark">Area</label>
                                                         @Html.DropDownListFor(m => m.areaId, new List<SelectListItem> {
-                                                           new SelectListItem{ Value="", Text="--Select Area"} }, new { @class = "form-control h-auto p-5 border-1 rounded-lg", id = "ddlBasicArea" })
+                                                           new SelectListItem{ Value="", Text="-- Select Area --"} }, new { @class = "form-control h-auto p-5 border-1 rounded-lg", id = "ddlBasicArea" })
                                                         @Html.ValidationMessageFor(m => m.areaId, "", new { @class = "text-danger", id="lbl_pincode_validation" })
                                                     </div>
                                                     <div class="form-group">
@@ -627,16 +627,20 @@
                                                         </div>
                                                         <div class="col-6">
                                                             <label class="font-weight-bolder text-dark">Landmark</label>
-                                                            @Html.TextBoxFor(m => m.firmLandmark, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Landmark", id = "txtOutletLandmark" })
+                                                            @Html.TextBoxFor(m => m.firmLandmark, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Landmark", id = "txtOutletLandmark", @autocomplete = "off" })
                                                             @Html.ValidationMessageFor(m => m.firmLandmark, "", new { @class = "text-danger" })
-                                                            @*<input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmLandmark" placeholder="Enter Landmark" id="txtOutletLandmark" />*@
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group" id="pincode_div1">
                                                         <label class="font-weight-bolder text-dark">Pincode</label>
-                                                        @Html.TextBoxFor(m => m.firmPinCode, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Pin Code", id = "txtOutletPinCode" })
+                                                        @Html.TextBoxFor(m => m.firmPinCode, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Pin Code",maxlength="6", id = "txtOutletPinCode", @autocomplete = "off", onkeypress = "return NumericKey(event);" })
                                                         @Html.ValidationMessageFor(m => m.firmPinCode, "", new { @class = "text-danger" })
-                                                        @*<input type="text" class="form-control h-auto p-5 border-1 rounded-lg" name="firmPinCode" placeholder="Enter Pincode" id="txtOutletPinCode" />*@
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="font-weight-bolder text-dark">Area</label>
+                                                        @Html.DropDownListFor(m => m.firmAreaId, new List<SelectListItem> {
+                                                           new SelectListItem{ Value="", Text="--Select Area"} }, new { @class = "form-control h-auto p-5 border-1 rounded-lg", id = "ddlOutletArea" })
+                                                        @Html.ValidationMessageFor(m => m.firmAreaId, "", new { @class = "text-danger", id = "lbl_pincode_validation1" })
                                                     </div>
                                                     <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-8 pr-4 py-4 my-3" id="btn_basic_details">
                                                         Next Step
@@ -665,13 +669,20 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">Bank Name</label>
-                                        <div class="col-12">
-                                            @Html.DropDownList("ddlBank", new List<SelectListItem> { new SelectListItem { Text = "Loading Bank" } }, new { @class = "form-control searchable-dropdown h-auto p-5 border-0 rounded-lg font-size-h6", style = "width:100%" })
+                                        <div class="">
+                                            @Html.DropDownListFor(m=>m.ddlBank, new List<SelectListItem> { new SelectListItem { Text = "Loading Bank" } }, new { @class = "form-control searchable-dropdown h-auto p-5 border-0 rounded-lg font-size-h6", style = "width:100%" })
+                                            @Html.ValidationMessageFor(m => m.ddlBank, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="font-size-h6 font-weight-bolder text-dark">Account Holder Name</label>
+                                        @Html.TextBoxFor(m => m.accountname, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Account Holder Name", @autocomplete = "off" })
+                                        @Html.ValidationMessageFor(m => m.accountname, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">Account Number</label>
-                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="bankaccount" placeholder="Enter Account Number" />
+                                        @Html.TextBoxFor(m => m.bankaccount, null, new { @class = "form-control h-auto p-5 border-1 rounded-lg", placeholder = "Enter Account Number", @onkeypress="return NumericKey(event);", @autocomplete = "off" })
+                                        @Html.ValidationMessageFor(m => m.bankaccount, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">IFSC Code</label>

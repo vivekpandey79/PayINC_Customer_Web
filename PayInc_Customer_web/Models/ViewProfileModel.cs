@@ -47,15 +47,19 @@ namespace PayInc_Customer_web.Models
         public int passwordTypeId { get; set; }
         public string passwordHash { get; set; }
         public int customerAccountTypeId { get; set; }
-        public decimal customerMainAccountBalance { get; set; }
-        public decimal customerFundsInClearing { get; set; }
-        public double customerFloatBalance { get; set; }
-        public decimal customerOverDueLiability { get; set; }
-        public decimal customerUnclearBalance { get; set; }
-        public decimal customerSystemReservedBalance { get; set; }
-        public decimal customerEffectiveBalance { get; set; }
+        public decimal? customerMainAccountBalance { get; set; }
+        public decimal? customerFundsInClearing { get; set; }
+        public double? customerFloatBalance { get; set; }
+        public decimal? customerOverDueLiability { get; set; }
+        public decimal? customerUnclearBalance { get; set; }
+        public decimal? customerSystemReservedBalance { get; set; }
+        public decimal? customerEffectiveBalance { get; set; }
         public string customerRole { get; set; }
         public string customerRoleDesc { get; set; }
+        public int? walletTypeId { get; set; }
+        public string walletType { get; set; }
+        public int? customerAccountStatus { get; set; }
+        public decimal? aepsBalance { get; set; }
     }
 
 }

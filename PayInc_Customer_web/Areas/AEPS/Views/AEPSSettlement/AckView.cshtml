@@ -1,0 +1,59 @@
+﻿@model PayInc_Customer_web.Areas.AEPS.Models.TransactionResult
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    if (Model.response != null)
+    {
+        <div class="row mb-2">
+            <div class="col-lg-4">
+                <img src="~/assets/media/logos/logo.jpeg" class="img-thumbnail" style="width:220px;height:76px;" />
+            </div>
+            <div class="col-lg-4">
+
+            </div>
+            <div class="col-lg-4">
+
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><b>Transaction ID</b></td>
+                    <td>@Model.response.clientTransactionId</td>
+                </tr>
+                <tr>
+                    <td><b>Client Transaction Id</b></td>
+                    <td>@Model.response.txnId</td>
+                </tr>
+                @if (Model.response.addlParameters != null)
+                {
+                    @foreach (var item in Model.response.addlParameters)
+                    {
+                        <tr>
+                            <td><b>@item.key</b></td>
+                            <td>@item.value</td>
+                        </tr>
+                    }
+                }
+
+                <tr>
+                    <td><b>Amount</b></td>
+                    <td>Rs. @Model.response.amount</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td><span class="text-danger">@Model.message</span></td>
+                </tr>
+            </tbody>
+        </table>
+    }
+
+}
+else
+{
+    <div class="alert alert-danger">
+        Something went wrong
+    </div>
+}

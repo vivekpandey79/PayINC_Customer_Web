@@ -1,0 +1,359 @@
+﻿@model PayInc_Customer_web.Areas.AEPS.Models.AEPSSettleInput
+@{
+    ViewData["Title"] = "Settle to Bank";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var loginDetails = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
+}
+<div class="card">
+    <div class="card-body">
+        <div class="row m-2">
+            <div class="col-4">
+                <label class="form-control form-control-solid">@loginDetails.mobileNumber</label>
+            </div>
+            <div class="col-4">
+                <label class="form-control form-control-solid">@(loginDetails.firstName+" "+@loginDetails.middleName+" "+@loginDetails.lastName)</label>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Available Limit</label>
+                        <label>₹ @ViewData["AvlLimit"]</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" id="btn_add_beneficiary"><span class="fa fa-plus"></span> Add Beneficiary</button>
+            </div>
+        </div>
+        @{
+            var listAccount = (List<PayInc_Customer_web.Areas.AEPS.Models.AEPSAccountList>)(ViewBag.GetAccountList);
+        }
+        <div class="row table-responsive" id="account_list_panel">
+            <table class="table table-bordered" id="tbl_accountlist">
+                <thead>
+                    <tr>
+                        <td>
+                            Beneficiary ID
+                        </td>
+                        <td>
+                            Beneficiary Name
+                        </td>
+                        <td>
+                            Bank
+                        </td>
+                        <td>
+                            Account No
+                        </td>
+                        <td>
+                            IFSC Code
+                        </td>
+                        <td>
+                            Status
+                        </td>
+                        <td>
+                            Action
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="7" class="text-center"><div class="btn btn-white"><span class="spinner spinner-right spinner-primary"></span>Please wait...</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<form action="@Url.Action("DoTransaction","AEPSSettlement")" method="post" id="form_transaction">
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Beneficiary Name</th>
+                            <td id="txtBeneficiary"></td>
+                        </tr>
+                        <tr>
+                            <th>Bank</th>
+                            <td id="txtBank"></td>
+                        </tr>
+                        <tr>
+                            <th>Account Number</th>
+                            <td id="txtAccount"></td>
+                        </tr>
+                        <tr>
+                            <th>IFSC Code</th>
+                            <td id="txtIFSC_code"></td>
+                        </tr>
+                    </table>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Payment Mode</label>
+                            <div class="radio-inline">
+                                <label class="radio">
+                                    <input type="radio" name="paymode" value="NEFT" />
+                                    <span></span>
+                                    NEFT
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="paymode" value="IMPS"checked />
+                                    <span></span>
+                                    IMPS
+                                </label>
+                            </div>
+                            <span class="form-text text-muted">NEFT takes upto 3 hrs to reflect transaction</span>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" name="recordId" id="hdnrecordId" />
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-rupee-sign"></i></span></div>
+                                @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", placeholder = "Enter Amount", Maxlength = "4", @autocomplete = "off", onkeypress = "return NumericKey(event);", id = "txtTxnAmount" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Amount, null, new { @class = "text-danger" })
+                            <span class="form-text text-muted">Amount should not be greater than Available Limit</span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-key"></i></span></div>
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter Password", Maxlength = "8", @autocomplete = "off", onkeypress = "return NumericKey(event);", id = "txtTxnPassword" })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
+                            <span class="form-text text-muted">Enter your transactional password for this transaction</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_transaction">Settle Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="modal fade" id="mymodal1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Acknowledgement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="ack_section">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form action="@Url.Action("RegisterAccount","AEPSSettlement")" method="post" id="form_acc_register">
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="mymodal3" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Settlement Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-user-alt"></i></span></div>
+                                @Html.TextBoxFor(m => m.AccountNo, null, new { @class = "form-control", placeholder = "Enter Account", Maxlength = "15", @autocomplete = "off", onkeypress = "return NumericKey(event);" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.AccountNo, null, new { @class = "text-danger" })
+                            <span class="form-text text-muted">Enter your valid account number.</span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Bank</label>
+                            @Html.DropDownListFor(m => m.ddlBank, new List<SelectListItem> { new SelectListItem { Text = "-- Select --", Value = "" } }, "--SELECT Bank--", new { @class = "form-control", id = "ddlBank" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.ddlBank, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>IFSC Code</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-hospital"></i></span></div>
+                                @Html.TextBoxFor(m => m.IfscCode, null, new { @class = "form-control", placeholder = "Enter IFSC Code", Maxlength = "11", @autocomplete = "off" })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.IfscCode, null, new { @class = "text-danger" })
+                            <span class="form-text text-muted">IFSC code should be valid</span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Beneficiary Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-user-secret"></i></span></div>
+                                @Html.TextBoxFor(m => m.BeneficiaryName, null, new { @class = "form-control", placeholder = "Enter Beneficiary Name", Maxlength = "8", @autocomplete = "off" })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.BeneficiaryName, null, new { @class = "text-danger" })
+                            <span class="form-text text-muted">Enter Beneficiary Name</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_reg_acc">Register Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function (e) {
+        GetAccountList();
+        $(".btn-click").click(function (e) {
+            e.preventDefault();
+            $("#txtTxnPassword").val('');
+            $("#txtTxnAmount").val('');
+            $("#btn_transaction").removeClass("spinner spinner-white spinner-right");
+            $("#btn_transaction").removeAttr("disabled");
+            var beneficiary_name = $(this).closest("tr").find(".beneficiary-name").text();
+            $("#txtBeneficiary").text(beneficiary_name);
+            var bank_name = $(this).closest("tr").find(".bank-name").text();
+            $("#txtBank").text(bank_name);
+            var account_name = $(this).closest("tr").find(".account-number").text();
+            $("#txtAccount").text(account_name);
+            var ifsc_code = $(this).closest("tr").find(".ifsc-code").text();
+            $("#txtIFSC_code").text(ifsc_code);
+            $("#mymodal").modal("show");
+            $("#hdnrecordId").val($(this).closest("tr").find(".recordid").text());
+        });
+        $("#form_transaction").submit(function (e) {
+            e.preventDefault();
+            if (!$(this).valid()) {
+                return;
+            }
+            $("#btn_transaction").addClass("spinner spinner-white spinner-right");
+            $("#btn_transaction").attr("disabled", "disabled");
+            $.ajax({
+                url: "/AEPS/AEPSSettlement/DoTransaction",
+                type: "POST",
+                data: $("#form_transaction").serialize(),
+                success: function (data) {
+                    $("#btn_transaction").removeClass("spinner spinner-white spinner-right");
+                    $("#btn_transaction").removeAttr("disabled");
+                    $("#ack_section").html(data);
+                    $("#mymodal").modal("hide");
+                    $("#mymodal1").modal("show");
+                },
+                error: function (er) {
+                    $("#btn_transaction").removeClass("spinner spinner-white spinner-right");
+                    $("#btn_transaction").removeAttr("disabled");
+                    $('#mymodal').modal('hide');
+                }
+            });
+        });
+        $("#form_acc_register").submit(function (e) {
+            e.preventDefault();
+            if (!$(this).valid()) {
+                return;
+            }
+            $("#btn_reg_acc").addClass("spinner spinner-white spinner-right");
+            $("#btn_reg_acc").attr("disabled", "disabled");
+            var url = this.action;
+            
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $("#form_acc_register").serialize(),
+                success: function (data) {
+                    $("#btn_reg_acc").removeClass("spinner spinner-white spinner-right");
+                    $("#btn_reg_acc").removeAttr("disabled");
+                    GetAccountList();
+                    if (data.success) {
+                        toastr.success("Successfully Added", "Success");
+                    }
+                    else {
+                        toastr.error(data.errorMessage, "Alert");
+                    }
+                    $('#mymodal3').modal('hide');
+                },
+                error: function (er) {
+                    toastr.error("Connection failed", "Alert");
+                    $('#mymodal3').modal('hide');
+                }
+            });
+        });
+        $('#myModal').on('hidden.bs.modal', function () {
+            $("#txtTxnPassword").val('');
+            $("#txtTxnAmount").val('');
+        });
+        $(".btn-verify").click(function (e) {
+            e.preventDefault();
+            $("#mymodal2").modal("show");
+        });
+        $("#btn_add_beneficiary").click(function (e) {
+            e.preventDefault();
+            $(':input').val('');
+            GetBankList();
+            $("#mymodal3").modal("show");
+        });
+    });
+    
+
+    function GetBankList() {
+        $("#ddlBank").empty();
+        $("#ddlBank").append($("<option></option>").val('').html("Loading Bank..."));
+        $.ajax({
+            url: "/AEPS/AEPSSettlement/GetBankList",
+            type: "GET",
+            data: {},
+            success: function (res) {
+                $("#ddlBank").empty();
+                $("#ddlBank").append($("<option></option>").val('').html('-- Select Bank --'));
+                $.each(res, function (data, value) {
+                    $("#ddlBank").append($("<option></option>").val(value.bankId + "~" + value.bankName).html(value.bankName));
+                })
+            },
+            error: function (er) {
+            }
+        });
+    }
+    function GetAccountList() {
+        $.ajax({
+            url: "/AEPS/AEPSSettlement/GetAccountList",
+            type: "POST",
+            data: {},
+            success: function (res) {
+                $('#account_list_panel').html(res);
+            },
+            error: function (er) {
+            }
+        });
+    }
+</script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

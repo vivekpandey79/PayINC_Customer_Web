@@ -4,12 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
 <link href="~/assets/css/pages/wizard/wizard-4.css" rel="stylesheet" />
 <div class="card card-custom card-transparent">
     <div class="card-body p-0">
-        <!--begin::Wizard-->
         <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
             <!--begin::Wizard Nav-->
             <div class="wizard-nav">
@@ -158,6 +155,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="MobileNumber" id="hdnMobileNumber" />
                     <input type="hidden" name="OperatorId" id="hdnOperatorId" />
+                    <input type="hidden" name="OperatorNm" id="hdnOperator" />
                     <input type="hidden" name="Amount" id="hdnAmount" />
                     <div class="row  d-flex flex-center">
                         <div class="col-6">
@@ -178,7 +176,7 @@
                     <div class="text-muted font-weight-bold d-flex flex-center">ENTER TPIN</div>
                     <div class="d-flex flex-center">
                         <div class="form-group digit-group mb-10">
-                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" />
+                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus />
                             <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
                             <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
                             <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
@@ -241,6 +239,7 @@
     $("#form_transaction").submit(function (e) {
         e.preventDefault();
         $("#btn_step3").attr("disabled", "disabled");
+        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
         if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "") {
             return;
         }
@@ -250,11 +249,12 @@
             data: $("#form_transaction").serialize(),
             success: function (data) {
                 $("#btn_step3").removeAttr("disabled");
+                $("#btn_step3").removeClass("spinner spinner-right spinner-white pr-15");
                 $('#mymodal').modal('hide');
                 $("#txn_panel").html(data);
                 var _wizard = new KTWizard("kt_wizard", {
                     startStep: 1, // initial active step number
-                    clickableSteps: true  // allow step clicking
+                    clickableSteps: false  // allow step clicking
                 });
                 _wizard.goTo(3);
             },

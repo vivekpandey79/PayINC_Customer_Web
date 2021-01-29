@@ -213,114 +213,85 @@
                         </form>
                     </div>
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_4" role="tabpanel">
-                      <form class="form">
-                        <div class="row">
-                          <label class="col-xl-3"></label>
-                          <div class="col-lg-9 col-xl-6">
-                            <h3 class="font-size-h6 mb-5">Account Info</h3>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-xl-3 col-lg-3 text-right col-form-label">Main Balance</label>
-                          <div class="col-lg-9 col-xl-6">
-                            <span class="switch">
-                              <label>
-                                <span>₹</span>
-                                <span>@Model.customerMainAccountBalance</span>
-                              </label>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-xl-3 col-lg-3 text-right col-form-label">Unclear Balance</label>
-                          <div class="col-lg-9 col-xl-6">
-                            <span class="switch">
-                              <label>
-                                <span>₹</span>
-                                <span>@Model.customerUnclearBalance</span>
-                              </label>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-xl-3 col-lg-3 text-right col-form-label">System Reserved Balance</label>
-                          <div class="col-lg-9 col-xl-6">
-                            <span class="switch">
-                              <label>
-                                <span>₹</span>
-                                <span>@Model.customerSystemReservedBalance</span>
-                              </label>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-xl-3 col-lg-3 text-right col-form-label">Float Balance</label>
-                          <div class="col-lg-9 col-xl-6">
-                            <span class="switch">
-                              <label>
-                                <span>₹</span>
-                                <span>@Model.customerFloatBalance</span>
-                              </label>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-xl-3 col-lg-3 text-right col-form-label">Effective Balance</label>
-                          <div class="col-lg-9 col-xl-6">
-                            <span class="switch">
-                              <label>
-                                <span>₹</span>
-                                <span>@Model.customerEffectiveBalance</span>
-                              </label>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="separator separator-dashed my-10"></div>
-
-                      </form>
-                    </div>
-                    <!--<div class="tab-pane" id="kt_apps_contacts_view_tab_1" role="tabpanel">
-                        <div class="container">
+                        <form class="form">
                             <div class="row">
-                                <div class="col-lg-9 col-xl-6 offset-xl-3">
-                                    <h3 class="font-size-h6 mb-5">Change Password:</h3>
+                                <label class="col-xl-3"></label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <h3 class="font-size-h6 mb-5">Account Info</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Old Password</label>
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Main Balance</label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" placeholder="Old Password"/>
+                                    <span class="form-control form-control-solid">
+                                        <label>
+                                            <span class="fas fa-xs fa-rupee-sign"></span>
+                                            <span> @Model.customerMainAccountBalance</span>
+                                        </label>
+                                    </span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">New Password</label>
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">AEPS Balance</label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" placeholder="New Password"/>
+                                    <span class="form-control form-control-solid">
+                                        <label>
+                                            <span  class="fas fa-xs fa-rupee-sign"></span>
+                                            <span>@Model.aepsBalance</span>
+                                        </label>
+                                    </span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Confirm Password</label>
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Unclear Balance</label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" placeholder="Confirm Password" />
+                                    <span class="form-control form-control-solid">
+                                        <label>
+                                            <span class="fas fa-xs fa-rupee-sign"></span>
+                                            <span>@Model.customerUnclearBalance</span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">System Reserved Balance</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <span class="form-control form-control-solid">
+                                        <label>
+                                            <span class="fas fa-xs fa-rupee-sign"></span>
+                                            <span>@Model.customerSystemReservedBalance</span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Float Balance</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <span class="form-control form-control-solid">
+                                        <label>
+                                            <span class="fas fa-xs fa-rupee-sign"></span>
+                                            <span>@Model.customerFloatBalance</span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Effective Balance</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <span class="form-control form-control-solid">
+                                        <label>
+                                            <span class="fas fa-xs fa-rupee-sign"></span>
+                                            <span>@Model.customerEffectiveBalance</span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="separator separator-dashed my-10"></div>
 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label"></label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input type="submit" value="Change" class="btn btn-bg-primary" />
-
-                                </div>
-                            </div>-->
-                            <!--end::Timeline-->
-                        <!--</div>
-                    </div>-->
-                    <!--end::Tab Content-->
+                        </form>
+                    </div>
                 </div>
             </div>
-            <!--end::Body-->
         </div>
-        <!--end::Card-->
     </div>
-    <!--end::Content-->
 </div>

@@ -1,21 +1,13 @@
-
+@model PayInc_Customer_web.Areas.Recharge.Models.PrepaidModel
 @{
     ViewData["Title"] = "DTH Recharge";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using Microsoft.AspNetCore.Http
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-@{
-    var result = HttpContextAccessor.HttpContext.Session.GetString("LoginDetails");
-    var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<PayInc_Customer_web.Models.LoginResData>(result);
-}
 <link href="~/css/dth_wizard_style.css" rel="stylesheet" />
 <div class="card card-custom card-transparent">
     <div class="card-body p-0">
-        <!--begin::Wizard-->
         <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="false">
-            <!--begin::Wizard Nav-->
             <div class="wizard-nav">
                 <div class="wizard-steps">
                     <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
@@ -23,7 +15,6 @@
                             <div class="wizard-number">1</div>
                             <div class="wizard-label">
                                 <div class="wizard-title">Subscriber Number</div>
-
                             </div>
                         </div>
                     </div>
@@ -56,236 +47,240 @@
                     </div>
                 </div>
             </div>
-            <!--end::Wizard Nav-->
-            <!--begin::Card-->
             <div class="card card-custom card-shadowless rounded-top-0">
-                <!--begin::Body-->
                 <div class="card-body p-0">
                     <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
                         <div class="col-xl-12 col-xxl-10">
-                            <!--begin::Wizard Form-->
                             <form class="form" id="kt_form">
-                                <div class="row justify-content-center">
-                                    <div class="col-xl-9">
-                                        <!--begin::Wizard Step 1-->
-                                        <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Subscriber Number/Account Number</h4>
-                                            <!--begin::Input-->
+                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
                                             <div class="form-group">
                                                 <label>Subscriber Number/Account Number</label>
-                                                <input type="text" class="form-control" name="subscriberno" placeholder="Subscriber Number/Account Number" id="txtAccountNo"/>
-
+                                                <input type="text" class="form-control" name="subscriberno" placeholder="Subscriber Number/Account Number" id="txtAccountNo" />
                                             </div>
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
-                                                <div class="mr-2">
-                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" id="btn_step1" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
-                                                </div>
-                                            </div>
-
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
 
                                         </div>
-                                        <!--end::Wizard Step 1-->
-                                        <!--begin::Wizard Step 2-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Operator Name</h4>
-                                            <!--begin::Input-->
-                                            @{
-
-                                                var list = new List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>();
-                                                if (ViewBag.Operator != null)
-                                                {
-                                                    list = (List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>)ViewBag.Operator;
-                                                }
-                                            }
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
                                             <div class="form-group">
-                                                <label>Operator</label>
-                                                <select name="operator" class="form-control" id="ddlOperator">
-                                                    <option value="">Select Operator</option>
-                                                    @foreach (var item in list)
-                                                    {
-                                                        <option value="@item.serviceProviderId">@item.serviceProviderName</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
-                                                <div class="mr-2">
-                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" id="btn_step2" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <!--end::Wizard Step 2-->
-                                        <!--begin::Wizard Step 3-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Customer Information</h4>
-                                            <!--begin::Select-->
-                                            <div class="row">
-                                                <div class="col-6" id="customer_details_panel">
-
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-group">
-                                                        <label>Amount</label>
-                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount" id="txtamount" />
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
-                                                <div class="mr-2">
-                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" id="enter_tpin" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
-                                                </div>
+                                                <button type="submit" id="btn_step1" class="btn btn-block btn-primary font-weight-bolder">Next</button>
                                             </div>
                                         </div>
-                                        <!--end::Wizard Step 3-->
-                                        <!--begin::Wizard Step 4-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
-                                            <div class="my-5">
-                                                <div class="card card-custom overflow-hidden">
-                                                    <div class="card-body p-0">
-                                                        <!-- begin: Invoice-->
-                                                        <!-- begin: Invoice header-->
-                                                        <div class="row justify-content-center bgi-size-cover bgi-no-repeat py-8 px-8 py-md-27 px-md-0" style="background-image: url(../../assets/media/bg/bg-6.jpg);">
-                                                            <div class="col-md-9">
-                                                                <div class="d-flex justify-content-between pb-5 pb-md-5 flex-column flex-md-row">
-                                                                    <h2 class="display-4 text-white font-weight-boldest mb-10">PayINC<sup>TM</sup></h2>
-                                                                    <span class="text-white d-flex flex-column align-items-md-end">
-                                                                        <span class="font-size-h3">Invoice Receipt</span>
-                                                                    </span>
-                                                                    <div class="d-flex flex-column align-items-md-end px-0">
-                                                                        <!--begin::Logo-->
-                                                                        <a href="#" class="text-center text-white text-uppercase mb-5">
-                                                                            @(obj.firstName+ " "+obj.lastName )
-                                                                        </a>
-                                                                        <!--end::Logo-->
-                                                                        <span class="text-white d-flex flex-column align-items-md-end">
-                                                                            <span>@obj.mobileNumber</span>
-                                                                            <span>@obj.Address</span>
-                                                                            <span>@System.DateTime.Now</span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="border-bottom w-100 opacity-20"></div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- end: Invoice header-->
-                                                        <!-- begin: Invoice body-->
-                                                        <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
-                                                            <div class="col-md-9">
-                                                                <div class="table-responsive">
-                                                                    <table class="table">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="pl-0 font-weight-bold text-muted text-uppercase">Operator</th>
-                                                                                <th class="text-right font-weight-bold text-muted text-uppercase">Transaction Id</th>
-                                                                                <th class="text-right font-weight-bold text-muted text-uppercase">Status</th>
-                                                                                <th class="text-right pr-0 font-weight-bold text-muted text-uppercase">Amount</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr class="font-weight-boldest font-size-lg">
-                                                                                <td class="pl-0 pt-7">Airtel</td>
-                                                                                <td class="text-right pt-7">98798716546</td>
-                                                                                <td class="text-right pt-7"><span class="badge badge-success text-white">Success</span></td>
-                                                                                <td class="text-danger pr-0 pt-7 text-right">₹ 40.00</td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- end: Invoice body-->
-                                                        <!-- begin: Invoice footer-->
-                                                        <div class="row justify-content-right bg-gray-100 py-8 px-8 py-md-10 px-md-0">
-                                                            <div class="col-md-10">
-                                                                <div class="font-size-lg">
-                                                                    <div class="d-flex dt-right flex-column text-md-right">
-                                                                        <span class="font-size-lg font-weight-bolder mb-1">TOTAL AMOUNT</span>
-                                                                        <span class="font-size-h2 font-weight-boldest text-danger mb-1">₹ 40.00</span>
-                                                                        <span>Taxes Included</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
 
-                                                        <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
-                                                            <div class="col-md-9">
-                                                                <div class="d-flex justify-content-between">
-                                                                    <button type="button" class="btn btn-light-primary font-weight-bold" onclick="window.print();">Download Invoice</button>
-                                                                    <button type="button" class="btn btn-primary font-weight-bold" onclick="window.print();">Print Invoice</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </form>
+                            <form class="form" id="form_operator" method="post">
+                                <div class="pb-5" data-wizard-type="step-content">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                            <div class="form-group">
+                                                <label>Operator</label>
+                                                @Html.DropDownListFor(m => m.OperatorId, new SelectList(ViewBag.Operator, "serviceProviderId", "serviceProviderName"), "--Select Operator--", new { @class = "form-control", id = "ddlOperator" })
+                                                @Html.ValidationMessageFor(m => m.OperatorId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                                    <button type="button" class="btn btn-block btn-secondary font-weight-bolder prev-step" data-wizard-type="action-prev">Previous</button>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                                    <button type="button" id="btn_step2" class="btn btn-block btn-primary font-weight-bolder">Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <form class="form" id="form_recharge" method="post">
+                                <div class="pb-5" data-wizard-type="step-content">
+                                    <h4 class="mb-10 font-weight-bold text-dark">Customer Information</h4>
+                                    <div class="row">
+                                        <div class="col-6" id="customer_details_panel">
+
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Amount</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="flaticon2-telegram-logo"></i></span>
+                                                    </div>
+                                                    @Html.TextBoxFor(m => m.Amount, "", new { @class = "form-control", id = "txtamount", placeholder = "Enter Amount", maxlength = "5", @autocomplete = "off", onkeypress = "return NumericKey(event);" })
+                                                </div>
+                                                @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-top pt-10">
+                                        <div class="mr-2">
+                                            <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
+                                <div class="my-5">
+                                    <div class="card card-custom overflow-hidden">
+                                        <div class="card-body p-0" id="txn_panel">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <!--end::Body-->
             </div>
-            <!--end::Card-->
         </div>
-        <!--end::Wizard-->
     </div>
 </div>
-<link href="~/assets/css/jquery.pinlogin.css" rel="stylesheet" />
-<script src="~/assets/js/jquery.pinlogin.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-
-        // ---- Single pincode input -----
-
-        var loginpin = $('#loginpin').pinlogin({
-            fields: 8,
-            reset: false,
-            complete: function (pin) {
-
-            },
 
 
+<form action="@Url.Action("DoTransaction", "Prepaid")" id="form_transaction" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Authorize Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="MobileNumber" id="hdnMobileNumber" />
+                    <input type="hidden" name="OperatorId" id="hdnOperatorId" />
+                    <input type="hidden" name="OperatorNm" id="hdnOperator" />
+                    <input type="hidden" name="Amount" id="hdnAmount" />
+                    <div class="row  d-flex flex-center">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Account Number:</label>
+                                <label id="lblMobileNo" class="form-control form-control-solid"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Operator:</label>
+                                <label id="lblOperator" class="form-control form-control-solid"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount:</label>
+                                <label id="lblAmount" class="form-control form-control-solid"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-muted font-weight-bold d-flex flex-center">ENTER TPIN</div>
+                    <div class="d-flex flex-center">
+                        <div class="form-group digit-group mb-10">
+                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus />
+                            <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
+                            <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
+                            <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
+                            <span class="splitter">&ndash;</span>
+                            <input type="password" id="digit-5" name="digit5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
+                            <input type="password" id="digit-6" name="digit6" data-next="digit-7" data-previous="digit-5" class="form-control-solid" />
+                            <input type="password" id="digit-7" name="digit7" data-next="digit-8" data-previous="digit-6" class="form-control-solid" />
+                            <input type="password" id="digit-8" name="digit8" data-previous="digit-7" class="form-control-solid" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    .digit-group input {
+        width: 30px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 24px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 200;
+        margin: 0 2px;
+    }
+
+    .splitter {
+        padding: 0 5px;
+        color: black;
+        font-size: 24px;
+    }
+</style>
+<script>
+    $('.digit-group').find('input').each(function () {
+        $(this).attr('maxlength', 1);
+        $(this).on('keyup', function (e) {
+            var parent = $($(this).parent());
+            if (e.keyCode === 8 || e.keyCode === 37) {
+                var prev = parent.find('input#' + $(this).data('previous'));
+                if (prev.length) {
+                    $(prev).select();
+                }
+            } else if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                var next = parent.find('input#' + $(this).data('next'));
+                if (next.length) {
+                    $(next).select();
+                } else {
+                    if (parent.data('autosubmit')) {
+                        //parent.submit();
+                    }
+                }
+            }
         });
-
-        $(".select-plan").click(function (e) {
-            $(this).html('<i class="text-white fa fa-check"></i>');
-            $("#txtamount").val($(this).attr("data-amt"));
-
+    });
+    $("#form_transaction").submit(function (e) {
+        e.preventDefault();
+        $("#btn_step3").attr("disabled", "disabled");
+        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
+        if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "") {
+            return;
+        }
+        $.ajax({
+            url: "/Recharge/DTH/DoDTHTransaction",
+            type: "POST",
+            data: $("#form_transaction").serialize(),
+            success: function (data) {
+                $("#btn_step3").removeAttr("disabled");
+                $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
+                $('#mymodal').modal('hide');
+                $("#txn_panel").html(data);
+                var _wizard = new KTWizard("kt_wizard", {
+                    startStep: 1, // initial active step number
+                    clickableSteps: true  // allow step clicking
+                });
+                _wizard.goTo(4);
+            },
+            error: function (er) {
+                $('#mymodal').modal('hide');
+            }
         });
     });
 </script>
-<div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">PIN Password for recharge</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body d-flex flex-center">
-                <div id="loginpin" style="max-width:80%"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                <button type="button" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/dth_wizard_script.js"></script>

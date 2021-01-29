@@ -25,6 +25,10 @@ namespace PayInc_Customer_web.Controllers
                 var response = new CallService().GetResponse<List<ProfileResponse>>("geCustomerProfile", listParams, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
+                    if (response.Count>1)
+                    {
+                        response[0].aepsBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerEffectiveBalance;
+                    }
                     return View(response[0]);
                 }
                 else

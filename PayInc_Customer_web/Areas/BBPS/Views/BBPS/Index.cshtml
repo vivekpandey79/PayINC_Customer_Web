@@ -1,0 +1,237 @@
+﻿@model PayInc_Customer_web.Areas.BBPS.Models.BBPSModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/css/dth_wizard_style.css" rel="stylesheet" />
+<div class="card card-custom card-transparent">
+    <div class="card-body p-0">
+        <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="false">
+            <div class="wizard-nav">
+                <div class="wizard-steps">
+                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">1</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Select Operator</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">2</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Enter Details</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">3</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Bill Details</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-wizard-type="step">
+                        <div class="wizard-wrapper">
+                            <div class="wizard-number">4</div>
+                            <div class="wizard-label">
+                                <div class="wizard-title">Receipt</div>
+                                <div class="wizard-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-custom card-shadowless rounded-top-0">
+                <div class="card-body p-0">
+                    <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <form class="form" id="form_operator" method="post" action="@Url.Action("InputParams","BBPS")">
+                                @Html.AntiForgeryToken()
+                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                            <div class="form-group">
+                                                <label>Operator</label>
+                                                @Html.DropDownListFor(m => m.Operator, new SelectList(ViewBag.OperatorList, "serviceProviderId", "serviceProviderName"), "--Select Operator--", new { @class = "form-control searchable-dropdown", id = "ddlOperator" })
+                                                @Html.ValidationMessageFor(m => m.Operator, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                            <div class="form-group">
+                                                <button type="submit" id="btn_step1" class="btn btn-block btn-primary font-weight-bolder">Next</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form class="form" id="form_inputparams" method="post">
+                                <div class="pb-5" data-wizard-type="step-content" id="step_2_panel">
+                                   
+                                </div>
+                            </form>
+
+                            <form class="form" id="form_recharge" method="post">
+                                <div class="pb-5" data-wizard-type="step-content" id="step_3_panel">
+                                    
+                                    
+                                </div>
+                            </form>
+                            <div class="pb-5" data-wizard-type="step-content">
+                                <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
+                                <div class="my-5">
+                                    <div class="card card-custom overflow-hidden">
+                                        <div class="card-body p-0" id="txn_panel">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form action="@Url.Action("DoTransaction", "BBPS")" id="form_transaction" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Authorize Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="MobileNumber" id="hdnMobileNumber" />
+                    <input type="hidden" name="OperatorId" id="hdnOperatorId" />
+                    <input type="hidden" name="Amount" id="hdnAmount" />
+                    <div class="row  d-flex flex-center">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Account Number:</label>
+                                <label id="lblMobileNo" class="form-control form-control-solid"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Operator:</label>
+                                <label id="lblOperator" class="form-control form-control-solid"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount:</label>
+                                <label id="lblAmount" class="form-control form-control-solid"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-muted font-weight-bold d-flex flex-center">ENTER TPIN</div>
+                    <div class="d-flex flex-center">
+                        <div class="form-group digit-group mb-10">
+                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus/>
+                            <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
+                            <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
+                            <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
+                            <span class="splitter">&ndash;</span>
+                            <input type="password" id="digit-5" name="digit5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
+                            <input type="password" id="digit-6" name="digit6" data-next="digit-7" data-previous="digit-5" class="form-control-solid" />
+                            <input type="password" id="digit-7" name="digit7" data-next="digit-8" data-previous="digit-6" class="form-control-solid" />
+                            <input type="password" id="digit-8" name="digit8" data-previous="digit-7" class="form-control-solid" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    .digit-group input {
+        width: 30px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 24px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 200;
+        margin: 0 2px;
+    }
+
+    .splitter {
+        padding: 0 5px;
+        color: black;
+        font-size: 24px;
+    }
+</style>
+<script>
+    $('.digit-group').find('input').each(function () {
+        $(this).attr('maxlength', 1);
+        $(this).on('keyup', function (e) {
+            var parent = $($(this).parent());
+            if (e.keyCode === 8 || e.keyCode === 37) {
+                var prev = parent.find('input#' + $(this).data('previous'));
+                if (prev.length) {
+                    $(prev).select();
+                }
+            } else if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                var next = parent.find('input#' + $(this).data('next'));
+                if (next.length) {
+                    $(next).select();
+                } else {
+                    if (parent.data('autosubmit')) {
+                        //parent.submit();
+                    }
+                }
+            }
+        });
+    });
+    $("#form_transaction").submit(function (e) {
+        e.preventDefault();
+        $("#btn_step3").attr("disabled", "disabled");
+        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
+        if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "") {
+            return;
+        }
+        $.ajax({
+            url: "/BBPS/BBPS/DoTransaction",
+            type: "POST",
+            data: $("#form_transaction").serialize(),
+            success: function (data) {
+                $("#btn_step3").removeAttr("disabled");
+                $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
+                $('#mymodal').modal('hide');
+                $("#txn_panel").html(data);
+                var _wizard = new KTWizard("kt_wizard", {
+                    startStep: 1, // initial active step number
+                    clickableSteps: true  // allow step clicking
+                });
+                _wizard.goTo(4);
+            },
+            error: function (er) {
+                $('#mymodal').modal('hide');
+            }
+        });
+    });
+</script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/bbps_wizard.js"></script>

@@ -75,7 +75,8 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Models
         public string BankRefNo { get; set; }
         public int LoadAmount { get; set; }
         public string LoadDepositDate { get; set; }
-        public string Status { get; set; }
+        public int Status { get; set; }
+        public string StatusMessage { get; set; }
         public int LoadRequestId { get; set; }
     }
 }

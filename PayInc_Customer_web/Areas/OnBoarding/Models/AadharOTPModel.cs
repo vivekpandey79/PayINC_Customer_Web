@@ -47,4 +47,15 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public Photo photo { get; set; }
         public OriginalKycInfo original_kyc_info { get; set; }
     }
+
+    public class AdditionalParam
+    {
+        public string Name { get; set; }
+        public string FatherName { get; set; }
+        public string PanPhoto { get; set; }
+        public string PanNumber { get; set; }
+        public string BoardingId { get; set; }
+        public string DateOfBirth { get; set; }
+        public string MobileNumber { get; set; }
+    }
 }

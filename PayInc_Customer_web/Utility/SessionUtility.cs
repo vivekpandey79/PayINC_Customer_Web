@@ -41,5 +41,11 @@ namespace PayInc_Customer_web.Utility
             var httpContextAccessor = new HttpContextAccessor();
             httpContextAccessor.HttpContext.Session.SetString(sessionKey, data);
         }
+
+        public void RemoveSession(string sessionKey)
+        {
+            var httpContextAccessor = new HttpContextAccessor();
+            httpContextAccessor.HttpContext.Session.Remove(sessionKey);
+        }
     }
 }

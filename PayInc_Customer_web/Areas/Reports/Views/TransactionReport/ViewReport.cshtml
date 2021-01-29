@@ -1,0 +1,135 @@
+﻿@model List<PayInc_Customer_web.Areas.Reports.Models.TransactionRes>
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    <table class="table table-bordered" id="tbl_ledger">
+        <thead>
+            <tr>
+                <td>TransactionId</td>
+                <td>Customer Name</td>
+                <td>Mobile Number</td>
+                <td>Operator</td>
+                <td>Category</td>
+                <td>Txn Date</td>
+                <td>Txn Type</td>
+                <td>Txn Amount</td>
+                <td>Operator RefNo</td>
+                <td>Op Bal</td>
+                <td>Cl Bal</td>
+                <td>Channel</td>
+                <td>Status</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.transactionId</td>
+                <td>
+                    @item.customerName (@item.customerRoleDesc)
+                </td>
+                <td>@item.consumerNumber</td>
+                <td>@item.serviceProviderName</td>
+                <td>
+                    @if (item.category == "Debit")
+                    {
+                        <span class="label label-success label-dot mr-2"></span><span class="font-weight-bold text-success">DEBIT</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger label-dot mr-2"></span><span class="font-weight-bold text-danger">CREDIT</span>
+                    }
+                </td>
+                <td>@item.txnDate</td>
+                <td>@item.transactionTypeDescription</td>
+                <td>@item.transactionAmount</td>
+                <td>@item.isoTransactionId</td>
+                <td>@item.customerOpBal</td>
+                <td>@item.customerClBal</td>
+                <td>@item.serviceChannelName</td>
+                <td>
+                    @if (item.transactionStatusDescription == "SUCCESS")
+                    {
+                        <span class="label label-success label-dot mr-2"></span><span class="font-weight-bold text-success">@item.transactionStatusDescription</span>
+                    }
+                    else if (item.transactionStatusDescription == "PENDING")
+                    {
+                        <span class="label label-warning label-dot mr-2"></span><span class="font-weight-bold text-warning">@item.transactionStatusDescription</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger label-dot mr-2"></span><span class="font-weight-bold text-danger">@item.transactionStatusDescription</span>
+                    }
+
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-secondary btn_complaint" data-id="@item.transactionId">Book Complaint</button>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="text-center">
+        <div class="text-muted"><h3>Data not found.</h3></div>
+    </div>
+}
+<script>
+    $('#tbl_ledger').DataTable({
+        responsive: true,
+    });
+    $("#tbl_ledger").on("click", ".btn_complaint", function () {
+        $(this).addClass("spinner spinner-right spinner-white pr-15");
+        var btn = $(this);
+        var id = $(this).attr("data-id");
+        $.ajax({
+            url: '/Reports/LedgerReport/BookComplaint',
+            type: "POST",
+            data: { txnId: id },
+            success: function (data) {
+                $(".btn_complaint").removeClass("spinner spinner-right spinner-white pr-15");
+                $(btn).attr("disabled", "disabled");
+                $(btn).text("Booked.");
+                Swal.fire(data, "", "success");
+            },
+            error: function (err) {
+                $(".btn_complaint").removeClass("spinner spinner-right spinner-white pr-15");
+                $(btn).attr("disabled", "disabled");
+                Swal.fire("Alert!", "", "error");
+            }
+        });
+    });
+</script>
+<style>
+    .dataTables_length {
+        display: none;
+    }
+</style>
+<script>
+    $(document).ready(function (e) {
+        $(".btn_complaint").click(function (e) {
+            alert("hii");
+            $(this).addClass("spinner spinner-right spinner-white pr-15");
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/Reports/TransactionReport/Complaint',
+                type: "POST",
+                data: { txnId: id },
+                success: function (data) {
+                    $(this).removeClass("spinner spinner-right spinner-white pr-15");
+                    Swal.fire("Complaint Booked!", "success");
+                },
+                error: function (err) {
+                    $(this).removeClass("spinner spinner-right spinner-white pr-15");
+                    Swal.fire("Alert!", "error");
+                }
+            });
+        });
+    });
+</script>

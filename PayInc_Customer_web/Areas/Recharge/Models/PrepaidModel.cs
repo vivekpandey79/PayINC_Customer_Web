@@ -41,6 +41,8 @@ namespace PayInc_Customer_web.Areas.Recharge.Models
         public string clientTransactionId { get; set; }
         public string vendorTransactionId { get; set; }
         public string operatorId { get; set; }
+        public string OperatorImage { get; set; }
+        public string OperatorNm { get; set; }
         public string amount { get; set; }
         public string customerNumber { get; set; }
         public string txnId { get; set; }

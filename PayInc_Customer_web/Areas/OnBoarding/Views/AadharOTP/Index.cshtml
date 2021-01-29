@@ -206,16 +206,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 mt-5">
-                                            <div class="col-4"></div>
-                                            <div class="col-8">
-                                                <div class="form-group">
-                                                    <a id="btn_fetch_pan" class="btn btn-block btn-success font-weight-bolder">
-                                                        Upload and Verify PAN Details
-                                                    </a>
-                                                </div>
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-lg-3 col-sm-12 text-lg-right"></label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <a id="btn_fetch_pan" class="btn btn-block btn-success font-weight-bolder">
+                                                    Upload and Verify PAN Details
+                                                </a>
                                             </div>
-
                                         </div>
                                     </section>
                                     <section id="pan_fetch_section" style="display:none">
@@ -298,8 +295,8 @@
                                                 <td>@aadharDetails.original_kyc_info.state</td>
                                             </tr>
                                             <tr>
-                                                <td>Landmark</td>
-                                                <td>@aadharDetails.original_kyc_info.landmark</td>
+                                                <td>Pin Code</td>
+                                                <td>@aadharDetails.original_kyc_info.pc</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -644,7 +641,7 @@
                                 </div>
                             </div>
                             <div class="pb-5" data-wizard-type="step-content">
-                                <form action="@Url.Action("VideoVerification","ManualForm")" id="form_video_verification">
+                                <form action="@Url.Action("VideoVerification","AadharOTP")" id="form_video_verification">
                                     <div class="card" data-scroll="true" data-height="300">
                                         Website Terms and Conditions [Text Format]
                                         Last updated [month day, year]

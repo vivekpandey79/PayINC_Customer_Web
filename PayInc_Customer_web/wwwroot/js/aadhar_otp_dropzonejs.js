@@ -36,15 +36,21 @@ var KTDropzoneDemo = function () {
                 document.getElementById("btn_fetch_pan").removeAttribute("disabled");
                 document.getElementById("btn_fetch_pan").classList.remove("spinner");
                 if (response.success) {
-                    $("#lblPANPercent").text(response.matchData.panNumber);
-                    $("#lblFNamePercent").text(response.matchData.fatherName);
-                    $("#lblNamePercent").text(response.matchData.fullName);
-                    $("#txtfetchPanNumber").val(response.responseData.panNumber);
-                    $("#txtPanFullName").val(response.responseData.name);
-                    $("#txtPanFatherName").val(response.responseData.fatherName);
-                    $("#txtPanDOB").val(response.responseData.dob);
-                    $("#pan_fetch_section").show();
-                    $("#upload_section").hide();
+                    if (parseInt(response.matchData.panNumber) < 50) {
+                        toastr.error("PAN not matching", "Alert");
+                    }
+                    else {
+                        $("#lblPANPercent").text(response.matchData.panNumber);
+                        $("#lblFNamePercent").text(response.matchData.fatherName);
+                        $("#lblNamePercent").text(response.matchData.fullName);
+                        $("#txtfetchPanNumber").val(response.responseData.panNumber);
+                        $("#txtPanFullName").val(response.responseData.name);
+                        $("#txtPanFatherName").val(response.responseData.fatherName);
+                        $("#txtPanDOB").val(response.responseData.dob);
+                        $("#pan_fetch_section").show();
+                        $("#upload_section").hide();
+                    }
+
                 }
                 else {
                     toastr.error(response.errorMessage, "Alert");

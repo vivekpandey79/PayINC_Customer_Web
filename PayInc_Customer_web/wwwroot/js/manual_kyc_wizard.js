@@ -168,6 +168,32 @@
 					$("#txtBasicAddress").val(data.responseData.address);
 					$("#txtBasicCity").val(data.responseData.city);
 					$("#txtBasicState").val(data.responseData.state);
+					$("#txtBasicPinCode").val(data.responseData.pinCode);
+					$("#ddlBasicArea").append($("<option></option>").val('').html('-- Loading Area --'));
+					$.ajax({
+						url: '/OnBoarding/ManualForm/GetAreaPinCode',
+						type: "POST",
+						data: { pincode: $("#txtBasicPinCode").val() },
+						success: function (res) {
+							if (res.success) {
+								$("#ddlBasicArea").empty();
+								$("#ddlBasicArea").append($("<option></option>").val('').html('-- Select Area --'));
+								$.each(res.responseData, function (data, value) {
+									$("#ddlBasicArea").append($("<option></option>").val(value.areaId).html(value.area));
+								});
+							}
+							else {
+								$("#ddlBasicArea").empty();
+								$("#ddlBasicArea").append($("<option></option>").val('').html('-- No Area Found--'));
+								console.log("error at pincode");
+							}
+						},
+						error: function (er) {
+							$("#ddlBasicArea").empty();
+							$("#ddlBasicArea").append($("<option></option>").val('').html('-- No Area Found --'));
+						}
+					});
+
                 }
 				KTUtil.btnRelease(btn);
 				_wizard1.goNext();
@@ -218,7 +244,7 @@
 				$("#ddlBank").empty();
 				$("#ddlBank").append($("<option></option>").val('').html('-- Select Bank --'));
 				$.each(res, function (data, value) {
-					$("#ddlBank").append($("<option></option>").val(value.bankName).html(value.bankName));
+					$("#ddlBank").append($("<option></option>").val(value.bankId + "~" + value.bankName).html(value.bankName));
 				})
 			}
 		});
@@ -236,6 +262,30 @@
 			$("#txtOutletDistrict").val($("#txtBasicDist").val());
 			$("#txtOutletLandmark").val($("#txtBasicLandmark").val());
 			$("#txtOutletPinCode").val($("#txtBasicPinCode").val());
+			$("#ddlOutletArea").append($("<option></option>").val('').html('-- Loading Area --'));
+			$.ajax({
+				url: '/OnBoarding/ManualForm/GetAreaPinCode',
+				type: "POST",
+				data: { pincode: $("#txtOutletPinCode").val() },
+				success: function (res) {
+					if (res.success) {
+						$("#ddlOutletArea").empty();
+						$("#ddlOutletArea").append($("<option></option>").val('').html('-- Select Area --'));
+						$.each(res.responseData, function (data, value) {
+							$("#ddlOutletArea").append($("<option></option>").val(value.areaId).html(value.area));
+						});
+					}
+					else {
+						$("#ddlOutletArea").empty();
+						$("#ddlOutletArea").append($("<option></option>").val('').html('-- No Area Found--'));
+						console.log("error at pincode");
+					}
+				},
+				error: function (er) {
+					$("#ddlOutletArea").empty();
+					$("#ddlOutletArea").append($("<option></option>").val('').html('-- No Area Found --'));
+				}
+			});
 		}
 		else {
 			$("#txtOutletAddress").val('');
@@ -295,6 +345,32 @@
 				}
 			});
         }
+	});
+	$("#txtOutletPinCode").on("keyup change", function (e) {
+		e.preventDefault();
+		$("#pincode_div1").removeClass("spinner spinner-success spinner-right");
+		if ($("#txtOutletPinCode").val().length === 6) {
+			$("#pincode_div1").addClass("spinner spinner-success spinner-right");
+			$("#lbl_pincode_validation1").text("");
+			$.ajax({
+				url: '/OnBoarding/ManualForm/GetAreaPinCode',
+				type: "POST",
+				data: { pincode: $("#txtOutletPinCode").val() },
+				success: function (res) {
+					$("#pincode_div1").removeClass("spinner spinner-success spinner-right");
+					if (res.success) {
+						$("#ddlOutletArea").empty();
+						$("#ddlOutletArea").append($("<option></option>").val('').html('-- Select Area --'));
+						$.each(res.responseData, function (data, value) {
+							$("#ddlOutletArea").append($("<option></option>").val(value.areaId).html(value.area));
+						});
+					}
+					else {
+						$("#lbl_pincode_validation1").text("Invalid Pincode");
+					}
+				}
+			});
+		}
 	});
 
 	$("#form_video_verification").submit(function (e) {

@@ -1,7 +1,6 @@
 ﻿<div class="row">
     <div class="col-4" id="show_pan_verify_panel">
         <form class="form" id="submit_dist_form" method="post" action="@Url.Action("VerifyMethod","OnBoardingForm")">
-
             @if (ViewData["ADCustomerName"] != null)
             {
                 <div class="form-group">
@@ -19,7 +18,6 @@
                     </div>
                 }
             }
-
             <div class="form-group">
                 <button type="submit" id="btn_submit_dist" class="btn btn-primary btn-block font-weight-bolder">Submit  <span class="loader" style="display:none;"></span></button>
             </div>

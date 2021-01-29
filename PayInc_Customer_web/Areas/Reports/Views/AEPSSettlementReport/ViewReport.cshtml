@@ -1,0 +1,94 @@
+﻿@model List<PayInc_Customer_web.Areas.Reports.Models.AEPSSettlementRes>
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    <table class="table table-bordered" id="tbl_ledger">
+        <thead>
+            <tr>
+                <td>Customer Name</td>
+                <td>Customer Mob</td>
+                <td>Beneficiary Name</td>
+                <td>Account Number</td>
+                <td>IFSC Code</td>
+                <td>Remarks</td>
+                <td>Payment Mode</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CustomerName</td>
+                    <td>@item.CustomerMobileNo</td>
+                    <td>@item.BeneficiaryName</td>
+                    <td>@item.AccountNumber</td>
+                    <td>@item.IFSCCode</td>
+                    <td>@item.Remarks</td>
+                    <td>@item.PaymentMode</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="text-center">
+        <div class="text-muted"><h3>Data not found.</h3></div>
+    </div>
+}
+<script>
+    $('#tbl_ledger').DataTable({
+        responsive: true,
+    });
+    $("#tbl_ledger").on("click", ".btn_complaint", function () {
+        $(this).addClass("spinner spinner-right spinner-white pr-15");
+        var btn = $(this);
+        var id = $(this).attr("data-id");
+        $.ajax({
+            url: '/Reports/LedgerReport/BookComplaint',
+            type: "POST",
+            data: { txnId: id },
+            success: function (data) {
+                $(".btn_complaint").removeClass("spinner spinner-right spinner-white pr-15");
+                $(btn).attr("disabled", "disabled");
+                $(btn).text("Booked.");
+                Swal.fire(data, "", "success");
+            },
+            error: function (err) {
+                $(".btn_complaint").removeClass("spinner spinner-right spinner-white pr-15");
+                $(btn).attr("disabled", "disabled");
+                Swal.fire("Alert!", "", "error");
+            }
+        });
+    });
+</script>
+<style>
+    .dataTables_length {
+        display: none;
+    }
+</style>
+<script>
+    $(document).ready(function (e) {
+        $(".btn_complaint").click(function (e) {
+            alert("hii");
+            $(this).addClass("spinner spinner-right spinner-white pr-15");
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/Reports/LedgerReport/Complaint',
+                type: "POST",
+                data: { txnId: id },
+                success: function (data) {
+                    $(this).removeClass("spinner spinner-right spinner-white pr-15");
+                    Swal.fire("Complaint Booked!", "success");
+                },
+                error: function (err) {
+                    $(this).removeClass("spinner spinner-right spinner-white pr-15");
+                    Swal.fire("Alert!", "error");
+                }
+            });
+        });
+    });
+</script>

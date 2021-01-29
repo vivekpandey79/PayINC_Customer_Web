@@ -1,0 +1,95 @@
+﻿@model PayInc_Customer_web.Areas.AEPS.Models.SettleToWalletInput
+@{
+    ViewData["Title"] = "Settle To Wallet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card card-body">
+    <form action="@Url.Action("DoWalletTransaction","AEPSSettlement")" id="form_transaction" method="post">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Available Limit</label>
+                    <div class="form-control form-control-solid">@ViewData["AvlLimit"]</div>
+                </div>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Transfer Amount</label>
+                    @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", placeholder = "Enter Amount" })
+                    @Html.ValidationMessageFor(m => m.Amount, null, new { @class = "text-danger", placeholder = "Enter Amount", maxlength = "5", onkeypress = "return NumericKey(event);" })
+                </div>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Password</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter Password", maxlength="8", onkeypress = "return NumericKey(event);" })
+                    @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button class="btn btn-block btn-primary" type="submit" id="btn_submit">Settle To Wallet</button>
+            </div>
+            <div class="col-6"></div>
+        </div>
+
+    </form>
+</div>
+<div class="modal fade" id="mymodal1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Acknowledgement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="ack_section">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#form_transaction").submit(function (e) {
+        e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
+        $("#btn_submit").addClass("spinner spinner-white spinner-right");
+        $("#btn_submit").attr("disabled", "disabled");
+        $.ajax({
+            url: "/AEPS/AEPSSettlement/DoWalletTransaction",
+            type: "POST",
+            data: $("#form_transaction").serialize(),
+            success: function (data) {
+                $("#btn_submit").removeClass("spinner spinner-white spinner-right");
+                $("#btn_submit").removeAttr("disabled");
+                $("#ack_section").html(data);
+                $("#mymodal").modal("hide");
+                $("#mymodal1").modal("show");
+            },
+            error: function (er) {
+                $("#btn_submit").removeClass("spinner spinner-white spinner-right");
+                $("#btn_submit").removeAttr("disabled");
+                toastr.error("Something went wrong.","Alert")
+                $('#mymodal').modal('hide');
+            }
+        });
+    });
+    
+</script>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

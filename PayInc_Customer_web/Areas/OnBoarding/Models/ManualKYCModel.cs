@@ -45,6 +45,16 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string firmLandmark { get; set; }
         [Required(ErrorMessage = "Please enter pincode")]
         public string firmPinCode { get; set; }
+        [Required(ErrorMessage = "Please select area")]
+        public int? firmAreaId { get; set; }
+        [Required(ErrorMessage = "Please select bank")]
+        public string ddlBank { get; set; }
+
+        [Required(ErrorMessage = "Please enter account name")]
+        public string accountname { get; set; }
+
+        [Required(ErrorMessage = "Please enter account number")]
+        public string bankaccount { get; set; }
     }
 
     public class AreaByPinCodeRes
@@ -82,6 +92,8 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string city { get; set; }
         public string district { get; set; }
         public string landmark { get; set; }
+        public string pincode { get; set; }
+        public string areaId { get; set; }
     }
     public class BasicInput
     {
@@ -92,6 +104,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string firmdist { get; set; }
         public string firmLandmark { get; set; }
         public string firmPinCode { get; set; }
+        public string firmAreaId { get; set; }
     }
 
     public class AllBasicDetailsInput
@@ -391,8 +404,10 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string Address { get; set; }
         public string State { get; set; }
         public string City { get; set; }
+        public string PinCode { get; set; }
         public string District { get; set; }
         public string BankName { get; set; }
+        public string AccountHolderName { get; set; }
         public string BankAccount { get; set; }
         public string BankIFSCCode { get; set; }
     }

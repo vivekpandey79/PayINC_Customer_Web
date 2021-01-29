@@ -18,7 +18,7 @@ namespace PayInc_Customer_web.Models
             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResData>(result);
             var listParam = new List<KeyValuePair<string, string>>();
             listParam.Add(new KeyValuePair<string, string>("portalId",Convert.ToString(PortalDetails.PortalId)));
-            listParam.Add(new KeyValuePair<string, string>("customerRoleId", Convert.ToString(6)));
+            listParam.Add(new KeyValuePair<string, string>("customerRoleId", Convert.ToString(obj.customerRoleId)));
             string errorMessage = string.Empty;
             var response = new CallService().GetResponse<List<MenuRes>>(APIMethodConst.GetMenusPortalRoleId, listParam,ref errorMessage);
             if (string.IsNullOrEmpty(errorMessage))

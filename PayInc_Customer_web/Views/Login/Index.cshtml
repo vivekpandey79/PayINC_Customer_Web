@@ -37,10 +37,10 @@
                             <h3>Sign In To RNFI</h3>
                             <div class="text-muted font-weight-bold">Enter your credential to login your account:</div>
                         </div>
-                        <form class="form" asp-controller="login" asp-action="index" method="post">
+                        <form class="form" asp-controller="login" asp-action="index" method="post" id="form_login">
                             @Html.AntiForgeryToken()
                             <div class="form-group mb-5">
-                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" value="9800570709" />
+                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" value="9000000090" />
                                 <span asp-validation-for="UserName" class="text-danger"></span>
 
                             </div>
@@ -58,7 +58,7 @@
                                 </div>
                                 <a href="#" id="kt_login_forgot" class="text-muted text-hover-primary">Forgot Password ?</a>
                             </div>
-                            <button type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4">Sign In</button>
+                            <button type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4" id="btn_signin">Sign In</button>
                         </form>
                         <div class="mt-10">
                         </div>
@@ -69,15 +69,7 @@
                             <div class="text-muted font-weight-bold">Enter your details to create your account</div>
                         </div>
                         <form class="form" id="kt_login_signup_form">
-                            <div class="form-group mb-5">
-                                <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Fullname" name="fullname" />
-                            </div>
-                            <div class="form-group mb-5">
-                                <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Email" name="email" autocomplete="off" />
-                            </div>
-                            <div class="form-group mb-5">
-                                <input class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="Password" name="password" />
-                            </div>
+                           
                             <div class="form-group mb-5">
                                 <input class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="Confirm Password" name="cpassword" />
                             </div>
@@ -195,6 +187,12 @@
                         }
                     }
                 });
+            });
+
+            $("#form_login").submit(function (e) {
+                $("#btn_signin").text("Logging you in...");
+
+                $("#btn_signin").addClass("spinner spinner-right spinner-white pr-15");
             });
         });
     </script>

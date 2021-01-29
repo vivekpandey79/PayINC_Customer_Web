@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -75,6 +76,8 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("bankId", fc["bankId"]));
                 sessionUtility.SetSession("bankId", fc["bankId"]);
+                sessionUtility.SetSession("bankName", fc["bankName"]);
+                sessionUtility.SetSession("ifscCode",Convert.ToString(fc["ifscCode"]));
                 listParam.Add(new KeyValuePair<string, string>("paymentModeId", sessionUtility.GetStringSession("paymentModeId")));
                 string errorMessage = string.Empty;
                 var response = new CallService().GetResponse<List<RequestInputRes>>("getPaymentReqFieldMapping", listParam, ref errorMessage);
@@ -98,6 +101,34 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
         {
             try
             {
+                var savedImageUrl = string.Empty;
+                if (Request.Form.Files!=null)
+                {
+                    if (Request.Form.Files.Count>0)
+                    {
+                       var file = Request.Form.Files[0];
+                        var paramater = new Object();
+                        if (file.Length > 0)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                file.CopyTo(ms);
+                                var fileBytes = ms.ToArray();
+                                string strBase64 = Convert.ToBase64String(fileBytes);
+                                var ext = Path.GetExtension(file.FileName);
+                                paramater = new
+                                {
+                                    fileCategory = "PaySlip",
+                                    fileUniqueId = "PaySlip_" + new Random().Next(1000, 9999),
+                                    fileExtension = ext,
+                                    base64String = strBase64
+                                };
+                            }
+                        }
+                        string errorMessage1 = string.Empty;
+                        savedImageUrl = new CallService().PostImage("saveImageBase64", paramater, ref errorMessage1);
+                    }
+                }
                 string errorMessage = string.Empty;
                 var sessionUtility = new SessionUtility();
                 var requestInput = JsonConvert.DeserializeObject<List<RequestInputRes>>(sessionUtility.GetStringSession("RequestInput"));
@@ -105,7 +136,7 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                 {
                     customerId = sessionUtility.GetLoginSession().customerId,
                     requestedBy = sessionUtility.GetLoginSession().customerId,
-                    branchIFSCCode = "ICIC0001238",
+                    branchIFSCCode = sessionUtility.GetStringSession("ifscCode"),
                     bankRefNo = "",
                     paymentModeId = Convert.ToInt32(sessionUtility.GetStringSession("paymentModeId")),
                     loadAmount = 0,
@@ -113,8 +144,8 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                     loadDescription = "",
                     bankId = Convert.ToInt32(sessionUtility.GetStringSession("bankId")),
                     loadDepositDate = null,
-                    serviceChannelId = 1,
-                    paymentSlipPath = ""
+                    serviceChannelId = 2,
+                    paymentSlipPath = savedImageUrl
                 };
                 for (int i = 0; i < requestInput.Count; i++)
                 {
@@ -150,8 +181,24 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                         BankRefNo = reqParam.bankRefNo,
                         LoadAmount = reqParam.loadAmount,
                         LoadDepositDate = reqParam.loadDepositDate,
+                        BankName=Convert.ToString(sessionUtility.GetStringSession("bankName")),
                         LoadRequestId =Convert.ToInt32(response),
-                        Status = "Success"
+                        Status = 1,
+                        StatusMessage="Load Request Submitted"
+                    };
+                    return PartialView("AckView", ackModel);
+                }
+                else
+                {
+                    var ackModel = new Acknowledgement()
+                    {
+                        BankRefNo = reqParam.bankRefNo,
+                        LoadAmount = reqParam.loadAmount,
+                        LoadDepositDate = reqParam.loadDepositDate,
+                        BankName = Convert.ToString(sessionUtility.GetStringSession("bankName")),
+                        LoadRequestId = Convert.ToInt32(response),
+                        Status = 0,
+                        StatusMessage = "Failed! " + errorMessage
                     };
                     return PartialView("AckView", ackModel);
                 }

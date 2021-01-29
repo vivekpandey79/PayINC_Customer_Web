@@ -20,7 +20,7 @@ namespace PayInc_Customer_web.Models
             var result = httpContextAccessor.HttpContext.Session.GetString("LoginDetails");
             if (result == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary {{ "Controller", "Login" },
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary {{ "Area", "" },{ "Controller", "Login" },
                                       { "Action", "Index" } });
             }
             var menus = new SessionUtility().GetMenuSession();

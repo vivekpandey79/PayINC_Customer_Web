@@ -85,28 +85,19 @@
 
     $("#kt_form").submit(function (e) {
         e.preventDefault();
-    })
-
-    
-    $("#btn_step1").click(function (e) {
-        e.preventDefault();
-        // Validate form
         var validator = _validations[0]; // get validator for currnt step
         validator.validate().then(function (status) {
             if (status === 'Valid') {
-                _wizard1.goNext();
+                _wizard1.goTo(2);
             }
         });
-        // _wizard1.goNext();
-    });
-
+    })
     $("#btn_step2").click(function (e) {
         e.preventDefault();
         var validator = _validations[1]; // get validator for currnt step
         validator.validate().then(function (status) {
             if (status === 'Valid') {
-
-                _wizard1.goNext();
+                _wizard1.goTo(3);
                 GetDTHPlan($("#txtAccountNo").val(), $("#ddlOperator option:selected").text());
             }
         });
@@ -126,7 +117,6 @@
             type: "POST",
             data: { accountName: accountNo, operatorName: operatorName },
             success: function (data) {
-                alert(data)
                 $("#customer_details_panel").html(data);
             },
             error: function (er) {
@@ -137,20 +127,42 @@
     $('.prev-step').click(function (e) {
         _wizard1.goPrev();
     });
-    $("#enter_tpin").click(function (e) {
+    $("#form_recharge").submit(function (e) {
         e.preventDefault();
-        $('#mymodal').modal('show');  
-    });
-    $("#btn_step3").click(function (e) {
-        e.preventDefault();
-        $('#mymodal').modal('hide'); 
-        var validator = _validations[2]; // get validator for currnt step
-        validator.validate().then(function (status) {
-            if (status === 'Valid') {
-                
-                _wizard1.goNext();
+        if ($(this).valid()) {
+            $("#lblMobileNo").text($("#txtAccountNo").val());
+            $("#lblOperator").text($("#ddlOperator option:selected").text());
+            $("#hdnOperator").val($("#ddlOperator option:selected").text());
+            $("#lblAmount").text($("#txtamount").val());
+            $("#hdnMobileNumber").val($("#txtAccountNo").val());
+            $("#hdnOperatorId").val($("#ddlOperator").val());
+            $("#hdnAmount").val($("#txtamount").val());
+            $("#digit-1").focus();
+            $('#mymodal').modal('show');
+        }
+    })
+   
+    //$("#btn_step3").click(function (e) {
+    //    e.preventDefault();
+    //    $('#mymodal').modal('hide'); 
+    //    var validator = _validations[2]; // get validator for currnt step
+    //    validator.validate().then(function (status) {
+    //        if (status === 'Valid') {
+    //            $.ajax({
+    //                url: '/Recharge/DTH/DoDTHTransaction',
+    //                type: "POST",
+    //                data: {},
+    //                success: function (data) {
+    //                    alert(data)
+    //                    $("#customer_details_panel").html(data);
+    //                },
+    //                error: function (er) {
+    //                    $("#customer_details_panel").html('');
+    //                }
+    //            });
+    //            _wizard1.goTo(3);
 
-            }
-        });
-    });
+    //        }
+    //    });
+    //});
 })

@@ -108,7 +108,7 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
                 var req = new {
                     parentMobileNumber = sessionUtility.GetLoginSession().mobileNumber,
                     childMobileNumber = Convert.ToInt64(sessionUtility.GetStringSession("PayeeMobileNo")),
-                    stockTypeId = Convert.ToInt32(sessionUtility.GetStringSession("stockTypeId")),
+                    stockTypeId = Convert.ToInt32(sessionUtility.GetStringSession("StockTypeId")),
                     stockCount = Convert.ToInt32(sessionUtility.GetStringSession("PayeeNumberOfStock")),
                     tpin = new PasswordHash().HashShA1(input.TPIN)//input.TPIN // new PasswordHash().HashShA1(input.TPIN)
                 };

@@ -209,7 +209,7 @@
 				$("#ddlBank").empty();
 				$("#ddlBank").append($("<option></option>").val('').html('-- Select Bank --'));
 				$.each(res, function (data, value) {
-					$("#ddlBank").append($("<option></option>").val(value.bankId).html(value.bankName));
+					$("#ddlBank").append($("<option></option>").val(value.bankId + "~" + value.bankName).html(value.bankName));
 				})
 			}
 		});
@@ -343,6 +343,8 @@
 				$("#txtBasicMobileNumber").val(data.responseData.mobile);
 				$("#txtBasicAddress").val(data.responseData.address);
 				$("#txtBasicState").val(data.responseData.state);
+				$("#txtBasicPinCode").val(data.responseData.pc);
+				$("#txtBasicCity").val(data.responseData.dist);
 				$("#btn_aadhar_details").removeAttr("disabled");
 				$("#btn_aadhar_details").removeClass("spinner spinner-right spinner-white pr-15");
 				_wizard1.goNext();

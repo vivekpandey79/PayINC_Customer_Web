@@ -7,7 +7,7 @@
         @foreach (var item in Model)
         {
             <div class="col-3">
-                <a href="javascript:;" class="symbol symbol-lg-150 showbank" data-item="@item.bankId">
+                <a href="javascript:;" class="symbol symbol-lg-150 showbank" data-item="@item.bankId" data-ifscode="@item.ifscCode" data-bankname="@item.bankName">
                     <span class="symbol-label">
                         <img src="@(item.bankLogo.Replace("png","jpeg"))" class="img-fluid" />
                     </span>

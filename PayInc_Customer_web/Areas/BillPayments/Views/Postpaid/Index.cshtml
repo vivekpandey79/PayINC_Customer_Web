@@ -1,14 +1,12 @@
-﻿
+﻿@model PayInc_Customer_web.Areas.Recharge.Models.PrepaidModel
 @{
     ViewData["Title"] = "Postpaid";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/assets/css/pages/wizard/wizard-4.css" rel="stylesheet" />
+<link href="~/css/dth_wizard_style.css" rel="stylesheet" />
 <div class="card card-custom card-transparent">
     <div class="card-body p-0">
-        <!--begin::Wizard-->
         <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
-            <!--begin::Wizard Nav-->
             <div class="wizard-nav">
                 <div class="wizard-steps">
                     <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
@@ -49,242 +47,241 @@
                     </div>
                 </div>
             </div>
-            <!--end::Wizard Nav-->
-            <!--begin::Card-->
             <div class="card card-custom card-shadowless rounded-top-0">
-                <!--begin::Body-->
                 <div class="card-body p-0">
                     <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
                         <div class="col-xl-12 col-xxl-10">
-                            <!--begin::Wizard Form-->
-                            <form class="form" id="kt_form">
-                                <div class="row justify-content-center">
-                                    <div class="col-xl-9">
-                                        <!--begin: Wizard Step 1-->
+                            <div class="row justify-content-center">
+                                <div class="col-xl-9">
+                                    <form class="form" id="kt_form">
                                         <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Post-Paid Mobile Number</h4>
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Mobile Number</label>
-                                                <input type="text" class="form-control" name="mobilenumber" placeholder="Enter Mobile Number" maxlength="10" />
-
-                                            </div>
-                                            <!--end::Input-->
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
-                                                <div class="mr-2">
-                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" id="btn_step1" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end: Wizard Step 1-->
-                                        <!--begin: Wizard Step 2-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Enter Operator Name</h4>
-                                            <!--begin::Input-->
-                                            @{
-
-                                                var list = new List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>();
-                                                if (ViewBag.Operator != null)
-                                                {
-                                                    list = (List<PayInc_Customer_web.Areas.Recharge.Models.OperatorResponse>)ViewBag.Operator;
-                                                }
-                                            }
-                                            <div class="form-group">
-                                                <label>Operator</label>
-                                                <select name="operator" class="form-control">
-                                                    <option value="">Select Operator</option>
-                                                    @foreach (var item in list)
-                                                    {
-                                                        <option value="@item.serviceProviderId">@item.serviceProviderName</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
-                                                <div class="mr-2">
-                                                    <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" id="btn_step2" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end: Wizard Step 2-->
-                                        <!--begin: Wizard Step 3-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark">Select your plan/amount</h4>
-                                            <!--begin::Select-->
                                             <div class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Mobile Number</label>
+                                                        <input type="text" class="form-control" name="mobilenumber" placeholder="Mobile Number" id="txtMobileNo" maxlength="10" autocomplete="off" autofocus />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                                    <div class="form-group">
+                                                        <button type="submit" id="btn_step1" class="btn btn-block btn-primary font-weight-bolder">Next</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form class="form" id="form_operator" method="post">
+                                        <div class="pb-5" data-wizard-type="step-content">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Operator</label>
+                                                        @Html.DropDownListFor(m => m.OperatorId, new SelectList(ViewBag.Operator, "serviceProviderId", "serviceProviderName"), "--Select Operator--", new { @class = "form-control", id = "ddlOperator" })
+                                                        @Html.ValidationMessageFor(m => m.OperatorId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <button type="button" class="btn btn-block btn-secondary font-weight-bolder prev-step" data-wizard-type="action-prev">Previous</button>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <button type="button" id="btn_step2" class="btn btn-block btn-primary font-weight-bolder">Next</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form class="form" id="form_recharge" method="post">
+                                        <div class="pb-5" data-wizard-type="step-content">
+                                            <h4 class="mb-10 font-weight-bold text-dark">Customer Information</h4>
+                                            <div class="row">
+                                                <div class="col-6" id="customer_details_panel">
+
+                                                </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label>Amount</label>
-                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount" />
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="flaticon2-telegram-logo"></i></span>
+                                                            </div>
+                                                            @Html.TextBoxFor(m => m.Amount, "", new { @class = "form-control", id = "txtamount", placeholder = "Enter Amount", maxlength = "5", @autocomplete = "off", onkeypress = "return NumericKey(event);" })
+                                                        </div>
+                                                        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <td>Plan</td>
-                                                                <td>Plan Desc</td>
-                                                                <td>Amount</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Data Plan</td>
-                                                                <td>2GB data,unlimited outgoing call</td>
-                                                                <td>
-                                                                    <a href="#" class="btn btn-icon btn-circle btn-light-twitter">
-                                                                        <i class="text-white">149</i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Data Plan</td>
-                                                                <td>3GB data,unlimited outgoing call</td>
-                                                                <td>
-                                                                    <a href="#" class="btn btn-icon btn-circle btn-light-twitter">
-                                                                        <i class="text-white">199</i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-
-                                                    </table>
-                                                </div>
                                             </div>
-
-                                            <div class="d-flex justify-content-between border-top pt-10 mt-15">
+                                            <div class="d-flex justify-content-between border-top pt-10">
                                                 <div class="mr-2">
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div>
-                                                    <button type="button" id="enter_tpin" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+                                                    <button type="submit" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--end: Wizard Step 3-->
-                                        <!--begin: Wizard Step 4-->
-                                        <div class="pb-5" data-wizard-type="step-content">
-                                            <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
-                                            <div class="my-5">
-                                                <div class="card card-custom card-stretch gutter-b">
-                                                    <!--begin::Header-->
-                                                    <div class="card-header pull-right border-0 pt-5">
+                                    </form>
 
-                                                        <div class="card-toolbar">
-                                                            <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Print Receipt">
-                                                                <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    <i class="ki ki-bold-more-hor"></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right" style="">
-                                                                    <!--begin::Navigation-->
-                                                                    <ul class="navi navi-hover py-5">
-                                                                        <li class="navi-item">
-                                                                            <a href="#" class="navi-link">
-                                                                                <span class="navi-icon">
-                                                                                    <i class="flaticon2-drop"></i>
-                                                                                </span>
-                                                                                <span class="navi-text">Print</span>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="navi-item">
-                                                                            <a href="#" class="navi-link">
-                                                                                <span class="navi-icon">
-                                                                                    <i class="flaticon2-list-3"></i>
-                                                                                </span>
-                                                                                <span class="navi-text">Downlaod Receipt</span>
-                                                                            </a>
-                                                                        </li>
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <h4 class="mb-10 font-weight-bold text-dark text-center">Transaction Receipt</h4>
+                                        <div class="my-5">
+                                            <div class="card card-custom card-stretch gutter-b">
+                                                <div class="card-body p-0" id="txn_panel">
 
-                                                                    </ul>
-                                                                    <!--end::Navigation-->
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Header-->
-                                                    <!--begin::Body-->
-                                                    <div class="card-body pt-8">
-                                                        <!--begin::Item-->
-                                                        <table class="table table-bordered">
-                                                            <tr>
-                                                                <td>Operator</td>
-                                                                <td>Amount</td>
-                                                                <td>TransctionId</td>
-                                                                <td>Status</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Airtel</td>
-                                                                <td>100</td>
-                                                                <td>4869187987</td>
-                                                                <td><span class="text-success">Success</span></td>
-                                                            </tr>
-
-                                                        </table>
-                                                        <!--end::Item-->
-                                                    </div>
-                                                    <!--end::Body-->
                                                 </div>
-
                                             </div>
                                         </div>
-                                        <!--end: Wizard Step 4-->
                                     </div>
                                 </div>
-                            </form>
-                            <!--end::Wizard Form-->
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <!--end::Body-->
             </div>
-            <!--end::Card-->
         </div>
-        <!--end::Wizard-->
     </div>
 </div>
-<link href="~/assets/css/jquery.pinlogin.css" rel="stylesheet" />
-<script src="~/assets/js/jquery.pinlogin.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-
-        // ---- Single pincode input -----
-
-        var loginpin = $('#loginpin').pinlogin({
-            fields: 8,
-            reset: false,
-            complete: function (pin) {
-
-            },
 
 
+<form action="@Url.Action("DoTransaction", "PostPaid")" id="form_transaction" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Authorize Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="MobileNumber" id="hdnMobileNumber" />
+                    <input type="hidden" name="OperatorId" id="hdnOperatorId" />
+                    <input type="hidden" name="Amount" id="hdnAmount" />
+                    <div class="row  d-flex flex-center">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Mobile Number:</label>
+                                <label id="lblMobileNo" class="form-control form-control-solid"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Operator:</label>
+                                <label id="lblOperator" class="form-control form-control-solid"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount:</label>
+                                <label id="lblAmount" class="form-control form-control-solid"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-muted font-weight-bold d-flex flex-center">ENTER TPIN</div>
+                    <div class="d-flex flex-center">
+                        <div class="form-group digit-group mb-10">
+                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus/>
+                            <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
+                            <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
+                            <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
+                            <span class="splitter">&ndash;</span>
+                            <input type="password" id="digit-5" name="digit5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
+                            <input type="password" id="digit-6" name="digit6" data-next="digit-7" data-previous="digit-5" class="form-control-solid" />
+                            <input type="password" id="digit-7" name="digit7" data-next="digit-8" data-previous="digit-6" class="form-control-solid" />
+                            <input type="password" id="digit-8" name="digit8" data-previous="digit-7" class="form-control-solid" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    .digit-group input {
+        width: 30px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 24px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 200;
+        margin: 0 2px;
+    }
+
+    .splitter {
+        padding: 0 5px;
+        color: black;
+        font-size: 24px;
+    }
+</style>
+<script>
+    $('.digit-group').find('input').each(function () {
+        $(this).attr('maxlength', 1);
+        $(this).on('keyup', function (e) {
+            var parent = $($(this).parent());
+            if (e.keyCode === 8 || e.keyCode === 37) {
+                var prev = parent.find('input#' + $(this).data('previous'));
+                if (prev.length) {
+                    $(prev).select();
+                }
+            } else if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                var next = parent.find('input#' + $(this).data('next'));
+                if (next.length) {
+                    $(next).select();
+                } else {
+                    if (parent.data('autosubmit')) {
+                        //parent.submit();
+                    }
+                }
+            }
         });
-
-
+    });
+    $("#form_transaction").submit(function (e) {
+        e.preventDefault();
+        $("#btn_step3").attr("disabled", "disabled");
+        if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "") {
+            return;
+        }
+        $.ajax({
+            url: "/BillPayments/Postpaid/DoTransaction",
+            type: "POST",
+            data: $("#form_transaction").serialize(),
+            success: function (data) {
+                $("#btn_step3").removeAttr("disabled");
+                $('#mymodal').modal('hide');
+                $("#txn_panel").html(data);
+                var _wizard = new KTWizard("kt_wizard", {
+                    startStep: 1, // initial active step number
+                    clickableSteps: true  // allow step clicking
+                });
+                _wizard.goTo(4);
+            },
+            error: function (er) {
+                $('#mymodal').modal('hide');
+            }
+        });
     });
 </script>
-<div class="modal fade" id="mymodal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">PIN Password for recharge</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body d-flex flex-center">
-                <div id="loginpin" style="max-width:80%"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                <button type="button" class="btn btn-primary font-weight-bolder text-uppercase" id="btn_step3">Recharge Now</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/prepaid_wizard_script.js"></script>

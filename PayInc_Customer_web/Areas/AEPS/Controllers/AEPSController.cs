@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayInc_Customer_web.Areas.AEPS.Models;
 using PayInc_Customer_web.Areas.OnBoarding.Models;
+using PayInc_Customer_web.Models;
 using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Areas.AEPS.Controllers
 {
     [Area("AEPS")]
+    [Authentication]
     public class AEPSController : Controller
     {
         public IActionResult Index()
@@ -119,7 +121,10 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                 {
                     pidData = (PidData)serializer.Deserialize(reader);
                 }
-
+                if (pidData.Resp.ErrCode!="0")
+                {
+                    return Json(new { success=false, errorMessage=pidData.Resp.ErrInfo });
+                }
                 var captureReq = new IciciCaptureInternalResponse {
                     ci = pidData.Skey.Ci,
                     dc = pidData.DeviceInfo.Dc,
@@ -247,6 +252,10 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     sessionKey = pidData.Skey.Text,
 
                 };
+                if (pidData.Resp.ErrCode != "0")
+                {
+                    return Json(new { success = false, errorMessage = pidData.Resp.ErrInfo });
+                }
                 var allReqInput = new DetailsAepReq
                 {
                     accessModeType = "",
@@ -393,6 +402,8 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     response1.ClientTransactionId = allReqInput.merchantTransactionId;
                     response1.AEPSModeType = "Mini Statement Web";
                     response1.MobileNumber = input.CustomerNumber;
+                    response1.ResponseMessage = errorMessage;
+                    response1.Status = 0;
                     return PartialView("AckView", response1);
                 }
             }
@@ -458,7 +469,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     merchantTransactionId = GetOrderID(),
                     nbin = input.BankName,
                     paymentType = "B",
-                    requestRemarks = "Mini Statement",
+                    requestRemarks = "Aadhar Pay",
                     serviceChannelId = 2,
                     transactionAmount = Convert.ToInt32(input.Amount),
                     transactionType = "MS",
@@ -473,7 +484,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     response1.AadhaarNumber = input.AadharNumber;
                     response1.Amount = Convert.ToDecimal(input.Amount);
                     response1.ClientTransactionId = allReqInput.merchantTransactionId;
-                    response1.AEPSModeType = "Mini Statement Web";
+                    response1.AEPSModeType = "Aadhar Pay";
                     response1.MobileNumber = input.CustomerNumber;
                     return PartialView("AckView", response1);
                 }

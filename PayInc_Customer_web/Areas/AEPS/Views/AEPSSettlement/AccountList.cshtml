@@ -1,0 +1,79 @@
+﻿@model List<PayInc_Customer_web.Areas.AEPS.Models.AEPSAccountList>
+@{
+    Layout = null;
+ }
+<table class="table table-bordered" id="tbl_accountlist">
+    <thead>
+        <tr>
+            <td>
+                Beneficiary ID
+            </td>
+            <td>
+                Beneficiary Name
+            </td>
+            <td>
+                Bank
+            </td>
+            <td>
+                Account No
+            </td>
+            <td>
+                IFSC Code
+            </td>
+            <td>
+                Status
+            </td>
+            <td>
+                Action
+            </td>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="recordid">
+                        @item.recordId
+                    </td>
+                    <td class="beneficiary-name">
+                        @item.beneficiaryName
+                    </td>
+                    <td class="bank-name">
+                        @item.bankName
+                    </td>
+                    <td class="account-number">
+                        @item.accountNumber
+                    </td>
+                    <td class="ifsc-code">
+                        @item.ifscCCode
+                    </td>
+                    <td>
+                        <span class="text-success">@item.customerKYCStatus</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-click">Settle Now</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(".btn-click").click(function (e) {
+        e.preventDefault();
+        $("#txtTxnPassword").val('');
+        $("#txtTxnAmount").val('');
+        var beneficiary_name = $(this).closest("tr").find(".beneficiary-name").text();
+        $("#txtBeneficiary").text(beneficiary_name);
+        var bank_name = $(this).closest("tr").find(".bank-name").text();
+        $("#txtBank").text(bank_name);
+        var account_name = $(this).closest("tr").find(".account-number").text();
+        $("#txtAccount").text(account_name);
+        var ifsc_code = $(this).closest("tr").find(".ifsc-code").text();
+        $("#txtIFSC_code").text(ifsc_code);
+        $("#mymodal").modal("show");
+        $("#hdnrecordId").val($(this).closest("tr").find(".recordid").text());
+    });
+</script>

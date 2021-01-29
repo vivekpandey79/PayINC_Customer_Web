@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group row">
-                <div class="col-lg-2 col-md-9 col-sm-12">
+                @*<div class="col-lg-2 col-md-9 col-sm-12">
                     <div class="input-group">
                         <input type="text" class="form-control" name="transactiontype" placeholder="Transaction Type" />
                         <div class="input-group-append">
@@ -19,32 +19,32 @@
                         </div>
                     </div>
                     @Html.ValidationMessageFor(m => m.TransactionType, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-lg-2 col-md-9 col-sm-12">
+                </div>*@
+                <div class="col-lg-3 col-md-9 col-sm-12">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="sendermobilenumber" placeholder="Sender Mobile Number" />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-phone"></i>
                             </span>
                         </div>
+                        @Html.TextBoxFor(m => m.SenderMobileNumber, new { @class = "form-control", placeholder = "Mobile Number" , @autocomplete="off", autofocus= "autofocus" })
                     </div>
                     @Html.ValidationMessageFor(m => m.SenderMobileNumber, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-lg-2 col-md-9 col-sm-12">
+                <div class="col-lg-3 col-md-9 col-sm-12">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="aadharnumber" placeholder="Aadhar  Number" />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-address-card"></i>
                             </span>
                         </div>
+                        @Html.TextBoxFor(m => m.AadharNumber, new { @class = "form-control", placeholder = "Aadhar Number" })
                     </div>
                     @Html.ValidationMessageFor(m => m.AadharNumber, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-lg-2 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <input type="text" class="form-control" name="FromDate" id="datepicker_1" value="@System.DateTime.Now.AddDays(-1).Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-lg-2 col-md-9 col-sm-12">
                     <div class="input-group date">
-                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("dd-MM-yyyy")" placeholder="from date" readonly />
+                        <input type="text" class="form-control" name="ToDate" id="datepicker_2" value="@System.DateTime.Now.Date.ToString("MM-dd-yyyy")" placeholder="from date" readonly />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar"></i>
@@ -98,22 +98,22 @@
                     {
                         foreach (var item in listReport)
                         {
-                    <tr>
-                        <td>@item.customerNumber</td>
-                        <td>@item.adhaarNumber</td>
-                        <td>₹ @item.transactionAmount</td>
-                        <td>@item.transactionId</td>
-                        <td>@item.settlementTransactionId</td>
-                        <td>₹ @item.serviceCharge</td>
-                        <td>₹ @item.commission</td>
-                        <td>₹ @item.customeropBal</td>
-                        <td>₹ @item.customerclBal</td>
-                        <td>@item.transactionStatusDescription</td>
-                    </tr>
+                            <tr>
+                                <td>@item.customerNumber</td>
+                                <td>@item.adhaarNumber</td>
+                                <td>₹ @item.transactionAmount</td>
+                                <td>@item.transactionId</td>
+                                <td>@item.settlementTransactionId</td>
+                                <td>₹ @item.serviceCharge</td>
+                                <td>₹ @item.commission</td>
+                                <td>₹ @item.customeropBal</td>
+                                <td>₹ @item.customerclBal</td>
+                                <td>@item.transactionStatusDescription</td>
+                            </tr>
                         }
                     }
                     <tr>
-                       <td colspan="8">
+                        <td colspan="8">
                             <div class="d-flex-in justify-content-between">
                                 <span class="text-center text-dark">@ViewData["ErrorMessage"]</span>
                             </div>
@@ -133,15 +133,17 @@
     $('#datepicker_1').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });
     $('#datepicker_2').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
-        format: 'dd-mm-yyyy',
+        format: 'mm-dd-yyyy',
         templates: arrows,
         autoclose: true,
     });
 </script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

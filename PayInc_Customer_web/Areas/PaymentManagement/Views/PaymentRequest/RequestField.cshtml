@@ -4,9 +4,9 @@
 {
     var inputList = Model.reqList;
 
-    <form id="form_request_fields" action="@Url.Action("SubmitPaymentReq","PaymentRequest")" method="post">
-        @for (int i = 0; i < inputList.Count; i++)
-        {
+<form id="form_request_fields" action="@Url.Action("SubmitPaymentReq","PaymentRequest")" method="post" enctype="multipart/form-data">
+    @for (int i = 0; i < inputList.Count; i++)
+    {
         <div class="form-group row">
             <label class="col-form-label text-left col-lg-2 col-sm-12">@inputList[i].parameterName</label>
             <div class="col-lg-6 col-md-9 col-sm-12">
@@ -31,7 +31,7 @@
                                 </span>
                             </div>
                             @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off" })
-                            
+
                         }
                         else if (inputList[i].dataValue.Trim() == "INTEGER" && inputList[i].fieldValue.Trim() == "DATE PICKER" && inputList[i].parameterName.Trim() == "DEPOSIT DATE")
                         {
@@ -41,7 +41,7 @@
                                 </span>
                             </div>
                             @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off", type = "date" })
-                            
+
                         }
                         else if (inputList[i].dataValue.Trim() == "INTEGER" && inputList[i].fieldValue.Trim() == "DATE PICKER" && inputList[i].parameterName.Trim() == "CHEQUE DATE")
                         {
@@ -50,8 +50,8 @@
                                     <i class="flaticon2-calendar"></i>
                                 </span>
                             </div>
-                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", id = "CheckDate", placeholder = @Model.reqList[i].parameterName, Maxlength = @Model.reqList[i].maxLength, MinLength = @Model.reqList[i].minLength, @autocomplete = "off", type = "date", min="01-12-2020", max = "04-12-2020" })
-                            
+                            @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", id = "CheckDate", placeholder = @Model.reqList[i].parameterName, Maxlength = @Model.reqList[i].maxLength, MinLength = @Model.reqList[i].minLength, @autocomplete = "off", type = "date", min = "01-12-2020", max = "04-12-2020" })
+
                         }
                         else if (inputList[i].dataValue.Trim() == "INTEGER")
                         {
@@ -61,14 +61,14 @@
                                 </span>
                             </div>
                             @Html.TextBoxFor(m => m.reqList[i].UsersInput, new { @class = "form-control", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off", onkeypress = "return NumericKey(event);" })
-                            
+
                         }
                         else if (inputList[i].dataValue.Trim() == "STRING" && inputList[i].fieldValue.Trim() == "DROP DOWN")
                         {
                             if (inputList[i].parameterName.Trim().ToUpper() == "CDM ID" || inputList[i].parameterName.Trim().ToUpper() == "STATE")
                             {
                                 @Html.DropDownListFor(m => m.reqList[i].UsersInput, new SelectList(string.Empty, "Value", "Text"), "-Select State-", new { @class = "form-control", id = "StateNm", placeholder = inputList[i].parameterName, Maxlength = inputList[i].maxLength, MinLength = inputList[i].minLength, @autocomplete = "off" })
-                                
+
                             }
                             else if (inputList[i].parameterName.Trim().ToUpper() == "CDM ID" || inputList[i].parameterName.Trim().ToUpper() == "CITY")
                             {
@@ -93,24 +93,70 @@
                 }
             </div>
             @*@if (!string.IsNullOrEmpty(inputList[i].hint))
-            {
-                <div class="col-lg-6 col-sm-12">
-                    <div class="bg-gray-300" style="border: 1px dotted #808080; margin-top: 8px">@inputList[i].hint</div>
+                {
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="bg-gray-300" style="border: 1px dotted #808080; margin-top: 8px">@inputList[i].hint</div>
+                    </div>
+                }*@
+        </div>
+    }
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Upload Payment Slip:</label>
+        <div class="col-lg-6 col-md-9 col-sm-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="flaticon2-download"></i>
+                    </span>
+                    <input type="file" class="form-control" name="payslip" accept="image/png, image/jpeg"/>
                 </div>
-            }*@
-        </div>
-        }
-        <div class="d-flex justify-content-between border-top pt-10 mt-15">
-            <div class="mr-2">
-                <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
-            </div>
-            <div>
-                <button type="submit" id="btn_request_fields" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
             </div>
         </div>
-    </form>
+    </div>
+    <div class="d-flex justify-content-between border-top pt-10 mt-15">
+        <div class="mr-2">
+            <button type="button" class="btn btn-light-primary font-weight-bolder px-9 py-4 prev-step" data-wizard-type="action-prev">Previous</button>
+        </div>
+        <div>
+            <button type="submit" id="btn_request_fields" class="btn btn-primary font-weight-bolder px-9 py-4">Next</button>
+        </div>
+    </div>
+</form>
 
 }
-<script src="~/js/paymentrequest_wizard.js"></script>
+<script>
+    $("#form_request_fields").submit(function (e) {
+        e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
+        $("#btn_request_fields").addClass("spinner spinner-right spinner-white pr-15");
+        $("#btn_request_fields").attr("disabled", "disabled");
+        var url = this.action;
+        var form = $("#form_request_fields")[0];
+        var formData = new FormData(form)
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData,
+            success: function (data) {
+                $("#btn_request_fields").removeClass("spinner spinner-right spinner-white pr-15");
+                $("#btn_request_fields").removeAttr("disabled", "disabled");
+                $("#acknowledge").html(data);
+                var _wizard = new KTWizard("kt_wizard", {
+                    startStep: 1,
+                    clickableSteps: false
+                });
+                _wizard.goTo(4);
+            },
+            error: function (er) {
+                $("#acknowledge").html('');
+            }
+        });
+    });
+</script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

@@ -42,12 +42,12 @@
 </div>
 <script>
     $("#btn_request_submission").click(function (e) {
-        $("#lbl_success").show();
-        $("#btn_request_submission").hide();
+        //$("#lbl_success").show();
+        //$("#btn_request_submission").hide();
     });
     $("#form_onboarding").submit(function (e) {
         e.preventDefault();
-        $(".loader").show();
+        $("#btn_request_submission").addClass("spinner spinner-right spinner-white");
         $("#btn_request_submission").attr("disabled","disabled");
         var url = this.action;
         $.ajax({
@@ -55,10 +55,10 @@
             type: "POST",
             data: $("#form_onboarding").serialize(),
             success: function (data) {
-                $(".loader").hide();
+                $("#lbl_success").show();
+                $("#btn_request_submission").removeClass("spinner spinner-right spinner-white");
                 $("#verify_method_panel").hide();
                 $("#btn_request_submission").removeAttr("disabled");
-                $("#lbl_success").show();
                 $("#btn_request_submission").hide();
                 window.location.reload();
             },

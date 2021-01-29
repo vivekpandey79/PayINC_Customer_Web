@@ -2,8 +2,8 @@
     var scheme = "http";
     //initCapture(url, callback)
     var startPort = 11100;
-var endPort = 11100;
-    var detectedUrl = "";
+var endPort = 11101;
+var detectedUrl = "";
 function captureBio(serviceType)
     {
         for (var i = startPort; i <= endPort; i++)
@@ -11,18 +11,14 @@ function captureBio(serviceType)
             var url = scheme + '://' + domain + ':' + i;
             initDiscovery(url,
                 function (err, data) {
-                    if (err != null) {
+                    if (err !== null) {
                         alert('Something went wrong: ' + err);
+                        return;
                     } else {
-
                         //var $doc = $.parseXML(data);
-
                         parser = new DOMParser();
                         xmlDoc = parser.parseFromString(data, "text/xml");
-
-
                         var deviceInfo = xmlDoc.getElementsByTagName("RDService")[0].attributes["info"].value;
-
                         if (deviceInfo.includes("Morpho")) {
                             detectedUrl = detectedUrl + "/capture";
                         }
@@ -32,21 +28,17 @@ function captureBio(serviceType)
                         else {
                             detectedUrl = detectedUrl + "/rd/capture";
                         }
-                        
-                           
-                       // alert(detectedUrl);
-
-                        //var path = xmlDoc.getElementsByTagName("RDService")[0].childNodes[3].attributes["path"].value;
-
-                        //path = path.replace(detectedUrl.replace('http:/', ''), '');
-                        //alert(path);
-
-                        
                         initCapture(detectedUrl,
                             function (err, data) {
-                                if (err != null) {
+                                if (err !== null) {
                                     alert('Something went wrong: ' + err);
                                 } else {
+                                    parser = new DOMParser();
+                                    xmlDoc = parser.parseFromString(data, "text/xml");
+                                    var deviceInfo = xmlDoc.getElementsByTagName("Resp")[0].attributes["errCode"].value;
+                                    if (deviceInfo !== "0") {
+                                        return;
+                                    }
                                     $('.PidData').val(data);
                                     StartLoading("Fetch");
                                     var url = "";
@@ -82,6 +74,9 @@ function captureBio(serviceType)
                                             try {
                                                 var checkError = data.errorMessage;
                                                 if (typeof (checkError) !== "undefined") {
+                                                    if (data.success === false) {
+                                                        return;
+                                                    }
                                                     toastr.error(checkError, "Alert");
                                                     return false;
                                                 }
@@ -115,7 +110,7 @@ function captureBio(serviceType)
         xhr.responseType = 'text';
         xhr.onload = function () {
             var status = xhr.status;
-            if (status == 200) {
+            if (status === 200) {
                 detectedUrl = url;
                 callback(null, xhr.response);
             } else {
@@ -132,9 +127,11 @@ function captureBio(serviceType)
         var InputXml = '<?xml version="1.0"?><PidOptions><Opts fCount="1" fType="0" iCount="0" pCount="0" format="0" pidVer="2.0" timeout="10000" wadh="" env="P" /></PidOptions>';
         xhr.onload = function () {
             var status = xhr.status;
-            if (status == 200) {
+            if (status === 200) {
                 callback(null, xhr.response);
+                return;
             } else {
+                alert(status)
                 callback(status);
             }
         };
