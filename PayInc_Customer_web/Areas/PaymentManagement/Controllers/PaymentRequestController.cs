@@ -140,7 +140,7 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                     bankRefNo = "",
                     paymentModeId = Convert.ToInt32(sessionUtility.GetStringSession("paymentModeId")),
                     loadAmount = 0,
-                    loadCategoryId = 1,
+                    loadCategoryId = 2,
                     loadDescription = "",
                     bankId = Convert.ToInt32(sessionUtility.GetStringSession("bankId")),
                     loadDepositDate = null,

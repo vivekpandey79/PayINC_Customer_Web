@@ -92,15 +92,13 @@
             }
         });
     })
-    $("#btn_step2").click(function (e) {
+    $("#form_operator").submit(function (e) {
         e.preventDefault();
-        var validator = _validations[1]; // get validator for currnt step
-        validator.validate().then(function (status) {
-            if (status === 'Valid') {
-                _wizard1.goTo(3);
-                GetDTHPlan($("#txtAccountNo").val(), $("#ddlOperator option:selected").text());
-            }
-        });
+        if (!$(this).valid()) {
+            return;
+        }
+        _wizard1.goTo(3);
+        GetDTHPlan($("#txtAccountNo").val(), $("#ddlOperator option:selected").text());
     });
 
     function GetDTHPlan(accountNo, operatorName) {

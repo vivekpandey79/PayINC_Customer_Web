@@ -108,7 +108,7 @@
                                     NEFT
                                 </label>
                                 <label class="radio">
-                                    <input type="radio" name="paymode" value="IMPS"checked />
+                                    <input type="radio" name="paymode" value="IMPS" checked />
                                     <span></span>
                                     IMPS
                                 </label>
@@ -129,6 +129,7 @@
                             <span class="form-text text-muted">Amount should not be greater than Available Limit</span>
                         </div>
                     </div>
+                    
                     <div class="mb-4">
                         <div class="form-group">
                             <label>Password</label>
@@ -215,10 +216,22 @@
                             <label>Beneficiary Name</label>
                             <div class="input-group">
                                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-user-secret"></i></span></div>
-                                @Html.TextBoxFor(m => m.BeneficiaryName, null, new { @class = "form-control", placeholder = "Enter Beneficiary Name", Maxlength = "8", @autocomplete = "off" })
+                                @Html.TextBoxFor(m => m.BeneficiaryName, null, new { @class = "form-control", placeholder = "Enter Beneficiary Name", Maxlength = "40", @autocomplete = "off" })
                             </div>
                             @Html.ValidationMessageFor(m => m.BeneficiaryName, null, new { @class = "text-danger" })
                             <span class="form-text text-muted">Enter Beneficiary Name</span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Upload Cheque/Passbook</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-xs fa-file-download"></i></span></div>
+                                @Html.TextBoxFor(m => m.UploadFile, new { @type = "file", @class = "form-control", placeholder = "Upload file" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.UploadFile, null, new { @class = "text-danger" })
+                            <span class="form-text text-muted">Upload image file of cheque or passbook</span>
                         </div>
                     </div>
                 </div>
@@ -278,17 +291,22 @@
         });
         $("#form_acc_register").submit(function (e) {
             e.preventDefault();
+            var url = this.action;
             if (!$(this).valid()) {
                 return;
             }
             $("#btn_reg_acc").addClass("spinner spinner-white spinner-right");
             $("#btn_reg_acc").attr("disabled", "disabled");
-            var url = this.action;
+            var form = $("#form_acc_register")[0];
+            var formData = new FormData(form)
             
             $.ajax({
                 url: url,
                 type: "POST",
-                data: $("#form_acc_register").serialize(),
+                contentType: false,
+                cache: false,
+                processData: false,
+                data: formData,
                 success: function (data) {
                     $("#btn_reg_acc").removeClass("spinner spinner-white spinner-right");
                     $("#btn_reg_acc").removeAttr("disabled");

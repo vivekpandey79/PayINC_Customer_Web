@@ -4,33 +4,30 @@
 }
 @if (Model != null)
 {
-    <table class="table table-bordered" id="tbl_ledger">
-        <thead>
+<table class="table table-bordered" id="tbl_ledger">
+    <thead>
+        <tr>
+            <td>Customer Name</td>
+            <td>Mobile Number</td>
+            <td>Outlet Name</td>
+            <td>Payment Received</td>
+            <td>Payment Transfer</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <td>TransactionId</td>
-                <td>Customer Name</td>
-                <td>Mobile Number</td>
-                <td>Operator</td>
-                <td>Category</td>
-                <td>Txn Date</td>
-                <td>Txn Type</td>
-                <td>Txn Amount</td>
-                <td>Operator RefNo</td>
-                <td>Op Bal</td>
-                <td>Cl Bal</td>
-                <td>Channel</td>
-                <td>Status</td>
-                <td>Action</td>
+                <td>@item.customerName</td>
+                <td>@item.mobileNumber</td>
+                <td>@item.outletName</td>
+                <td>@item.paymentReceived</td>
+                <td>@item.paymentTransfer</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                
-            }
+        }
 
-        </tbody>
-    </table>
+    </tbody>
+</table>
 }
 else
 {

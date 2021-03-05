@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +37,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult DoTransaction(IFormCollection fc)
         {
             try
@@ -196,17 +197,45 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult RegisterAccount(IFormCollection fc)
         {
             try
-            {                
+            {
+                var savedImageUrl = string.Empty;
+                if (Request.Form.Files != null)
+                {
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        var file = Request.Form.Files[0];
+                        var paramater = new Object();
+                        if (file.Length > 0)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                file.CopyTo(ms);
+                                var fileBytes = ms.ToArray();
+                                string strBase64 = Convert.ToBase64String(fileBytes);
+                                var ext = Path.GetExtension(file.FileName);
+                                paramater = new
+                                {
+                                    fileCategory = "Cheque_Passbook_AEPS",
+                                    fileUniqueId = "Cheque_Passbook_AEPS" + System.DateTime.Now.DayOfYear+ new Random().Next(1000, 9999),
+                                    fileExtension = ext,
+                                    base64String = strBase64
+                                };
+                            }
+                        }
+                        string errorMessage1 = string.Empty;
+                        savedImageUrl = new CallService().PostImage("saveImageBase64", paramater, ref errorMessage1);
+                    }
+                }
                 var req = new {
                     customerId=new SessionUtility().GetLoginSession().customerId,
                     beneficiaryName=Convert.ToString(fc["BeneficiaryName"]),
                     accountNumber= Convert.ToString(fc["AccountNo"]),
                     ifscCode= Convert.ToString(fc["ifsccode"]),
-                    imagePath= Convert.ToString(""),
+                    imagePath= savedImageUrl,
                     ext1="",
                     ext2="",
                     status=1,

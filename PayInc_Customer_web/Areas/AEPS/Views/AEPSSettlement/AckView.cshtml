@@ -21,11 +21,15 @@
             <tbody>
                 <tr>
                     <td><b>Transaction ID</b></td>
-                    <td>@Model.response.clientTransactionId</td>
+                    <td>@Model.response.vendorTransactionId</td>
                 </tr>
                 <tr>
-                    <td><b>Client Transaction Id</b></td>
+                    <td><b>ISO Transaction Id</b></td>
                     <td>@Model.response.txnId</td>
+                </tr>
+                <tr>
+                    <td><b>Settlement Type</b></td>
+                    <td>@Model.response.SettlementType</td>
                 </tr>
                 @if (Model.response.addlParameters != null)
                 {
@@ -44,7 +48,7 @@
                 </tr>
                 <tr>
                     <td>Status</td>
-                    <td><span class="text-danger">@Model.message</span></td>
+                    <td><span class="@(Model.errorCode==0 ? "text-success": "text-danger")">@Model.message</span></td>
                 </tr>
             </tbody>
         </table>
@@ -53,7 +57,12 @@
 }
 else
 {
-    <div class="alert alert-danger">
-        Something went wrong
-    </div>
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>Status</td>
+            <td><span class="text-danger">No response from operator end. Please reports for final status.</span></td>
+        </tr>
+    </tbody>
+</table>
 }

@@ -1,0 +1,86 @@
+﻿@model PayInc_Customer_web.Areas.OnBoarding.Models.FinalVideoVerifyResp
+@{
+    ViewData["Title"] = "Show Manual KYC Status";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="">
+        <div class="d-flex justify-content-center pt-30">
+            <div class="alert alert-white fade show mb-5 p-5" role="alert">
+                <h4 class="alert-heading text-center">Video Verification Done!</h4>
+                <hr />
+                <p>You have successfully submitted your all document. Retailer On Boarding Submitted. Check your sms on your mobile for credentials.</p>
+                <div class="border-bottom border-dark opacity-20 mb-5"></div>
+                <p class="mb-0 text-warning">Your docuemnt is in Review. Please wait for further notice.</p>
+            </div>
+        </div>
+    </div>
+    @*<div class="">
+        <div class="d-flex justify-content-center">
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label">
+                            Video Verification Summary
+                            <small></small>
+                        </h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>PAN Image</td>
+                                <td>Video Image</td>
+                                <td>Match Percent</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.result != null)
+                            {
+                                if (Model.result.videoVerification != null)
+                                {
+                                    foreach (var item in Model.result.videoVerification.videoFaceMatch)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img src="@Model.PanImage" class="img-fluid" style="width:150px"/>
+                                            </td>
+                                            <td>
+                                                <img src="@item.videoImages[0]" class="img-fluid" style="width:150px"/>
+                                            </td>
+                                            <td>@Model.result.videoVerification.videoFaceMatch[0].matchStatistics.matchPercentage</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+    
+    
+    <div class="text-center mt-3">
+        <span class="font-weight-bold text-muted font-size-h5">Already having?</span>
+        <a href="/Login" class="font-weight-bolder text-primary font-size-h4" id="kt_login_signup">Login Here</a>
+    </div>
+    <script>var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";</script>
+    <!--begin::Global Config(global config for global JS scripts)-->
+    <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1400 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#3699FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#E4E6EF", "dark": "#181C32" }, "light": { "white": "#ffffff", "primary": "#E1F0FF", "secondary": "#EBEDF3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#3F4254", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#EBEDF3", "gray-300": "#E4E6EF", "gray-400": "#D1D3E0", "gray-500": "#B5B5C3", "gray-600": "#7E8299", "gray-700": "#5E6278", "gray-800": "#3F4254", "gray-900": "#181C32" } }, "font-family": "Poppins" };</script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+</body>
+</html>
+    

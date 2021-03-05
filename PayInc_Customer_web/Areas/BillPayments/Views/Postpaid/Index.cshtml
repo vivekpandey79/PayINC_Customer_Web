@@ -99,7 +99,7 @@
                                                             <button type="button" class="btn btn-block btn-secondary font-weight-bolder prev-step" data-wizard-type="action-prev">Previous</button>
                                                         </div>
                                                         <div class="col-lg-6 col-md-12 col-sm-12">
-                                                            <button type="button" id="btn_step2" class="btn btn-block btn-primary font-weight-bolder">Next</button>
+                                                            <button type="submit"  class="btn btn-block btn-primary font-weight-bolder">Next</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -114,7 +114,18 @@
                                             <h4 class="mb-10 font-weight-bold text-dark">Customer Information</h4>
                                             <div class="row">
                                                 <div class="col-6" id="customer_details_panel">
-
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12  col-sm-12">
+                                                            <div class="form-group">
+                                                                <label>Operator Name</label>
+                                                                <label id="lblOperator1" class="form-control form-control-solid"></label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Mobile No</label>
+                                                                <label id="lblMobileNo1" class="form-control form-control-solid"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
@@ -176,6 +187,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="MobileNumber" id="hdnMobileNumber" />
                     <input type="hidden" name="OperatorId" id="hdnOperatorId" />
+                    <input type="hidden" name="OperatorNm" id="hdnOperator" />
                     <input type="hidden" name="Amount" id="hdnAmount" />
                     <div class="row  d-flex flex-center">
                         <div class="col-6">
@@ -196,7 +208,7 @@
                     <div class="text-muted font-weight-bold d-flex flex-center">ENTER TPIN</div>
                     <div class="d-flex flex-center">
                         <div class="form-group digit-group mb-10">
-                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus/>
+                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus />
                             <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
                             <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
                             <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
@@ -269,12 +281,30 @@
             success: function (data) {
                 $("#btn_step3").removeAttr("disabled");
                 $('#mymodal').modal('hide');
-                $("#txn_panel").html(data);
-                var _wizard = new KTWizard("kt_wizard", {
-                    startStep: 1, // initial active step number
-                    clickableSteps: true  // allow step clicking
-                });
-                _wizard.goTo(4);
+                try {
+                    var checkError = data.errorMessage;
+                    if (typeof (checkError) !== "undefined") {
+                        toastr.error(checkError, "Alert");
+                        return false;
+                    }
+                    else {
+                        $("#txn_panel").html(data);
+                        var _wizard = new KTWizard("kt_wizard", {
+                            startStep: 1, // initial active step number
+                            clickableSteps: true  // allow step clicking
+                        });
+                        _wizard.goTo(4);
+                    }
+                }
+                catch (error) {
+                    $("#txn_panel").html(data);
+                    var _wizard = new KTWizard("kt_wizard", {
+                        startStep: 1, // initial active step number
+                        clickableSteps: true  // allow step clicking
+                    });
+                    _wizard.goTo(4);
+                }
+                
             },
             error: function (er) {
                 $('#mymodal').modal('hide');
@@ -284,4 +314,4 @@
 </script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/js/prepaid_wizard_script.js"></script>
+<script src="~/js/postpaid_wizard.js"></script>

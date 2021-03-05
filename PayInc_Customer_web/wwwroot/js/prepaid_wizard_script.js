@@ -109,7 +109,7 @@ $(document).ready(function () {
                 $("#txtShowMobileNo").val($("#txtMobileNo").val());
                 $("#lblMobileNo").text($("#txtMobileNo").val());
                 GetPLAN($("#txtMobileNo").val(), $("#ddlOperator").val())
-                _wizard1.goNext();
+                _wizard1.goTo(2);
             }
         });
     });
@@ -139,12 +139,16 @@ $(document).ready(function () {
 
     $("#txtMobileNo").keyup(function () {
         var mobileNumber = $("#txtMobileNo").val();
-        if (mobileNumber.length === 10)
-        {
-            $("#txtShowMobileNo").val($("#txtMobileNo").val());
-            $("#lblMobileNo").text($("#txtMobileNo").val());
-            _wizard1.goNext();
-            GetPLAN($("#txtMobileNo").val(), $("#ddlOperator").val());
+        if (mobileNumber.length === 10) {
+            var validator = _validations[0]; // get validator for currnt step
+            validator.validate().then(function (status) {
+                if (status === 'Valid') {
+                    $("#txtShowMobileNo").val($("#txtMobileNo").val());
+                    $("#lblMobileNo").text($("#txtMobileNo").val());
+                    _wizard1.goTo(2);
+                    GetPLAN($("#txtMobileNo").val(), $("#ddlOperator").val());
+                }
+            });
         }
     });
 

@@ -1,8 +1,51 @@
 ﻿$(document).ready(function (e) {
-	var _wizard1 = new KTWizard("kt_wizard", {
-		startStep: 1,
-		clickableSteps: false
-	});
+	var _wizard1 = "";
+	if ($("#step_num").val() === "") {
+		_wizard1 = new KTWizard("kt_wizard", {
+			startStep: 1,
+			clickableSteps: false
+		});
+	}
+	else {
+		_wizard1 = new KTWizard("kt_wizard", {
+			startStep: 6,
+			clickableSteps: false
+		});
+		if ($("#step_num").val() === "6") {
+			$.ajax({
+				url: "/OnBoarding/ManualForm/BankDetails",
+				type: "POST",
+				data: {},
+				success: function (data) {
+					$("#panel_all_details").html(data);
+					_wizard1.goTo(6);
+				}
+			});
+		}
+		if ($("#step_num").val() === "5") {
+			GetBankList();
+			$.ajax({
+				url: "/OnBoarding/ManualForm/BasicDetails",
+				type: "POST",
+				data: {},
+				success: function (data) {
+					if (data.bankData !== "") {
+						$("#ddlBank").val(data.bankData.bankId);
+						$("#accountname").val(data.bankData.accountname);
+						$("#bankaccount").val(data.bankData.bankaccount);
+						$("#txtifsccode").val(data.bankData.ifsccode);
+					}
+				}
+			});
+            _wizard1.goTo(5);
+		}
+		if ($("#step_num").val() === "3") {
+			_wizard1.goTo(3);
+		}
+		if ($("#step_num").val() === "2") {
+			_wizard1.goTo(2);
+		}
+	}
 
 	var _validations = [];
 	var initValidation = function () {
@@ -202,6 +245,9 @@
 	});
 	$("#form_basic_details").submit(function (e) {
 		e.preventDefault();
+		if (!$(this).valid()) {
+			return;
+		}
 		var btn = KTUtil.getById("btn_basic_details");
 		KTUtil.addEvent(btn, "click", function () {
 			KTUtil.btnWait(btn, "spinner spinner-right spinner-white pr-15", "Please wait");
@@ -220,6 +266,9 @@
 	});
 	$("#form_bankdetails").submit(function (e) {
 		e.preventDefault();
+		if (!$(this).valid()) {
+			return;
+		}
 		var btn = KTUtil.getById("btn_bankdetails");
 		KTUtil.addEvent(btn, "click", function () {
 			KTUtil.btnWait(btn, "spinner spinner-right spinner-white pr-15", "Please wait");

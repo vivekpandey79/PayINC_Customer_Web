@@ -52,7 +52,7 @@ function TopTransaction() {
 						'</td><td>' + value.isoTransactionId +
 						'</td><td>' + value.txnDate +
 					'</td><td>' + '<span class="icon-xl fas fa-xs fa-rupee-sign"></span> '+value.transactionAmount +
-						'</td><td class="text_status">' + value.transactionStatusDescription +'</td></tr>';
+						'</td><td class="text_status text-nowrap">' + value.transactionStatusDescription +'</td></tr>';
 				});
 				$('#records_table').append(trHTML);
 				$('.text_status').each(function () {

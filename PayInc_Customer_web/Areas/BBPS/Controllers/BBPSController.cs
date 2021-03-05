@@ -28,11 +28,12 @@ namespace PayInc_Customer_web.Areas.BBPS.Controllers
             try
             {
                 var listParams = new List<KeyValuePair<string, string>>();
-                listParams.Add(new KeyValuePair<string, string>("serviceProviderId", Convert.ToString(input.Operator)));
+                listParams.Add(new KeyValuePair<string, string>("serviceProviderId", Convert.ToString(input.Operator.Split('~')[0])));
                 string errorMessage = string.Empty;
                 var response = new CallService().GetResponse<List<InputParamsRes>>("getDetailsBBPSBillerInputParams",listParams,ref errorMessage);
                 var sessionUtility = new SessionUtility();
-                sessionUtility.SetSession("ServiceProviderId", input.Operator);
+                sessionUtility.SetSession("ServiceProviderId", input.Operator.Split('~')[0]);
+                sessionUtility.SetSession("ServiceProviderNm", input.Operator.Split('~')[1]);
                 sessionUtility.SetSession("InputParams",JsonConvert.SerializeObject(response));
                 if (string.IsNullOrEmpty(errorMessage))
                 {
@@ -53,6 +54,7 @@ namespace PayInc_Customer_web.Areas.BBPS.Controllers
             try
             {
                 var sessionUtility = new SessionUtility();
+                ViewData["ServiceProviderNm"] = sessionUtility.GetStringSession("ServiceProviderNm");
                 var inputData = JsonConvert.DeserializeObject<List<InputParamsRes>>(sessionUtility.GetStringSession("InputParams"));
                 for (int i = 0; i < inputData.Count; i++)
                 {
@@ -88,6 +90,10 @@ namespace PayInc_Customer_web.Areas.BBPS.Controllers
             try
             {
                 var tpin = Convert.ToString(fc["digit1"]) + Convert.ToString(fc["digit2"]) + Convert.ToString(fc["digit3"]) + Convert.ToString(fc["digit4"]) + Convert.ToString(fc["digit5"]) + Convert.ToString(fc["digit6"]) + Convert.ToString(fc["digit7"]) + Convert.ToString(fc["digit8"]);
+                if (tpin.Length!=8)
+                {
+                    return Json(new { errorMessage = "Please enter TPIN." });
+                }
                 var listAddtionParam = new List<AdditonalParam>();
                 var sessionUtility = new SessionUtility();
                 var inputData=JsonConvert.DeserializeObject<List<InputParamsRes>>(sessionUtility.GetStringSession("InputParams"));
@@ -143,6 +149,10 @@ namespace PayInc_Customer_web.Areas.BBPS.Controllers
             var response = new CallService().GetResponse<List<ServiceProviderResp>>("getServiceProvidersByTypeId", listParams, ref errorMessage);
             if (string.IsNullOrEmpty(errorMessage))
             {
+                foreach (var item in response)
+                {
+                    item.serviceProviderId = item.serviceProviderId + "~" + item.serviceProviderName;
+                }
                 ViewBag.OperatorList = response;
             }
         }

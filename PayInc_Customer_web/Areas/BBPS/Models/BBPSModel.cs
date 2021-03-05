@@ -14,7 +14,7 @@ namespace PayInc_Customer_web.Areas.BBPS.Models
     }
     public class ServiceProviderResp
     {
-        public int serviceProviderId { get; set; }
+        public string serviceProviderId { get; set; }
         public int serviceProviderTypeId { get; set; }
         public string serviceProviderName { get; set; }
         public string serviceProviderShortName { get; set; }
@@ -62,6 +62,8 @@ namespace PayInc_Customer_web.Areas.BBPS.Models
         public object balance { get; set; }
         public Addinfo addinfo { get; set; }
         public string errormsg { get; set; }
+        [Required(ErrorMessage ="Please enter bill amount.")]
+        public string BillAmount { get; set; }
     }
 
     #endregion

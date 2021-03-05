@@ -88,113 +88,133 @@
             <div class="card-body px-0">
                 <div class="tab-content pt-5">
                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                        <form class="form">
-                            <div class="row">
-                                <div class="col-lg-9 col-xl-6 offset-xl-3">
-                                    <h3 class="font-size-h6 mb-5">Customer Info:</h3>
-                                </div>
-                            </div>
-                            @*<div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Photo</label>
-                                <div class="col-lg-9 col-xl-9">
-                                    <div class="image-input image-input-outline image-input-circle" id="kt_user_avatar" style="background-image: url(assets/media/users/blank.png)">
-                                        <div class="image-input-wrapper" style="background-image: url(assets/media/svg/avatars/007-boy-2.svg)"></div>
-                                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
-                                            <i class="fa fa-pen icon-sm text-muted"></i>
-                                            <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg" />
-                                            <input type="hidden" name="profile_avatar_remove" />
-                                        </label>
-                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
-                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
-                                        </span>
-                                        <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="Remove avatar">
-                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>*@
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">First Name</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.firstName" disabled />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Last Name</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.lastName" disabled />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Shop Name</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.outletName" disabled  />
-                                    
-                                </div>
-                            </div>
-                            <div class="separator separator-dashed my-10"></div>
-                            <!--begin::Heading-->
-                            <div class="row">
-                                <div class="col-lg-9 col-xl-6 offset-xl-3">
-                                    <h3 class="font-size-h6 mb-5">Contact Info:</h3>
-                                </div>
-                            </div>
-                            <!--end::Heading-->
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Phone</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="input-group input-group-lg input-group-solid">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="la la-phone"></i>
-                                            </span>
+                        <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
+                            <div class="col-xl-12 col-xxl-7">
+                                <form class="form fv-plugins-bootstrap fv-plugins-framework" id="kt_contact_add_form">
+                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <h3 class="mb-10 font-weight-bold text-dark">User's Profile Details:</h3>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Photo</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <div class="image-input image-input-outline" id="kt_contact_add_avatar">
+                                                            <div class="image-input-wrapper" style="background-image: url(/assets/media/users/100_2.jpg)"></div>
+                                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                                                                <input type="hidden" name="profile_avatar_remove">
+                                                            </label>
+                                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.firstName" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Last Name</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.lastName" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Outlet Name</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.outletName" disabled />
+                                                        <span class="form-text text-muted">Shop Name.</span>
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="separator separator-dashed my-10"></div>
+                                                <div class="row">
+                                                    <div class="col-lg-9 col-xl-6 offset-xl-3">
+                                                        <h3 class="font-size-h6 mb-5">Contact Info:</h3>
+                                                    </div>
+                                                </div>
+                                                  
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <div class="input-group input-group-lg input-group-solid">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-at"></i>
+                                                                </span>
+                                                            </div>
+                                                            <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.emailAddress" disabled />
+                                                        </div>
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="separator separator-dashed my-10"></div>
+                                                <div class="row">
+                                                    <div class="col-lg-9 col-xl-6 offset-xl-3">
+                                                        <h3 class="font-size-h6 mb-5">Upper Chain Info:</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Name</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <div class="input-group input-group-lg input-group-solid">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-user"></i>
+                                                                </span>
+                                                            </div>
+                                                            <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.parentName" placeholder="Phone" disabled />
+                                                        </div>
+                                                        <div class="fv-plugins-message-container">Upper Network information is displayed here.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Mobile Number</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <div class="input-group input-group-lg input-group-solid">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-mobile"></i>
+                                                                </span>
+                                                            </div>
+                                                            <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.paretMobileNumber" disabled />
+                                                        </div>
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.mobileNumber" placeholder="Phone" disabled />
                                     </div>
-                                    <span class="form-text text-muted">We'll never share your email with anyone else.</span>
-                                </div>
+                                </form>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Email Address</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="input-group input-group-lg input-group-solid">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="la la-at"></i>
-                                            </span>
-                                        </div>
-                                        <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.emailAddress" />
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="separator separator-dashed my-10"></div>
-                            <!--begin::Heading-->
-                        </form>
+                        </div>
+
                     </div>
-                    <!--end::Tab Content-->
-                    <!--begin::Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
                         <form class="form">
-                            <!--begin::Heading-->
                             <div class="row">
                                 <div class="col-lg-9 col-xl-6 offset-xl-3">
                                     <h3 class="font-size-h6 mb-5">Address:</h3>
                                 </div>
                             </div>
-                            <!--end::Heading-->
                             <div class="form-group row">
-                              <label class="col-xl-3 col-lg-3 text-right col-form-label">Address 1</label>
-                              <div class="col-lg-9 col-xl-6">
-                                <div class="input-group input-group-lg input-group-solid">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <i class="la la-at"></i>
-                                    </span>
-                                  </div>
-                                  <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.permAddressLine1" disabled />
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Address 1</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="input-group input-group-lg input-group-solid">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="la la-map-marked"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.permAddressLine1" disabled />
+                                    </div>
                                 </div>
-                              </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-xl-3 col-lg-3 text-right col-form-label">Address 2</label>
@@ -202,10 +222,49 @@
                                     <div class="input-group input-group-lg input-group-solid">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
-                                                <i class="la la-at"></i>
+                                                <i class="la la-map-marked"></i>
                                             </span>
                                         </div>
                                         <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.permAddressLine2" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Area</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="input-group input-group-lg input-group-solid">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="la la-map-marked"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.area" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">District</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="input-group input-group-lg input-group-solid">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="la la-map-marked"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.districtName" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 text-right col-form-label">State</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <div class="input-group input-group-lg input-group-solid">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="la la-map-marked"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.stateName" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -213,82 +272,87 @@
                         </form>
                     </div>
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_4" role="tabpanel">
-                        <form class="form">
-                            <div class="row">
-                                <label class="col-xl-3"></label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <h3 class="font-size-h6 mb-5">Account Info</h3>
-                                </div>
+                        <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
+                            <div class="col-xl-12 col-xxl-7">
+                                <form>
+                                    <div class="pb-5">
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Effective Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.customerEffectiveBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Float Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.customerFloatBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">System Reserved Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.customerSystemReservedBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Unclear Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.customerUnclearBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">OverDue Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.customerOverDueLiability" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="separator separator-dashed my-10"></div>
+                                                <div class="row">
+                                                    <div class="col-lg-9 col-xl-6 offset-xl-3">
+                                                        <h3 class="font-size-h6 mb-5">AEPS Balance:</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">AEPS Effective Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.aepsEffectiveBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">AEPS Float Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.aepsFloatBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">AEPS System Reserved</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.aepsSystemReservedBalance" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row fv-plugins-icon-container">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">AEPS OverDue Balance</label>
+                                                    <div class="col-lg-9 col-xl-9">
+                                                        <input class="form-control form-control-lg form-control-solid" type="text" value="@Model.aepsOverDueLiability" disabled />
+                                                        <div class="fv-plugins-message-container"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Main Balance</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <span class="form-control form-control-solid">
-                                        <label>
-                                            <span class="fas fa-xs fa-rupee-sign"></span>
-                                            <span> @Model.customerMainAccountBalance</span>
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">AEPS Balance</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <span class="form-control form-control-solid">
-                                        <label>
-                                            <span  class="fas fa-xs fa-rupee-sign"></span>
-                                            <span>@Model.aepsBalance</span>
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Unclear Balance</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <span class="form-control form-control-solid">
-                                        <label>
-                                            <span class="fas fa-xs fa-rupee-sign"></span>
-                                            <span>@Model.customerUnclearBalance</span>
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">System Reserved Balance</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <span class="form-control form-control-solid">
-                                        <label>
-                                            <span class="fas fa-xs fa-rupee-sign"></span>
-                                            <span>@Model.customerSystemReservedBalance</span>
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Float Balance</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <span class="form-control form-control-solid">
-                                        <label>
-                                            <span class="fas fa-xs fa-rupee-sign"></span>
-                                            <span>@Model.customerFloatBalance</span>
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 text-right col-form-label">Effective Balance</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <span class="form-control form-control-solid">
-                                        <label>
-                                            <span class="fas fa-xs fa-rupee-sign"></span>
-                                            <span>@Model.customerEffectiveBalance</span>
-                                        </label>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="separator separator-dashed my-10"></div>
-
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -17,8 +17,13 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
     [Authentication]
     public class OnBoardingFormController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string rolename)
         {
+            if (!string.IsNullOrEmpty(rolename))
+            {
+                new SessionUtility().SetSession("BoardingRoleName", rolename);
+
+            }
             return View();
         }
 
@@ -101,7 +106,6 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     {
                         return Json(new { success = false, errorMessage, data = "" });
                     }
-
                 }
                 else
                 {
@@ -118,32 +122,57 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
-                var httpContextAccessor = new HttpContextAccessor();
-                var result = httpContextAccessor.HttpContext.Session.GetString("LoginDetails");
-                var obj = JsonConvert.DeserializeObject<LoginResData>(result);
-                if (obj.customerRoleId!=5)
+                var sessionUtility = new SessionUtility();
+                var obj = sessionUtility.GetLoginSession();
+                if(sessionUtility.GetStringSession("BoardingRoleName") == "retailer")
                 {
-                    var listParam = new List<KeyValuePair<string, string>>();
-                    listParam.Add(new KeyValuePair<string, string>("parentMobileNumber", Convert.ToString(obj.mobileNumber)));
-                    string errorMessage = string.Empty;
-                    var response = new CallService().GetResponse<List<LowChainResponse>>("getNetworkADByNumber", listParam, ref errorMessage);
-                    if (response.Count > 0)
+                    if (obj.customerRoleId != 5)
                     {
-                        foreach (var item in response)
+                        var listParam = new List<KeyValuePair<string, string>>();
+                        listParam.Add(new KeyValuePair<string, string>("parentMobileNumber", Convert.ToString(obj.mobileNumber)));
+                        string errorMessage = string.Empty;
+                        var response = new CallService().GetResponse<List<LowChainResponse>>("getNetworkADByNumber", listParam, ref errorMessage);
+                        if (response.Count > 0)
                         {
-                            item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName + " - " + item.customerRoleDesc;
+                            foreach (var item in response)
+                            {
+                                item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName + " - " + item.customerRoleDesc;
+                            }
+                            ViewBag.ADList = response.ToList();
                         }
-                        ViewBag.ADList = response.ToList();
+                        else
+                        {
+                            return Json(new { success = false, errorMessage = "Distributor list not found. Please try again." });
+                        }
                     }
                     else
                     {
-                        return Json(new { success = false, errorMessage ="Distributor list not found. Please try again." });
+                        ViewData["ADCustomerName"] = obj.mobileNumber + " - " + obj.firstName + " " + obj.lastName + " - " + obj.customerRoleDesc;
                     }
                 }
                 else
                 {
-                    ViewData["ADCustomerName"] = obj.mobileNumber + " - " + obj.firstName + " " + obj.lastName + " - " + obj.customerRoleDesc;
+                    var listParam = new List<KeyValuePair<string, string>>();
+                    listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(obj.customerId)));
+                    string errorMessage = string.Empty;
+                    var response = new CallService().GetResponse<List<LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
+                    if (string.IsNullOrEmpty(errorMessage))
+                    {
+                        if (response.Count > 0)
+                        {
+                            foreach (var item in response)
+                            {
+                                item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName + " - " + item.customerRoleDesc;
+                            }
+                            ViewBag.NetworkList = response.ToList();
+                        }
+                        else
+                        {
+                            return Json(new { success = false, errorMessage = "Distributor list not found. Please try again." });
+                        }
+                    }
                 }
+                
                 return PartialView("DistributorList");
             }
             catch (Exception ex)
@@ -157,16 +186,46 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
-                if (GetSession<LoginResData>("LoginDetails").customerRoleId==5)
+                var sessionUtility = new SessionUtility();
+                if (sessionUtility.GetStringSession("BoardingRoleName") == "retailer")
                 {
+                    if (GetSession<LoginResData>("LoginDetails").customerRoleId == 5)
+                    {
+                        return PartialView("VerifyMethod");
+                    }
+                    if (fc["ddlADlist"] == "")
+                    {
+                        return Json(new { success = true, errorMessage = "Please select Distributor" });
+                    }
+                    SetSession("distributorId", fc["ddlADlist"]);
                     return PartialView("VerifyMethod");
                 }
-                if (fc["ddlADlist"]=="")
+                else
                 {
-                    return Json(new { success = true, errorMessage = "Please select Distributor"  });
+                    if (sessionUtility.GetLoginSession().customerRoleId==3)
+                    {
+                        if (Convert.ToInt32(fc["RoleType"])==5)
+                        {
+                            SetSession("distributorId", fc["PartnerId"]);
+                        }
+                        else
+                        {
+                            SetSession("distributorId", fc["DistributorId"]);
+                        }
+                        return PartialView("VerifyMethod");
+                    }
+                    else if(sessionUtility.GetLoginSession().customerRoleId == 4)
+                    {
+                        SetSession("distributorId", Convert.ToString(sessionUtility.GetLoginSession().customerId));
+                        return PartialView("VerifyMethod");
+                    }
+                    else
+                    {
+                        SetSession("distributorId", Convert.ToString(sessionUtility.GetLoginSession().customerId));
+                        return PartialView("VerifyMethod");
+                    }
                 }
-                SetSession("distributorId", fc["ddlADlist"]);
-                return PartialView("VerifyMethod");
+                
             }
             catch (Exception ex)
             {
@@ -193,7 +252,8 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     submittedBy = GetSession<LoginResData>("LoginDetails").customerId,
                     kycChannel = verifyMode =="1" ? "Manual Kyc": "Aadhar OTP",
                     remarks = "OnBoarding Request",
-                    kycChannelId = Convert.ToInt32(verifyMode)
+                    kycChannelId = Convert.ToInt32(verifyMode),
+                    employeeId = 0
                 };
                 string errorMessage = string.Empty;
                 var response = new CallService().PostResponse<string>("putDetailsCustomerOnbBoarding", param, ref errorMessage);
@@ -213,10 +273,12 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         {
             try
             {
+                var sessionUtility = new SessionUtility();
+                var response = new List<LowChainResponse>();
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(fc["customerId"])));
                 string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<List<LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
+                response = new CallService().GetResponse<List<LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     if (response.Count > 0)
@@ -236,6 +298,35 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     }
                 }
                 return Json(new { success = false, errorMessage="data not found" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, errorMessage = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult GetLowerNetworkChain(IFormCollection fc)
+        {
+            try
+            {
+                var listParam = new List<KeyValuePair<string, string>>();
+                listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(fc["customerId"])));
+                string errorMessage = string.Empty;
+                var response = new CallService().GetResponse<List<LowChainResponse>>("getLowerCustomerNetwork", listParam, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    if (response.Count > 0)
+                    {
+                        foreach (var item in response)
+                        {
+                            item.mobileNumber = item.mobileNumber + " - " + item.firstName + " " + item.lastName + " - " + item.customerRoleDesc;
+                        }
+                        response = response.Where(m => m.customerId != Convert.ToInt32(fc["customerId"])).ToList();
+                        return Json(new { success = true, role = "", responseData = response.ToList() });
+                    }
+                }
+                return Json(new { success = false, errorMessage = "data not found" });
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 ﻿@model PayInc_Customer_web.Areas.Reports.Models.PaymentReportModel  
 @{
-    ViewData["Title"] = "Payment Request Reports";
+    ViewData["Title"] = "Check Payments Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -46,10 +46,8 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>Bank</td>
                         <td>Mode</td>
                         <td>Branch Code</td>
-                        <td>Branch</td>
                         <td>Trans ID</td>
                         <td>Deposit Date</td>
                         <td>Submit Date</td>
@@ -66,11 +64,9 @@
                         foreach (var item in listReport)
                         {
                             <tr>
-                                <td>ICICI</td>
                                 <td>@item.paymentModeName</td>
                                 <td>@item.branchIFSCCode</td>
-                                <td>malad</td>
-                                <td></td>
+                                <td>@item.loadTransactionId</td>
                                 <td>@item.loadDepositDate @item.loadDepositTime</td>
                                 <td>@item.loadRequestedDate</td>
                                 <td>₹ @item.loadAmount</td>

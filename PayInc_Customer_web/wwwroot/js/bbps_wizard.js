@@ -16,10 +16,14 @@
                 type: "POST",
                 data: $("#form_operator").serialize(),
                 success: function (data) {
+                    $("#btn_step1").removeClass("spinner spinner-right spinner-white pr-15");
+                    $("#btn_step1").removeAttr("disabled");
                     $("#step_2_panel").html(data);
                     _wizard1.goTo(2);
                 },
                 error: function (er) {
+                    $("#btn_step1").removeClass("spinner spinner-right spinner-white pr-15");
+                    $("#btn_step1").removeAttr("disabled");
                     toastr.error("Internet connection failed","alert");
                 }
             });
@@ -36,22 +40,26 @@
                 type: "POST",
                 data: $("#form_input_params").serialize(),
                 success: function (data) {
+                    $("#btn_step2").removeClass("spinner spinner-right spinner-white pr-15");
+                    $("#btn_step2").removeAttr("disabled");
                     $("#step_3_panel").html(data);
                     _wizard1.goTo(3);
                 },
                 error: function (er) {
+                    $("#btn_step2").removeClass("spinner spinner-right spinner-white pr-15");
+                    $("#btn_step2").removeAttr("disabled");
                     toastr.error("Internet connection failed", "alert");
                 }
             });
         }
     });
-    $("#form_bill_fetch").submit(function (e) {
-        e.preventDefault();
-        if ($(this).valid()) {
-            $("#mymodal").modal('show');
+    //$("#form_bill_fetch").submit(function (e) {
+    //    e.preventDefault();
+    //    if ($(this).valid()) {
+    //        $("#mymodal").modal('show');
 
-        }
-    });
+    //    }
+    //});
     $("#form_bill_fetch").submit(function (e) {
         e.preventDefault();
         if ($(this).valid()) {

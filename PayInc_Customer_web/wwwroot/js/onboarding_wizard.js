@@ -189,6 +189,9 @@
 
     $("#submit_dist_form").submit(function (e) {
         e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
         $(".loader").show();
         $("#btn_submit_dist").attr("disabled", "disabled");
         var url = this.action;
@@ -223,11 +226,11 @@
         e.preventDefault();
         var validator = _validations[1]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
+            if (status === 'Valid') {
                 _wizard1.goNext();
 
             } else {
-
+                return "";
             }
         });
     });
@@ -243,17 +246,34 @@
         $('#mymodal').modal('hide');
         var validator = _validations[2]; // get validator for currnt step
         validator.validate().then(function (status) {
-            if (status == 'Valid') {
-
+            if (status === 'Valid') {
                 _wizard1.goNext();
 
             } else {
-
+                return "";
             }
         });
     });
 
     function GotoNextStep() {
         _wizard1.goNext();
+    }
+
+    function GetLowerNetwork(customerId,selector) {
+        $.ajax({
+            url: "/OnBoarding/OnBoardingForm/GetLowerNetworkChain",
+            type: "POST",
+            data: { customerId: roleId },
+            success: function (res) {
+                $(selector).empty();
+                $(selector).append($("<option></option>").val('').html('-- Select  --'));
+                $.each(res.responseData, function (data, value) {
+                    $(selector).append($("<option></option>").val(value.customerId).html(value.firstName + value.lastName));
+                })
+            },
+            error: function (data) {
+
+            }
+        });
     }
 })

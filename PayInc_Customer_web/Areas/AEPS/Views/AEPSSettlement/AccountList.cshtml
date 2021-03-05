@@ -1,7 +1,7 @@
 ﻿@model List<PayInc_Customer_web.Areas.AEPS.Models.AEPSAccountList>
 @{
     Layout = null;
- }
+}
 <table class="table table-bordered" id="tbl_accountlist">
     <thead>
         <tr>
@@ -50,10 +50,21 @@
                         @item.ifscCCode
                     </td>
                     <td>
-                        <span class="text-success">@item.customerKYCStatus</span>
+                        @if (item.customerKYCStatus == "APPROVED")
+                        {
+                            <span class="text-success">@item.customerKYCStatus</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning">@item.customerKYCStatus</span>
+                        }
+
                     </td>
                     <td>
-                        <button class="btn btn-primary btn-click">Settle Now</button>
+                        @if (item.customerKYCStatus == "APPROVED")
+                        {
+                            <button class="btn btn-primary btn-click">Settle Now</button>
+                        }
                     </td>
                 </tr>
             }

@@ -33,8 +33,10 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
                 {
                     response.NumberOfStock = input.NumberOfStock;
                     response.StockType = input.StockType;
+                    response.StockAmount = GetStockTypeById(Convert.ToInt32(input.StockType)) * Convert.ToInt32(input.NumberOfStock);
                     var sessionUtility = new SessionUtility();
                     sessionUtility.SetSession("StockTypeId", input.StockType);
+                    sessionUtility.SetSession("StockAmount", Convert.ToString(response.StockAmount));
                     sessionUtility.SetSession("PayeeMobileNo", Convert.ToString(response.mobileNumber));
                     sessionUtility.SetSession("PayeeName", response.firstName + " " + response.lastName);
                     sessionUtility.SetSession("PayeeNumberOfStock", Convert.ToString(input.NumberOfStock));
@@ -97,22 +99,52 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
             }
         }
 
+
+        public double GetStockTypeById(int stockId)
+        {
+            try
+            {
+                var listParam = new List<KeyValuePair<string, string>>();
+                listParam.Add(new KeyValuePair<string, string>("stockTypeId", Convert.ToString(stockId)));
+                string errorMessage = string.Empty;
+                var response = new CallService().GetResponse<List<StockTypeRes>>("getMasterStockTypes", listParam, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    if (response != null)
+                    {
+                        if (response.Count > 0)
+                        {
+                            return response[0].msp;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return 0;
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult TransferStock(ShowProfile input) 
+        public IActionResult TransferStock(ShowProfile input)
         {
             try
             {
                 var sessionUtility = new SessionUtility();
                 string errorMessage = string.Empty;
-                var req = new {
+                var req = new
+                {
                     parentMobileNumber = sessionUtility.GetLoginSession().mobileNumber,
                     childMobileNumber = Convert.ToInt64(sessionUtility.GetStringSession("PayeeMobileNo")),
                     stockTypeId = Convert.ToInt32(sessionUtility.GetStringSession("StockTypeId")),
                     stockCount = Convert.ToInt32(sessionUtility.GetStringSession("PayeeNumberOfStock")),
-                    tpin = new PasswordHash().HashShA1(input.TPIN)//input.TPIN // new PasswordHash().HashShA1(input.TPIN)
+                    serviceChannelId=2,
+                    amount = GetStockTypeById(Convert.ToInt32(sessionUtility.GetStringSession("StockTypeId")))*Convert.ToInt32(sessionUtility.GetStringSession("PayeeNumberOfStock")),
+                    tPin = new PasswordHash().HashShA1(input.TPIN)//input.TPIN // new PasswordHash().HashShA1(input.TPIN)
                 };
-                var response = new CallService().PostResponse<string>("putCustomerStockTransafer", req,ref errorMessage);
+                var response = new CallService().PostResponse<string>("putCustomerStockTransafer", req, ref errorMessage);
                 var resp = new PaymentManagement.Models.PaymentTransferAck()
                 {
                     PayeeMobileNumber = sessionUtility.GetStringSession("PayeeMobileNo"),

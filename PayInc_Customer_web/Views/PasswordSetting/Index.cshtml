@@ -67,7 +67,7 @@
                                 <span class="nav-text font-weight-bold">Reset TPIN</span>
                             </a>
                         </li>
-                        
+
                     </ul>
                 </div>
             </div>
@@ -76,7 +76,7 @@
             <div class="card-body px-0">
                 <div class="tab-content pt-5">
                     <!--begin::Tab Content-->
-                    
+
                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
                         <form action="@Url.Action("ChangeMPIN","PasswordSetting")" id="changempin">
                             <div class="container">
@@ -88,8 +88,8 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">Old MPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m=>m.oldPassword,new { @class= "form-control form-control-lg form-control-solid",  placeholder = "Old MPIN", maxlength="8" })
-                                        @Html.ValidationMessageFor(m=>m.oldPassword,"",new { @class="text-danger" })
+                                        @Html.PasswordFor(m => m.oldPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "Old MPIN", maxlength = "8" })
+                                        @Html.ValidationMessageFor(m => m.oldPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -115,7 +115,7 @@
                                 <!--end::Timeline-->
                             </div>
                         </form>
-                        
+
                     </div>
                     <!--end::Tab Content-->
                     <!--begin::Tab Content-->
@@ -137,7 +137,7 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label">New TPIN</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        @Html.PasswordFor(m => m.newPassword,  new { @class = "form-control form-control-lg form-control-solid", placeholder = "New TPIN", maxlength = "8" })
+                                        @Html.PasswordFor(m => m.newPassword, new { @class = "form-control form-control-lg form-control-solid", placeholder = "New TPIN", maxlength = "8" })
                                         @Html.ValidationMessageFor(m => m.newPassword, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label"></label>
                                     <div class="col-lg-9 col-xl-6">
-                                       
+
                                         <button class="btn btn-primary ajax-button" type="submit" id="btn_tpin">Change TPIN</button>
                                     </div>
                                 </div>
@@ -165,24 +165,24 @@
                         <form action="@Url.Action("ResetTPIN","PasswordSetting")" id="resettpin">
                             <div class="container">
                                 @*<div class="row">
-                                    <div class="col-lg-9 col-xl-6 offset-xl-3">
-                                        <h3 class="font-size-h6 mb-5">Reset TPIN:</h3>
+                                        <div class="col-lg-9 col-xl-6 offset-xl-3">
+                                            <h3 class="font-size-h6 mb-5">Reset TPIN:</h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 text-right col-form-label">Mobile Number</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control form-control-lg form-control-solid" type="text" placeholder="Enter Mobile Number" />
-                                    </div>
-                                </div>*@
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 text-right col-form-label">Mobile Number</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control form-control-lg form-control-solid" type="text" placeholder="Enter Mobile Number" />
+                                        </div>
+                                    </div>*@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 text-right col-form-label"></label>
                                     <div class="col-lg-9 col-xl-6">
-                                        <input type="submit" value="Reset TPIN" class="btn btn-primary" id="btn_resettpin"/>
+                                        <input type="submit" value="Reset TPIN" class="btn btn-primary" id="btn_resettpin" />
                                     </div>
                                 </div>
                                 <!--end::Timeline-->
-                            </div> 
+                            </div>
                         </form>
                     </div>
                     <!--end::Tab Content-->
@@ -334,4 +334,4 @@
         });
     });
 </script>
-@*@Html.PartialAsync("_ValidationScriptsPartial")*@
+<partial name="_ValidationScriptsPartial" />

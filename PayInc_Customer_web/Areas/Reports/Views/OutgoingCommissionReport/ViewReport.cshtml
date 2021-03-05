@@ -1,0 +1,166 @@
+﻿@model List<PayInc_Customer_web.Areas.Reports.Models.OutgoingCommissionRes>
+@{
+    Layout = null;
+    var loginDetails = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
+}
+@if (Model != null)
+{
+    <table class="table table-bordered" id="tbl_ledger">
+        <thead>
+            <tr>
+                <td>Mobile Number</td>
+                <td>From Amount</td>
+                <td>To Amount</td>
+                <td>Operator Type</td>
+                <td>Operator</td>
+                @if (loginDetails.customerRoleId == 3)
+                {
+                    <td>Super Dist Comm.</td>
+                }
+                else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4)
+                {
+                    <td>Parnter Comm.</td>
+                }
+                else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5)
+                {
+                    <td>Distributor Comm.</td>
+                }
+                else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5 || loginDetails.customerRoleId == 6)
+                {
+                    <td>Retailer Comm.</td>
+                }
+                @if (loginDetails.customerRoleId == 3)
+                {
+                    <td>Super Dist. Ser. Chrg.</td>
+                }
+                else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4)
+                {
+                    <td>Partner Ser. Chrg.</td>
+                }
+                else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5)
+                {
+                    <td>Dist. Ser. Chrg.</td>
+                }
+                else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5 || loginDetails.customerRoleId == 6)
+                {
+                    <td>Retailer Ser. Chrg.</td>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(item.name+" - "+item.mobileNumber+" - "+item.customerRoleDesc)</td>
+                    <td>@item.fromAmount</td>
+                    <td>@item.toAmount</td>
+                    <td>@item.serviceProviderTypeName</td>
+                    <td>@item.serviceProviderName</td>
+                    @if (loginDetails.customerRoleId == 3)
+                    {
+                        <td>@item.cnfCommission</td>
+                    }
+                    else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4)
+                    {
+                        <td>@item.mdCommission</td>
+                    }
+                    else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5)
+                    {
+                        <td>@item.adCommission</td>
+                    }
+                    else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5 || loginDetails.customerRoleId == 6)
+                    {
+                        <td>@item.retailerCommission</td>
+                    }
+                    @if (loginDetails.customerRoleId == 3)
+                    {
+                        <td>@item.cnfServiceCharge</td>
+                    }
+                    else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4)
+                    {
+                        <td>@item.mdServiceCharge</td>
+                    }
+                    else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5)
+                    {
+                        <td>@item.adServiceCharge</td>
+                    }
+                    else if (loginDetails.customerRoleId == 3 || loginDetails.customerRoleId == 4 || loginDetails.customerRoleId == 5 || loginDetails.customerRoleId == 6)
+                    {
+                        <td>@item.retailerServiceCharge</td>
+                    }
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="text-center">
+        <div class="text-muted"><h3>Data not found.</h3></div>
+    </div>
+}
+<script>
+    $('#tbl_ledger').DataTable({
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+            'print'
+        ]
+    });
+    $("#tbl_ledger").on("click", ".btn_complaint", function () {
+        $(this).addClass("spinner spinner-right spinner-white pr-15");
+        var btn = $(this);
+        var id = $(this).attr("data-id");
+        $.ajax({
+            url: '/Reports/LedgerReport/BookComplaint',
+            type: "POST",
+            data: { txnId: id },
+            success: function (data) {
+                $(".btn_complaint").removeClass("spinner spinner-right spinner-white pr-15");
+                $(btn).attr("disabled", "disabled");
+                $(btn).text("Booked.");
+                Swal.fire(data, "", "success");
+            },
+            error: function (err) {
+                $(".btn_complaint").removeClass("spinner spinner-right spinner-white pr-15");
+                $(btn).attr("disabled", "disabled");
+                Swal.fire("Alert!", "", "error");
+            }
+        });
+    });
+</script>
+<style>
+    .dataTables_length {
+        display: none;
+    }
+    .dt-buttons {
+        display: none;
+    }
+</style>
+<script>
+    $(document).ready(function (e) {
+        $(".btn_complaint").click(function (e) {
+            alert("hii");
+            $(this).addClass("spinner spinner-right spinner-white pr-15");
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/Reports/LedgerReport/Complaint',
+                type: "POST",
+                data: { txnId: id },
+                success: function (data) {
+                    $(this).removeClass("spinner spinner-right spinner-white pr-15");
+                    Swal.fire("Complaint Booked!", "success");
+                },
+                error: function (err) {
+                    $(this).removeClass("spinner spinner-right spinner-white pr-15");
+                    Swal.fire("Alert!", "error");
+                }
+            });
+        });
+    });
+</script>

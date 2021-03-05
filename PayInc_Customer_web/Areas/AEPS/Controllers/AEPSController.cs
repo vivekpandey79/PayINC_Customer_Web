@@ -472,7 +472,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     requestRemarks = "Aadhar Pay",
                     serviceChannelId = 2,
                     transactionAmount = Convert.ToInt32(input.Amount),
-                    transactionType = "MS",
+                    transactionType = "AP",
                     virtualId = string.Empty
 
                 };
@@ -486,6 +486,7 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     response1.ClientTransactionId = allReqInput.merchantTransactionId;
                     response1.AEPSModeType = "Aadhar Pay";
                     response1.MobileNumber = input.CustomerNumber;
+                    response1.ResponseMessage = errorMessage;
                     return PartialView("AckView", response1);
                 }
                 else
@@ -494,8 +495,9 @@ namespace PayInc_Customer_web.Areas.AEPS.Controllers
                     response1.AadhaarNumber = input.AadharNumber;
                     response1.Amount = Convert.ToDecimal(input.Amount);
                     response1.ClientTransactionId = allReqInput.merchantTransactionId;
-                    response1.AEPSModeType = "Mini Statement Web";
+                    response1.AEPSModeType = "Aadhar Pay";
                     response1.MobileNumber = input.CustomerNumber;
+                    response1.ResponseMessage = errorMessage;
                     return PartialView("AckView", response1);
                 }
             }

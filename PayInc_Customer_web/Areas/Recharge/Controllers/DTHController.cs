@@ -65,11 +65,15 @@ namespace PayInc_Customer_web.Areas.Recharge.Controllers
                 }
                 else
                 {
+                    ViewData["OperatorName"] = operatorName;
+                    ViewData["AccountNo"] = accountName;
                     return PartialView("ViewPlan");
                 }
             }
             catch (Exception)
             {
+                ViewData["OperatorName"] = operatorName;
+                ViewData["AccountNo"] = accountName;
                 return PartialView("ViewPlan");
             }
         }

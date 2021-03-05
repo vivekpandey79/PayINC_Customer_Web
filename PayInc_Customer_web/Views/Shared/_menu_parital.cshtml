@@ -81,10 +81,8 @@
                         }
 
                         <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-
-
                             <a href="javascript:;" class="menu-link menu-toggle">
-                                <span class="fas fa-th-list @mp.menuIcon menu-icon"></span>
+                                <span class="@(@mp.menuIcon ?? "fas fa-th-list") menu-icon"></span>
                                 <span class="menu-text">
                                     @mp.menuText
                                 </span>

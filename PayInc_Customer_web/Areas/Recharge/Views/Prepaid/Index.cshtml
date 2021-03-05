@@ -31,7 +31,7 @@
                     </div>
                     <div class="wizard-step" data-wizard-type="step">
                         <div class="wizard-wrapper">
-                            <div class="wizard-number">4</div>
+                            <div class="wizard-number">3</div>
                             <div class="wizard-label">
                                 <div class="wizard-title">Receipt</div>
                                 <div class="wizard-desc">Transaction Receipt</div>
@@ -56,7 +56,7 @@
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label>Mobile Number</label>
-                                                        <input type="text" class="form-control" name="mobilenumber" placeholder="Enter Mobile Number" id="txtMobileNo" maxlength="10" autocomplete="off" autofocus />
+                                                        <input type="text" class="form-control" name="mobilenumber" placeholder="Enter Mobile Number" id="txtMobileNo" maxlength="10" autocomplete="off" autofocus  onkeypress="return NumericKey(event);"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
@@ -157,8 +157,8 @@
                     <input type="hidden" name="OperatorId" id="hdnOperatorId" />
                     <input type="hidden" name="OperatorNm" id="hdnOperator" />
                     <input type="hidden" name="Amount" id="hdnAmount" />
-                    <div class="row  d-flex flex-center">
-                        <div class="col-6">
+                    <div class="row d-flex flex-center">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label>Mobile Number:</label>
                                 <label id="lblMobileNo" class="form-control form-control-solid"></label>
@@ -238,11 +238,11 @@
     });
     $("#form_transaction").submit(function (e) {
         e.preventDefault();
-        $("#btn_step3").attr("disabled", "disabled");
-        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
-        if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "") {
+        if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "" || $("#digit-7").val() === "" || $("#digit-8").val() === "") {
             return;
         }
+        $("#btn_step3").attr("disabled", "disabled");
+        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
         $.ajax({
             url: "/Recharge/Prepaid/DoTransaction",
             type: "POST",

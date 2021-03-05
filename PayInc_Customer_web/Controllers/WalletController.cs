@@ -7,7 +7,7 @@ using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Controllers
 {
-
+    [Authentication]
     public class WalletController : Controller
     {
         public JsonResult GetBalance()

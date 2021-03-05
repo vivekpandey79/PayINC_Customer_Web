@@ -124,5 +124,21 @@ namespace PayInc_Customer_web.Controllers
                 return Json(new { success = false, errorMessage = ex.Message });
             }
         }
+        
+        public void GetMarquee(int roleId)
+        {
+            var listParams = new List<KeyValuePair<string, string>>();
+            listParams.Add(new KeyValuePair<string, string>("customerRoleId", Convert.ToString(roleId)));
+            string errorMessage = string.Empty;
+            var response1 = new CallService().GetResponse<List<ProfileResponse>>("getDetailsdashboardmarquee", listParams, ref errorMessage);
+            if (string.IsNullOrEmpty(errorMessage))
+            {
+                
+            }
+            else
+            {
+
+            }
+        }
     }
 }

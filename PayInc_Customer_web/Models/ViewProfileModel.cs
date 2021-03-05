@@ -54,6 +54,22 @@ namespace PayInc_Customer_web.Models
         public decimal? customerUnclearBalance { get; set; }
         public decimal? customerSystemReservedBalance { get; set; }
         public decimal? customerEffectiveBalance { get; set; }
+        public long? paretMobileNumber { get; set; }
+        public string parentName { get; set; }
+        public string area { get; set; }
+        public string districtName { get; set; }
+        public string stateName { get; set; }
+
+
+
+        public decimal? aepsMainAccountBalance { get; set; }
+        public decimal? aepsFundsInClearing { get; set; }
+        public double? aepsFloatBalance { get; set; }
+        public decimal? aepsOverDueLiability { get; set; }
+        public decimal? aepsUnclearBalance { get; set; }
+        public decimal? aepsSystemReservedBalance { get; set; }
+        public decimal? aepsEffectiveBalance { get; set; }
+
         public string customerRole { get; set; }
         public string customerRoleDesc { get; set; }
         public int? walletTypeId { get; set; }

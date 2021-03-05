@@ -40,8 +40,8 @@ namespace PayInc_Customer_web.Controllers
             var result = httpContextAccessor.HttpContext.Session.GetString("LoginDetails");
             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResData>(result);
             string errorMessage = string.Empty;
-            var parameter = new { customerId = obj.customerId, passwordType = 2, oldPassword = req.oldPassword, newPassword = req.newPassword };
-            var response = new CallService().PostResponse<ChangePasswordResponse>(APIMethodConst.ChangePassword, parameter, ref errorMessage);
+            var parameter = new { customerId = obj.customerId, passwordType = 2, oldPassword = HashShA1(req.oldPassword), newPassword = HashShA1(req.newPassword) };
+            var response = new CallService().PostResponse<int>(APIMethodConst.ChangePassword, parameter, ref errorMessage);
             if (string.IsNullOrEmpty(errorMessage))
             {
                 return Json(new { success = true, errorMessage = "Password Changed" });

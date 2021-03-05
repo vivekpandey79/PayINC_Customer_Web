@@ -1,0 +1,58 @@
+﻿@model List<PayInc_Customer_web.Areas.Reports.Models.GetNetworkUsage>
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    <table class="table table-bordered" id="tbl_ledger">
+        <thead>
+            <tr>
+                <td>Customer Name</td>
+                <td>Mobile Number</td>
+                <td>Outlet Name</td>
+                <td>Prepaid Usage</td>
+                <td>DTH Usage</td>
+                <td>PostPaid Usage</td>
+                <td>Utility Usage</td>
+                <td>Wallet Usage</td>
+                <td>MicroATM Usage</td>
+                <td>DMT Usage</td>
+                <td>Insurance Usage</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.customerName</td>
+                    <td>@item.mobileNumber</td>
+                    <td>@item.outletName</td>
+                    <td>@item.mobileUsage</td>
+                    <td>@item.dthUsage</td>
+                    <td>@item.postPaidUsage</td>
+                    <td>@item.utilityUsage</td>
+                    <td>@item.walletUsage</td>
+                    <td>@item.microAtmUsage</td>
+                    <td>@item.dmtUsage</td>
+                    <td>@item.insuranceUsage</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="text-center">
+        <div class="text-muted"><h3>Data not found.</h3></div>
+    </div>
+}
+<script>
+    $('#tbl_ledger').DataTable({
+        responsive: true,
+    });
+</script>
+<style>
+    .dataTables_length {
+        display: none;
+    }
+</style>

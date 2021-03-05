@@ -15,6 +15,8 @@ namespace PayInc_Customer_web.Areas.Recharge.Models
         public long MobileNumber { get; set; }
         [Required(ErrorMessage = "Please select operator")]
         public int? OperatorId { get; set; }
+        [Required(ErrorMessage = "Please enter amount")]
+        [Range(10, Int64.MaxValue,ErrorMessage ="Amount should be 10 or greater than 10")]
         public long Amount { get; set; }
     }
     public class OperatorResponse

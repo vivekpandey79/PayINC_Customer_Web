@@ -15,24 +15,28 @@
                         <td>MobileNumber</td>
                         <td>EmailAddress</td>
                         <td>Role</td>
+                        <td>ASM Name</td>
+                        <td>ASM Mobile No</td>
                         <td>Action</td>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@(item.firstName+" "+item.lastName)</td>
-                            <td>@item.mobileNumber</td>
-                            <td>@item.emailAddress</td>
-                            <td>@item.customerRoleDesc</td>
-                            <td>
-                                @if (item.customerRoleDesc.Trim() == "DISTRIBUTOR")
-                                {
-                                    <a href="@Url.Action("ViewNetwork","ViewNetworks",new { customerId=item.customerId })" class="btn btn-light-success font-weight-bolder font-size-sm view-network">View Networks</a>
-                                }
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>@(item.firstName+" "+item.lastName)</td>
+                        <td>@item.mobileNumber</td>
+                        <td>@item.emailAddress</td>
+                        <td>@item.customerRoleDesc</td>
+                        <td>@(item.employeeName ?? "NA")</td>
+                        <td>@(item.employeeMobileNo ?? "NA")</td>
+                        <td>
+                            @if (item.customerRoleDesc.Trim() == "DISTRIBUTOR")
+                            {
+                                <a href="@Url.Action("ViewNetwork","ViewNetworks",new { customerId=item.customerId })" class="btn btn-light-success font-weight-bolder font-size-sm view-network">View Networks</a>
+                            }
+                        </td>
+                    </tr>
                         <tr style="display:none" class="network-row">
                             <td colspan="999">
                                 <div class="d-flex justify-content-center">

@@ -126,7 +126,7 @@
                     <input type="hidden" name="OperatorId" id="hdnOperatorId" />
                     <input type="hidden" name="Amount" id="hdnAmount" />
                     <div class="row  d-flex flex-center">
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label>Account Number:</label>
                                 <label id="lblMobileNo" class="form-control form-control-solid"></label>
@@ -202,29 +202,53 @@
                     }
                 }
             }
+            else {
+                $(next).select();
+            }
         });
     });
     $("#form_transaction").submit(function (e) {
         e.preventDefault();
-        $("#btn_step3").attr("disabled", "disabled");
-        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
         if ($("#digit-1").val() === "" || $("#digit-2").val() === "" || $("#digit-3").val() === "" || $("#digit-4").val() === "" || $("#digit-5").val() === "" || $("#digit-6").val() === "") {
             return;
         }
+        $("#btn_step3").attr("disabled", "disabled");
+        $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
         $.ajax({
             url: "/BBPS/BBPS/DoTransaction",
             type: "POST",
             data: $("#form_transaction").serialize(),
             success: function (data) {
+                $(".loader").hide();
                 $("#btn_step3").removeAttr("disabled");
-                $("#btn_step3").addClass("spinner spinner-right spinner-white pr-15");
-                $('#mymodal').modal('hide');
-                $("#txn_panel").html(data);
-                var _wizard = new KTWizard("kt_wizard", {
-                    startStep: 1, // initial active step number
-                    clickableSteps: true  // allow step clicking
-                });
-                _wizard.goTo(4);
+                $("#btn_step3").removeClass("spinner spinner-right spinner-white pr-15");
+                try {
+                    var checkError = data.errorMessage;
+                    if (typeof (checkError) !== "undefined") {
+                        toastr.error(checkError, "Alert");
+                        return false;
+                    }
+                    else {
+                        $('#mymodal').modal('hide');
+                        $("#txn_panel").html(data);
+                        var _wizard = new KTWizard("kt_wizard", {
+                            startStep: 1, // initial active step number
+                            clickableSteps: true  // allow step clicking
+                        });
+                        _wizard.goTo(4);
+                    }
+                }
+                catch (error) {
+                    $('#mymodal').modal('hide');
+                    $("#txn_panel").html(data);
+                    var _wizard = new KTWizard("kt_wizard", {
+                        startStep: 1, // initial active step number
+                        clickableSteps: true  // allow step clicking
+                    });
+                    _wizard.goTo(4);
+                }
+                
+                
             },
             error: function (er) {
                 $('#mymodal').modal('hide');

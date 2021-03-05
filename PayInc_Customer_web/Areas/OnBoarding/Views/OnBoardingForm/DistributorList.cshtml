@@ -1,22 +1,76 @@
-﻿<div class="row">
+﻿@model PayInc_Customer_web.Areas.OnBoarding.Models.DistributorInputReq
+<div class="row">
     <div class="col-4" id="show_pan_verify_panel">
-        <form class="form" id="submit_dist_form" method="post" action="@Url.Action("VerifyMethod","OnBoardingForm")">
-            @if (ViewData["ADCustomerName"] != null)
+        <form class="form" id="submit_dist_form" method="post" action="@Url.Action("VerifyMethod", "OnBoardingForm")">
+            @{
+                var sessionUtility = new PayInc_Customer_web.Utility.SessionUtility();
+            }
+
+            @if (sessionUtility.GetStringSession("BoardingRoleName") == "retailer")
             {
-                <div class="form-group">
-                    <label>Distributor</label>
-                   <input type="text" class="form-control form-control-solid" name="ddlADlist" placeholder="PARTNER"  value="@ViewData["ADCustomerName"]"  readonly />
-                </div>
+                if (ViewData["ADCustomerName"] != null)
+                {
+                    <div class="form-group">
+                        <label>Distributor</label>
+                        <input type="text" class="form-control form-control-solid" name="ddlADlist" placeholder="PARTNER" value="@ViewData["ADCustomerName"]" readonly />
+                    </div>
+                }
+                else
+                {
+                    if (ViewBag.ADList != null)
+                    {
+                        <div class="form-group">
+                            <label>Select Distributor</label>
+                            @Html.DropDownList("ddlADlist", new SelectList(ViewBag.ADList, "customerId", "mobileNumber"), "--SELECT DISTRIBUTOR--", new { @class = "form-control" })
+                        </div>
+                    }
+                }
             }
             else
             {
-                if (ViewBag.ADList != null)
+
+                var list = new List<SelectListItem>();
+                if (sessionUtility.GetLoginSession().customerRoleId == 3)
                 {
-                    <div class="form-group">
-                        <label>Select Distributor</label>
-                        @Html.DropDownList("ddlADlist", new SelectList(ViewBag.ADList, "customerId", "mobileNumber"), "--SELECT DISTRIBUTOR--", new { @class = "form-control" })
+                    list.Add(new SelectListItem { Text = "Partner", Value = "4" });
+                    list.Add(new SelectListItem { Text = "Distributor", Value = "5" });
+                }
+                else
+                {
+                    list.Add(new SelectListItem { Text = "Distributor", Value = "5" });
+                }
+
+                <div class="form-group">
+                    <label>Select Role</label>
+                    @Html.DropDownListFor(m => m.RoleType,
+                   list, "--SELECT Role--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.RoleType, null, new { @class = "text-danger" })
+                </div>
+
+                @if (ViewBag.NetworkList != null)
+                {
+                    <div class="form-group" id="ddl_partner_panel">
+                        <label>Select Partner</label>
+                        @Html.DropDownListFor(m => m.PartnerId, new SelectList(ViewBag.NetworkList, "customerId", "mobileNumber"), "--SELECT Partner--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.PartnerId, null, new { @class = "text-danger" })
                     </div>
                 }
+                @if (sessionUtility.GetLoginSession().customerRoleId == 3 || sessionUtility.GetLoginSession().customerRoleId == 4)
+                {
+                    <div class="form-group" id="ddl_distributor_panel">
+                        <label>Select Distributor</label>
+                        @Html.DropDownListFor(m => m.DistributorId, new List<SelectListItem> { new SelectListItem { } }, "--SELECT Distributor--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DistributorId, null, new { @class = "text-danger" })
+                    </div>
+                }
+                else if (sessionUtility.GetLoginSession().customerRoleId == 5)
+                {
+                    <div class="form-group">
+                        <label>Distributor</label>
+                        <input type="text" class="form-control form-control-solid" name="ddlADlist" placeholder="Distributor" value="@ViewData["ADCustomerName"]" readonly />
+                    </div>
+                }
+
             }
             <div class="form-group">
                 <button type="submit" id="btn_submit_dist" class="btn btn-primary btn-block font-weight-bolder">Submit  <span class="loader" style="display:none;"></span></button>
@@ -24,6 +78,61 @@
         </form>
     </div>
 </div>
-
-
 <script src="~/js/onboarding_wizard.js"></script>
+<script>
+    $("#PartnerId").change(function (e) {
+        if ($("#PartnerId").val() == "") {
+            $("#DistributorId").empty();
+            $("#DistributorId").append($("<option></option>").val('').html('-- Loading --'));
+            return;
+        }
+        $("#DistributorId").empty();
+        $("#DistributorId").append($("<option></option>").val('').html('-- Loading --'));
+        $.ajax({
+            url: "/OnBoarding/OnBoardingForm/GetLowerNetworkChain",
+            type: "POST",
+            data: { customerId: $("#PartnerId").val() },
+            success: function (res) {
+                $("#DistributorId").empty();
+                $("#DistributorId").append($("<option></option>").val('').html('-- Select Distributor --'));
+                $.each(res.responseData, function (data, value) {
+                    $("#DistributorId").append($("<option></option>").val(value.customerId).html(value.mobileNumber));
+                })
+            },
+            error: function (data) {
+            }
+        });
+    });
+    $("#DistributorId").change(function (e) {
+        $.ajax({
+            url: "/OnBoarding/OnBoardingForm/GetLowerNetworkChain",
+            type: "POST",
+            data: { customerId: $("#DistributorId").val() },
+            success: function (res) {
+                $("#ddlDistlist2").empty();
+                $("#ddlDistlist2").append($("<option></option>").val('').html('-- Select  Distributer--'));
+                $.each(res.responseData, function (data, value) {
+                    $("#ddlDistlist2").append($("<option></option>").val(value.customerId).html(value.mobileNumber));
+                })
+            },
+            error: function (data) {
+            }
+        });
+    });
+    $("#RoleType").change(function (e) {
+        if ($(this).val() == "4") {
+            $("#ddl_partner_panel").show();
+            $("#ddl_distributor_panel").show();
+        }
+        else if ($(this).val() == "5") {
+            $("#ddl_partner_panel").show();
+            $("#ddl_distributor_panel").hide();
+        }
+        else {
+            $("#ddl_partner_panel").hide();
+            $("#ddl_distributor_panel").hide();
+        }
+    });
+</script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

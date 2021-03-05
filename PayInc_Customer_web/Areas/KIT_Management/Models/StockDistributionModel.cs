@@ -29,7 +29,7 @@ namespace PayInc_Customer_web.Areas.KIT_Management.Models
         public string customerRole { get; set; }
         public string customerRoleDesc { get; set; }
         public string StockType { get; set; }
-
+        public double StockAmount { get; set; }
         public int NumberOfStock { get; set; }
         [Required]
         public string TPIN { get; set; }

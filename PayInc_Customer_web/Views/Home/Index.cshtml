@@ -33,7 +33,7 @@
                         foreach (var item in listImage)
                         {
                             <div class="carousel-item @(listImage.First()==item ? " active":"") ">
-                                <img src="@item.imageUrl" class="img-fluid" />
+                                <img src="@item.imageUrl" class="img-fluid" style="width:590px;height:255px"/>
                             </div>
                         }
                     }
@@ -41,7 +41,7 @@
                     {
                         <div class="carousel-item active">
                             <div class="flex-grow-1 bg-warning p-12  card-rounded flex-grow-1 bgi-no-repeat"
-                                 style="background-position: right bottom;background-size: 55% auto;background-image: url(assets/media/svg/patterns/aare.svg)">
+                                 style="background-position: right bottom;background-size: 55% auto;background-image: url(/assets/media/svg/patterns/aare.svg)">
                                 <h3 class="text-inverse-info pb-5 font-weight-bolder">Recharge Now</h3>
                                 <p class="text-inverse-info pb-5 font-size-h6">
                                     Offering best commission
@@ -179,7 +179,7 @@
                                         <span class="navi-icon">
                                             <i class="flaticon2-shopping-cart-1"></i>
                                         </span>
-                                        <span class="navi-text">Network Lsit</span>
+                                        <span class="navi-text">Network List</span>
                                     </a>
                                 </li>
                                 <li class="navi-item">
@@ -248,7 +248,7 @@
                                     </g>
                                 </svg>
                             </span>
-                            <a href="#" class="text-danger font-weight-bold font-size-h6 mt-2">Network Payment: </a>
+                            <a href="#" class="text-danger font-weight-bold mt-2">Payment: </a>
                             <span class="text-danger font-weight-bold mt-1 mb-1" id="lblNetworkPaymentRec"><span class="fas fa-circle-notch fa-spin text-danger"></span></span>
 
                         </div>
@@ -262,7 +262,7 @@
                                     </g>
                                 </svg>
                             </span>
-                            <a href="#" class="text-success font-weight-bold font-size-h6 mt-2">Network Commission: </a>
+                            <a href="#" class="text-success font-weight-bold mt-2">Commission: </a>
                             <span class="text-success font-weight-bold mt-1 mb-1" id="lblNetworkCommissionRec"><span class="fas fa-circle-notch fa-spin text-success"></span></span>
 
                         </div>

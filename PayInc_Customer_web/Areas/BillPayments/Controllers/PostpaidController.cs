@@ -57,6 +57,17 @@ namespace PayInc_Customer_web.Areas.BillPayments.Controllers
                 };
                 string errorMessage = string.Empty;
                 var response = new CallService().PostTransaction<TransactionResult>("doRecharge", req, ref errorMessage);
+                if (response != null)
+                {
+                    if (response.response != null)
+                    {
+                        if (response.response.statusCode== "1002")
+                        {
+                            return Json(new { success=false, errorMessage=response.response.message });
+                        }
+                        response.response.OperatorNm = Convert.ToString(fc["OperatorNm"]).Trim();
+                    }
+                }
                 return PartialView("AckView", response);
 
             }

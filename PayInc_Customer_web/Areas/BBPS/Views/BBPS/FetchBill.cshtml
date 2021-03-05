@@ -42,7 +42,8 @@
                                 <div class="input-group-prepend">
                                     <span class="fas fa-rupee-sign font-size-h3 text-primary ml-5 mr-5"></span>
                                 </div>
-                                <input type="tel" name="billamount" class="form-control font-weight-bold font-size-h3 text-primary" value="@Model.addinfo.bill_amount" id="txtamount" />
+                                @Html.TextBoxFor(m=>m.BillAmount,new { @class="form-control", placeholder="Enter Bill Amount", value= Model.addinfo.bill_amount, onkeypress = "return NumericKey(event);",  maxlength = "5", id = "txtamount" })
+                                @Html.ValidationMessageFor(m=>m.BillAmount,"",new { @class="text-danger" })
                             </div>
                         </div>
                     }
@@ -63,6 +64,9 @@ else
     <form action="" method="post" id="form_bill_fetch">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="row mb-10">
+                    <b class="mr-5">Operator: </b> @ViewData["ServiceProviderNm"]
+                </div>
                 @if (ViewBag.InputData != null)
                 {
                     var inputData = (List<PayInc_Customer_web.Areas.BBPS.Models.InputParamsRes>)(ViewBag.InputData);
@@ -73,13 +77,17 @@ else
                         </div>
                     }
                 }
+                <div>
+                </div>
                 <div class="row mb-10">
                     <div class="input-group input-group-solid">
                         <div class="input-group-prepend">
                             <span class="fas fa-rupee-sign font-size-h3 text-primary ml-5 mr-5"></span>
                         </div>
-                        <input type="tel" name="billamount" placeholder="Enter Bill Amount" class="form-control font-weight-bold font-size-h3 text-primary" value="" id="txtamount" />
+                        @Html.TextBoxFor(m => m.BillAmount, new { @class = "form-control", placeholder = "Enter Bill Amount", onkeypress = "return NumericKey(event);", maxlength = "5", id= "txtamount" })
+                        @Html.ValidationMessageFor(m => m.BillAmount, "", new { @class = "text-danger" })
                     </div>
+                    <span class="form-text text-muted" id="word"></span>
                 </div>
                 <div class="row mb-10">
                     <button type="submit" id="btn_step_3" class="btn btn-block btn-primary">Pay Bill</button>

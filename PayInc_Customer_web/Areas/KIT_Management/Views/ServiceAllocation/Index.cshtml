@@ -1,0 +1,87 @@
+﻿@model List<PayInc_Customer_web.Areas.KIT_Management.Models.ServiceAllocationResponse>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Purchase Services";
+}
+
+<div class="card card-custom gutter-b">
+    <div class="card-body">
+        <div class="col-lg-8 col-sm-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Stock Type</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.stockType</td>
+                                <td>
+                                    @if (item.isAllocated == false)
+                                    {
+                                        <a href="@Url.Action("Details","ServiceAllocation",new { stockTypeId=item.stockTypeId,stockType=item.stockType})" data-modal="" data-toggle="modal" class="btn btn-sm btn-primary"><span class="far fa-edit"></span>Purchase Now</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success"><span class="far fa-check-circle"></span> Allocated</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                <span class="text-center">@ViewData["ErrorMessage"]</span>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="myModalContent">
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $("a[data-modal]").on("click", function (e) {            
+            $('#myModalContent').load(this.href, function () {
+                $('#myModal').modal({
+                    keyboard: true
+                }, 'show');
+                StopLoading();
+                bindForm(this);
+            });
+            return false;
+        });
+    });
+</script>
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        toastr.success("@TempData["SuccessMessage"]", "Success");
+    </script>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+    toastr.error("@TempData["ErrorMessage"]", "Alert");
+    </script>
+}
+
+<partial name="_ValidationScriptsPartial">

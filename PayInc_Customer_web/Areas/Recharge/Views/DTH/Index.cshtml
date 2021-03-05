@@ -97,7 +97,7 @@
                                                     <button type="button" class="btn btn-block btn-secondary font-weight-bolder prev-step" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-sm-12">
-                                                    <button type="button" id="btn_step2" class="btn btn-block btn-primary font-weight-bolder">Next</button>
+                                                    <button type="submit" class="btn btn-block btn-primary font-weight-bolder">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,8 +174,8 @@
                     <input type="hidden" name="OperatorId" id="hdnOperatorId" />
                     <input type="hidden" name="OperatorNm" id="hdnOperator" />
                     <input type="hidden" name="Amount" id="hdnAmount" />
-                    <div class="row  d-flex flex-center">
-                        <div class="col-6">
+                    <div class="row d-flex flex-center">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label>Account Number:</label>
                                 <label id="lblMobileNo" class="form-control form-control-solid"></label>
@@ -270,8 +270,8 @@
                 $('#mymodal').modal('hide');
                 $("#txn_panel").html(data);
                 var _wizard = new KTWizard("kt_wizard", {
-                    startStep: 1, // initial active step number
-                    clickableSteps: true  // allow step clicking
+                    startStep: 1,
+                    clickableSteps: true
                 });
                 _wizard.goTo(4);
             },

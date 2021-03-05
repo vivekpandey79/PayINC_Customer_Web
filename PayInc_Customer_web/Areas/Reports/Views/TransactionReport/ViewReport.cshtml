@@ -83,6 +83,14 @@ else
 <script>
     $('#tbl_ledger').DataTable({
         responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+            'print'
+        ]
     });
     $("#tbl_ledger").on("click", ".btn_complaint", function () {
         $(this).addClass("spinner spinner-right spinner-white pr-15");
@@ -108,6 +116,9 @@ else
 </script>
 <style>
     .dataTables_length {
+        display: none;
+    }
+    .dt-buttons {
         display: none;
     }
 </style>

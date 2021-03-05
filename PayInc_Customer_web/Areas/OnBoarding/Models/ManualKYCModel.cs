@@ -496,4 +496,182 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
 
 
     #endregion
+
+
+    #region Get Customer Boading
+    public class DetailsCustomerOnboarding
+    {
+        public int onboardingId { get; set; }
+        public int customerId { get; set; }
+        public long customerNumber { get; set; }
+        public string panCardNumber { get; set; }
+        public string firstName { get; set; }
+        public string middleName { get; set; }
+        public string lastName { get; set; }
+        public string fatherName { get; set; }
+        public string dob { get; set; }
+        public int parentCustomerId { get; set; }
+        public string submittedOn { get; set; }
+        public int submittedBy { get; set; }
+        public int onboardingStatus { get; set; }
+        public string kycChannel { get; set; }
+        public string updateOn { get; set; }
+        public int updatedBy { get; set; }
+        public string remarks { get; set; }
+        public int employeeId { get; set; }
+        public string customerKYCStatus { get; set; }
+        public string customerName { get; set; }
+        public string parentName { get; set; }
+        public string parentOutletName { get; set; }
+        public string customerOutletName { get; set; }
+        public int parentCommissionTemplateId { get; set; }
+    }
+
+    public class DetailsKycPanOcrInfo
+    {
+        public int panOCRInformationId { get; set; }
+        public int onboardingId { get; set; }
+        public string nameonPancard { get; set; }
+        public string fatherName { get; set; }
+        public int dob { get; set; }
+        public string dateOfBirth { get; set; }
+        public string imagePath { get; set; }
+        public string submittedOnDate { get; set; }
+        public string submittedOnTime { get; set; }
+        public int submittedBy { get; set; }
+        public int kycStatus { get; set; }
+        public string approvedOnDate { get; set; }
+        public string approvedOnTime { get; set; }
+        public int approvedBy { get; set; }
+        public int remarks { get; set; }
+        public string panOCRInfo1 { get; set; }
+        public string customerKYCStatus { get; set; }
+        public string remarksDescription { get; set; }
+    }
+
+    public class DetailsKycBasicInfo
+    {
+        public int basicInformationId { get; set; }
+        public int onboardingId { get; set; }
+        public string emailId { get; set; }
+        public int genderId { get; set; }
+        public int maritalStatusId { get; set; }
+        public string casteCategory { get; set; }
+        public int serviceProviderId { get; set; }
+        public string physicalStatus { get; set; }
+        public string occupationType { get; set; }
+        public string entityType { get; set; }
+        public string alternateNumber { get; set; }
+        public string submittedOnDate { get; set; }
+        public string submittedOnTime { get; set; }
+        public int submittedBy { get; set; }
+        public int kycStatus { get; set; }
+        public string approvedOnDate { get; set; }
+        public string approvedOnTime { get; set; }
+        public int approvedBy { get; set; }
+        public int remarks { get; set; }
+        public string basicInfo1 { get; set; }
+        public string basicInfo2 { get; set; }
+        public string customerKYCStatus { get; set; }
+        public string serviceProviderName { get; set; }
+        public string maritalStatusName { get; set; }
+        public string genderName { get; set; }
+        public string remarksDescription { get; set; }
+    }
+
+    public class DetailsKycOutletInfo
+    {
+        public int outletInformationId { get; set; }
+        public int onboardingId { get; set; }
+        public string outletName { get; set; }
+        public int outletCategoryId { get; set; }
+        public int outletDistrictId { get; set; }
+        public int outletAreaId { get; set; }
+        public int outletPinCode { get; set; }
+        public string outletLandmark { get; set; }
+        public string outletAddress { get; set; }
+        public string occupationDuration { get; set; }
+        public string outletLatitude { get; set; }
+        public string outletLongitude { get; set; }
+        public string submittedOnDate { get; set; }
+        public string submittedOnTime { get; set; }
+        public int submittedBy { get; set; }
+        public int kycStatus { get; set; }
+        public string approvedOnDate { get; set; }
+        public string approvedOnTime { get; set; }
+        public int approvedBy { get; set; }
+        public int remarks { get; set; }
+        public string outletInfo1 { get; set; }
+        public string outletInfo2 { get; set; }
+        public string area { get; set; }
+        public string districtName { get; set; }
+        public string stateName { get; set; }
+        public string countryName { get; set; }
+        public string customerKYCStatus { get; set; }
+        public string customerCategory { get; set; }
+        public string remarksDescription { get; set; }
+    }
+
+    public class DetailsKycResidentialInfo
+    {
+        public int residentialInformationId { get; set; }
+        public int onboardingId { get; set; }
+        public int residentialDistrictId { get; set; }
+        public int residentialAreaId { get; set; }
+        public int residentialPinCode { get; set; }
+        public string residentialLandmark { get; set; }
+        public string residentialAddress { get; set; }
+        public string submittedOnDate { get; set; }
+        public string submittedOnTime { get; set; }
+        public int submittedBy { get; set; }
+        public int kycStatus { get; set; }
+        public string approvedOnDate { get; set; }
+        public string approvedOnTime { get; set; }
+        public int approvedBy { get; set; }
+        public int remarks { get; set; }
+        public string residentialInfo1 { get; set; }
+        public string residentialInfo2 { get; set; }
+        public string area { get; set; }
+        public string districtName { get; set; }
+        public string stateName { get; set; }
+        public string countryName { get; set; }
+        public string customerKYCStatus { get; set; }
+        public string remarksDescription { get; set; }
+    }
+
+    public class DetailsKycBankInfo
+    {
+        public int bankInformationId { get; set; }
+        public int onboardingId { get; set; }
+        public int bankAccountTypeId { get; set; }
+        public int bankId { get; set; }
+        public string accountName { get; set; }
+        public string accountNumber { get; set; }
+        public string ifscCode { get; set; }
+        public string imagePath { get; set; }
+        public string submittedOnDate { get; set; }
+        public string submittedOnTime { get; set; }
+        public int submittedBy { get; set; }
+        public int kycStatus { get; set; }
+        public string approvedOnDate { get; set; }
+        public string approvedOnTime { get; set; }
+        public int approvedBy { get; set; }
+        public int remarks { get; set; }
+        public string bankInfo1 { get; set; }
+        public string bankAccountTypeName { get; set; }
+        public string bankName { get; set; }
+        public string customerKYCStatus { get; set; }
+        public string remarksDescription { get; set; }
+    }
+    public class OnBoardingCustomer
+    {
+        public List<DetailsCustomerOnboarding> detailsCustomerOnboarding { get; set; }
+        public List<DetailsKycPanOcrInfo> detailsKycPanOcrInfo { get; set; }
+        public List<DetailsKycBasicInfo> detailsKycBasicInfo { get; set; }
+        public List<DetailsKycOutletInfo> detailsKycOutletInfo { get; set; }
+        public List<DetailsKycResidentialInfo> detailsKycResidentialInfo { get; set; }
+        public List<DetailsKycBankInfo> detailsKycBankInfo { get; set; }
+    }
+
+    #endregion
 }

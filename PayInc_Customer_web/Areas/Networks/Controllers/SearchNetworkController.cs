@@ -25,7 +25,7 @@ namespace PayInc_Customer_web.Areas.Networks.Controllers
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(new SessionUtility().GetLoginSession().customerId)));
                 string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<List<OnBoarding.Models.LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
+                var response = new CallService().GetResponse<List<OnBoarding.Models.LowChainResponse>>("getLowerAllCustomerNetwork", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     if (response.Count > 0)
@@ -57,6 +57,22 @@ namespace PayInc_Customer_web.Areas.Networks.Controllers
                 var response = new CallService().GetResponse<ProfileResponse>("getCustomerDetailsByMobileNo", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
+                    var listParam1 = new List<KeyValuePair<string, string>>();
+                    listParam1.Add(new KeyValuePair<string, string>("CustomerId",Convert.ToString(response.customerId)));
+                    string errorMessage1 = string.Empty;
+                    var response1 = new CallService().GetResponse<List<WalletRes>>(APIMethodConst.GetBalanceByCustomerId, listParam1, ref errorMessage1);
+                    if (string.IsNullOrEmpty(errorMessage1))
+                    {
+                        if (response1.Where(m => m.walletTypeId == 2).ToList().Count>0)
+                        {
+                            response.aepsEffectiveBalance = response1.Where(m => m.walletTypeId == 2).FirstOrDefault().customerEffectiveBalance;
+                            response.aepsFloatBalance = response1.Where(m => m.walletTypeId == 2).FirstOrDefault().customerFloatBalance;
+                            response.aepsMainAccountBalance = response1.Where(m => m.walletTypeId == 2).FirstOrDefault().customerMainAccountBalance;
+                            response.aepsSystemReservedBalance = response1.Where(m => m.walletTypeId == 2).FirstOrDefault().customerSystemReservedBalance;
+                            response.aepsOverDueLiability = response1.Where(m => m.walletTypeId == 2).FirstOrDefault().customerOverDueLiability;
+                            response.aepsFundsInClearing = response1.Where(m => m.walletTypeId == 2).FirstOrDefault().customerFundsInClearing;
+                        }
+                    }
                     return View("ViewProfile", response);
                 }
                 else

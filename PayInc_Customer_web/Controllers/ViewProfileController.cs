@@ -27,7 +27,17 @@ namespace PayInc_Customer_web.Controllers
                 {
                     if (response.Count>1)
                     {
-                        response[0].aepsBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerEffectiveBalance;
+                        for (int i = 0; i < response.Count; i++)
+                        {
+                            response[i].aepsEffectiveBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerEffectiveBalance;
+                            response[i].aepsFloatBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerFloatBalance;
+                            response[i].aepsMainAccountBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerMainAccountBalance;
+                            response[i].aepsSystemReservedBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerSystemReservedBalance;
+                            response[i].aepsOverDueLiability = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerOverDueLiability;
+                            response[i].aepsFundsInClearing = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerFundsInClearing;
+                            response[i].aepsBalance = response.Where(m => m.walletTypeId == 2).FirstOrDefault().customerEffectiveBalance;
+                        }
+                        response = response.Where(m => m.walletTypeId == 1).ToList();
                     }
                     return View(response[0]);
                 }

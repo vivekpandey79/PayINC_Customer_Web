@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,7 +64,9 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
         public string lastName { get; set; }
         public string emailAddress { get; set; }
         public string customerAccountStatus { get; set; }
-
+        public int employeeId { get; set; }
+        public string employeeName { get; set; }
+        public string employeeMobileNo { get; set; }
     }
 
     public class AllInputs
@@ -105,4 +108,45 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Models
     }
     #endregion
 
+
+    public class DistributorInputReq
+    {
+        [Required]
+        public string RoleType { get; set; }
+        [Required(ErrorMessage = "Select Partner Chain")]
+        public string PartnerId { get; set; }
+        [Required(ErrorMessage = "Select Distributor Chain")]
+        public string DistributorId { get; set; }
+    }
+
+
+
+    public class EmployeeResponse
+    {
+        public int EmployeeId { get; set; }
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string EmailId { get; set; }
+        public string MobileNumber { get; set; }
+        public int ParentEmployeeId { get; set; }
+        public int DesignationId { get; set; }
+        public int EmployeeRoleId { get; set; }
+        public int LevelId { get; set; }
+        public string CreatedOn { get; set; }
+        public int CreatedBy { get; set; }
+        public string DOJ { get; set; }
+        public string DOB { get; set; }
+        public string Address { get; set; }
+        public int AreaId { get; set; }
+        public int EmployeeStatusId { get; set; }
+        public string ModifiedOn { get; set; }
+        public int ModifiedBy { get; set; }
+        public string Remarks { get; set; }
+        public string EmployeePassword { get; set; }
+        public string DesignationName { get; set; }
+        public string EmployeeRole { get; set; }
+        public string LevelName { get; set; }
+        public string Area { get; set; }
+        public string EmployeeStatusName { get; set; }
+    }
 }

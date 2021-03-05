@@ -7,83 +7,87 @@
     var loginRes = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
 }
 
-<style>
-    th {
-        background-color: #f8f8f9;
-    }
-</style>
-<table class="table table-bordered">
-    <tbody>
-        <tr>
-            <td>
-                <img src="~/assets/media/logos/logo_rnfi.png" style="width:150px;" />
-            </td>
-            <td class="text-right text-muted ml-5">
-                <b>Agent Name:</b> @(loginRes.firstName+ " "+ loginRes.lastName )<br />
-                <b>Mobile Number:</b> @loginRes.mobileNumber<br />
-                <b>Address:</b> @(loginRes.Address ?? "NA")<br />
-                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy")
-            </td>
-        </tr>
-    </tbody>
-</table>
-<table class="table table-bordered">
-    <tbody>
-        <tr class="text-center @(Model.errorCode==0 ? "bg-success": "bg-warning")">
-            <td colspan="2" class="text-white">@Model.response.message</td>
-        </tr>
-        <tr>
-            <th>Operator</th>
-            <td>
-                <div class="alert alert-custom alert-white alert-shadow fade show" style="padding: 0px !important;margin: 0px !important;" role="alert">
-                    <div class="alert-icon">
-                        <img src="~/assets/media/operator/Jio.png" style="width:50px;" />
+@if (Model != null)
+{
+    <style>
+        th {
+            background-color: #f8f8f9;
+        }
+    </style>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>
+                    <img src="~/assets/media/logos/logo_rnfi.png" style="width:150px;" />
+                </td>
+                <td class="text-right text-muted ml-5">
+                    <b>Agent Name:</b> @(loginRes.firstName+ " "+ loginRes.lastName )<br />
+                    <b>Mobile Number:</b> @loginRes.mobileNumber<br />
+                    <b>Address:</b> @(loginRes.Address ?? "NA")<br />
+                    <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy")
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <tbody>
+            <tr class="text-center @(Model.errorCode==0 ? "bg-success": "bg-warning")">
+                <td colspan="2" class="text-white">@Model.response.message</td>
+            </tr>
+            <tr>
+                <th>Operator</th>
+                <td>
+                    <div class="alert alert-custom alert-white alert-shadow fade show" style="padding: 0px !important;margin: 0px !important;" role="alert">
+                        <div class="alert-icon">
+                            <img src="~/assets/media/operator/Jio.png" style="width:50px;" />
+                        </div>
+                        <div class="alert-text">
+                            @Model.response.operatorId
+                        </div>
                     </div>
-                    <div class="alert-text">
-                        @Model.response.operatorId
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th>Transaction Id</th>
-            <td>@(string.IsNullOrEmpty(Model.response.txnId) ? "NA": Model.response.txnId)</td>
-        </tr>
-        <tr>
-            <th>Operator Txn Id</th>
-            <td>@(string.IsNullOrEmpty(Model.response.vendorTransactionId) ? "NA": Model.response.vendorTransactionId)</td>
-        </tr>
-        <tr>
-            <th>Txn Date</th>
-            <td>@System.DateTime.Now.ToString("dddd, dd MMMM yyyy")	</td>
-        </tr>
-        <tr>
-            <th>DTH Number</th>
-            <td>@(string.IsNullOrEmpty(Model.response.customerNumber) ? "NA": Model.response.customerNumber)</td>
-        </tr>
-        <tr>
-            <th>Amount</th>
-            <td>@Model.response.amount</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td><span class="@(Model.errorCode==0 ? "text-success": "text-danger")">@Model.message</span></td>
-        </tr>
-    </tbody>
+                </td>
+            </tr>
+            <tr>
+                <th>Transaction Id</th>
+                <td>@(string.IsNullOrEmpty(Model.response.txnId) ? "NA": Model.response.txnId)</td>
+            </tr>
+            <tr>
+                <th>Operator Txn Id</th>
+                <td>@(string.IsNullOrEmpty(Model.response.vendorTransactionId) ? "NA": Model.response.vendorTransactionId)</td>
+            </tr>
+            <tr>
+                <th>Txn Date</th>
+                <td>@System.DateTime.Now.ToString("dddd, dd MMMM yyyy")	</td>
+            </tr>
+            <tr>
+                <th>Account Number</th>
+                <td>@(string.IsNullOrEmpty(Model.response.customerNumber) ? "NA": Model.response.customerNumber)</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>@Model.response.amount</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td><span class="@(Model.errorCode==0 ? "text-success": "text-danger")">@Model.message</span></td>
+            </tr>
+        </tbody>
 
-</table>
-<hr />
-<div class="text-muted">
-    This transaction is facilitated by Relipay payment services. Any disputes muste be raised on info@rnfi.com within 7 days of transaction.
-</div>
-<div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
-    <div class="col-md-9">
-        <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-light-primary font-weight-bold" onclick="PrintElem();">Download Invoice</button>
-            <button type="button" class="btn btn-primary font-weight-bold" id="print_receipt" onclick="PrintElem();">Print Invoice</button>
+    </table>
+    <hr />
+    <div class="text-muted">
+        This transaction is facilitated by Relipay payment services. Any disputes muste be raised on info@rnfi.com within 7 days of transaction.
+    </div>
+    <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-light-primary font-weight-bold" onclick="PrintElem();">Download Invoice</button>
+                <button type="button" class="btn btn-primary font-weight-bold" id="print_receipt" onclick="PrintElem();">Print Invoice</button>
+            </div>
         </div>
     </div>
-</div>
+
+
 
 
 <div id="hidden_recipt" style="display:none">
@@ -116,8 +120,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td style="border:dashed;">Airtel</td>
-                    <td style="border:dashed;">98798716546</td>
+                    <td style="border:dashed;">Payment transfer</td>
+                    <td style="border:dashed;">@Model.response.customerNumber</td>
                     <td style="border:dashed;">Success</td>
                     <td style="border:dashed;">₹ 40.00</td>
                 </tr>
@@ -129,7 +133,7 @@
         ** THANK YOU VISIT AGAIN **
     </center>
 </div>
-
+}
 <script>
     var html = $('#hidden_recipt').html();
     function PrintElem() {

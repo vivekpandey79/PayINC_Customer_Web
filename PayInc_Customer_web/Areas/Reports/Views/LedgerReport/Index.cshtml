@@ -34,7 +34,7 @@
                     <ul class="navi flex-column navi-hover py-2">
                         <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
                         <li class="navi-item">
-                            <a href="#" class="navi-link">
+                            <a href="#" class="navi-link" onclick="$('.buttons-print').click();">
                                 <span class="navi-icon">
                                     <i class="la la-print"></i>
                                 </span>
@@ -42,7 +42,7 @@
                             </a>
                         </li>
                         <li class="navi-item">
-                            <a href="#" class="navi-link">
+                            <a href="#" class="navi-link" onclick="$('.buttons-copy').click();">
                                 <span class="navi-icon">
                                     <i class="la la-copy"></i>
                                 </span>
@@ -50,7 +50,7 @@
                             </a>
                         </li>
                         <li class="navi-item">
-                            <a href="#" class="navi-link">
+                            <a href="#" class="navi-link" onclick="$('.buttons-excel').click();">
                                 <span class="navi-icon">
                                     <i class="la la-file-excel-o"></i>
                                 </span>
@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li class="navi-item">
-                            <a href="#" class="navi-link">
+                            <a href="#" class="navi-link" onclick="$('.buttons-csv').click();">
                                 <span class="navi-icon">
                                     <i class="la la-file-text-o"></i>
                                 </span>
@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li class="navi-item">
-                            <a href="#" class="navi-link">
+                            <a href="#" class="navi-link" onclick="$('.buttons-pdf').click();">
                                 <span class="navi-icon">
                                     <i class="la la-file-pdf-o"></i>
                                 </span>
@@ -130,6 +130,18 @@
                         <button type="submit" class="btn btn-primary px-6 font-weight-bold" id="btn_search">Search</button>
                     </div>
                 </div>
+                @if (new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession().customerRoleId != 6)
+                {
+                    <div class="row mt-2">
+                        <div class="col-lg-4 col-sm-12">
+                            <label class="mr-3 mb-0 d-none d-md-block">Wallet Type:</label>
+                            <div class="d-flex align-items-center">
+                                @Html.DropDownList("ddlNetworkUser", new List<SelectListItem> { new SelectListItem { Text = "Loading Customer", Value = "" } }, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                }
+
             </div>
         </form>
         <div class="" id="report_section">
@@ -143,6 +155,7 @@
     $(document).ready(function (e) {
         var fromDate, toDate, txnType;
         GetReport(fromDate, toDate, txnType);
+        GetDdlNetworkUser();
     });
     function GetReport(fromDate,toDate,txnType) {
         $.ajax({
@@ -151,6 +164,23 @@
             data: {},
             success: function (data) {
                 $("#report_section").html(data);
+            },
+            error: function (err) {
+                $("#report_section").html("No record found.");
+            }
+        });
+    }
+    function GetDdlNetworkUser() {
+        $.ajax({
+            url: '/Reports/LedgerReport/GetNetworkUser',
+            type: "POST",
+            data: {},
+            success: function (res) {
+                $("#ddlNetworkUser").empty();
+                $("#ddlNetworkUser").append($("<option></option>").val('').html('-- Select Network User --'));
+                $.each(res, function (data, value) {
+                    $("#ddlNetworkUser").append($("<option></option>").val(value.customerId).html(value.firstName + " " + value.middleName + "(" + value.customerRoleDesc+")"));
+                })
             },
             error: function (err) {
                 $("#report_section").html("No record found.");

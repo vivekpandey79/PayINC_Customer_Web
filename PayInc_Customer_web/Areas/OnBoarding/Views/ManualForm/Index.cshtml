@@ -31,6 +31,7 @@
 
     @if (ViewData["ErrorMessage"] == null)
     {
+        <input type="hidden" value="@ViewData["StepNum"]" id="step_num"/>
         <div class="card card-custom">
             <div class="card-body p-0">
                 <h1 class="text-center m-5">
@@ -488,9 +489,9 @@
                                                             <label class="font-weight-bolder text-dark">Mobile Operator</label>
                                                             <select class="form-control h-auto p-5 border-1 rounded-lg" name="MobileOperator">
                                                                 <option>-- Select Mobile Operator --</option>
-                                                                <option value="Vodafone/Idea">Vodafone/Idea</option>
-                                                                <option value="JIO">JIO</option>
-                                                                <option value="Airtel">Airtel</option>
+                                                                <option value="8~Vodafone/Idea">Vodafone/Idea</option>
+                                                                <option value="5~JIO">JIO</option>
+                                                                <option value="1~Airtel">Airtel</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-6">
@@ -686,7 +687,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="font-size-h6 font-weight-bolder text-dark">IFSC Code</label>
-                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="bankifsccode" placeholder="Enter IFSC Code" />
+                                        <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="bankifsccode" placeholder="Enter IFSC Code" id="txtifsccode" />
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Upload Cancelled Cheque</label>

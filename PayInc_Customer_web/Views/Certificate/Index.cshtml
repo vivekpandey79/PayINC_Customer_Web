@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "Certificate";
+}
+@{
+    var loginDetails = new PayInc_Customer_web.Utility.SessionUtility().GetLoginSession();
+}
+<link href="~/css/certificate.css" rel="stylesheet" />
+<button class="btn btn-default" onclick="getPDF();">Download Certificate</button>
+<div class="container pm-certificate-container canvas_div_pdf">
+    <div class="outer-border"></div>
+    <div class="inner-border"></div>
+    <div class="pm-certificate-border bg-white">
+        <div class="d-flex justify-content-center">
+            <img src="~/assets/media/logos/logo_rnfi.png" style="width:157px;" />
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="pm-certificate-title cursive">
+                <h2>Certificate of Authorisation</h2>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-10 ml-4 mr-4">
+            <div class="text-muted">
+                <span class="pm-name-text">This is certify that</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center underline mt-4 ml-4 mr-4">
+            <div class="pm-certificate-name">
+                <span class="pm-name-text bold">@(loginDetails.firstName +" "+loginDetails.lastName)</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-4 ml-4 mr-4">
+            <div class="text-muted">
+                <span class="pm-name-text">is appointed as the customer service point  of RNFI Service PVT LTD.</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center underline mt-4 ml-4 mr-4">
+            <div class="pm-certificate-name">
+                <span class="pm-name-text bold">@(loginDetails.customerRoleDesc)</span>
+            </div>
+        </div>
+
+        <div class="" style="margin-top:100px;">
+            <div class="row">
+                <div class="col-lg-4 pm-certified col-xs-4 text-center">
+                    <span class="pm-credits-text block sans">Signature</span>
+                    <span class="pm-empty-space block underline"></span>
+                    <span class="bold block">@(loginDetails.firstName+" "+loginDetails.lastName)</span>
+                </div>
+                <div class="col-lg-4">
+                </div>
+                <div class="col-lg-4 pm-certified col-xs-4 text-center">
+                    <span class="pm-credits-text block sans">Date Completed</span>
+                    <span class="pm-empty-space block underline"></span>
+                    <span class="bold block">Joining Date: @System.DateTime.Now</span>
+                    <span class="bold block">Retailer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<script>
+    function getPDF() {
+
+        var HTML_Width = $(".canvas_div_pdf").width();
+        var HTML_Height = $(".canvas_div_pdf").height();
+        var top_left_margin = 15;
+        var PDF_Width = HTML_Width + (top_left_margin * 2);
+        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+        var canvas_image_width = HTML_Width;
+        var canvas_image_height = HTML_Height;
+
+        var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+
+        html2canvas($(".canvas_div_pdf")[0], { allowTaint: true }).then(function (canvas) {
+            canvas.getContext('2d');
+
+            console.log(canvas.height + "  " + canvas.width);
+
+
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+
+
+            for (var i = 1; i <= totalPDFPages; i++) {
+                pdf.addPage(PDF_Width, PDF_Height);
+                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
+            }
+
+            pdf.save("HTML-Document.pdf");
+        });
+    };
+</script>

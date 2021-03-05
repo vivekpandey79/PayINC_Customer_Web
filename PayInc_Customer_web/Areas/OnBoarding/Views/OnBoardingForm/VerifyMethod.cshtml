@@ -5,16 +5,20 @@
             <label class="col-3 col-form-label">Verify Method</label>
             <div class="col-9 col-form-label">
                 <div class="radio-list">
-                    <label class="radio">
-                        <input type="radio" name="vmode" value="2" />
-                        <span></span>
-                        Adhaar OTP
-                    </label>
-                    <label class="radio radio-disabled">
-                        <input type="radio" name="vmode" value="2" disabled="disabled" />
-                        <span></span>
-                        Adhaar Biometrics
-                    </label>
+                    @if (new PayInc_Customer_web.Utility.SessionUtility().GetStringSession("BoardingRoleName") == "retailer")
+                    {
+                        <label class="radio">
+                            <input type="radio" name="vmode" value="2" />
+                            <span></span>
+                            Adhaar OTP
+                        </label>
+                        <label class="radio radio-disabled">
+                            <input type="radio" name="vmode" value="3" disabled="disabled" />
+                            <span></span>
+                            Adhaar Biometrics
+                        </label>
+                    }
+
                     <label class="radio">
                         <input type="radio" name="vmode" value="1" checked="checked" />
                         <span></span>

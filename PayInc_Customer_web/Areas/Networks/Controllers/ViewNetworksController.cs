@@ -18,11 +18,27 @@ namespace PayInc_Customer_web.Areas.Networks.Controllers
             try
             {
                 var listParam = new List<KeyValuePair<string, string>>();
-                listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(new  SessionUtility().GetLoginSession().customerId)));
-                string errorMessage = string.Empty;
+                listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(new SessionUtility().GetLoginSession().customerId)));
+                string errorMessage = string.Empty;string errorMessage1 = string.Empty;
                 var response = new CallService().GetResponse<List<LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
+                var employeeList = new CallHelpDeskService().GetResponse<List<EmployeeResponse>>("getEmployeeRolesDetails", listParam, ref errorMessage1);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
+                    if (string.IsNullOrEmpty(errorMessage1))
+                    {
+                        if (employeeList!=null)
+                        {
+                            for (int i = 0; i < response.Count; i++)
+                            {
+                                var employee= employeeList.Where(m => m.EmployeeId == response[i].employeeId).FirstOrDefault();
+                                if (employee != null)
+                                {
+                                    response[i].employeeName = employee.EmployeeName;
+                                }
+                                
+                            }
+                        }   
+                    }
                     return View(response);
                 }
                 return View();
@@ -39,11 +55,24 @@ namespace PayInc_Customer_web.Areas.Networks.Controllers
             {
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(customerId)));
-                string errorMessage = string.Empty;
+                string errorMessage = string.Empty; string errorMessage1 = string.Empty;
                 var response = new CallService().GetResponse<List<LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
+                var employeeList = new CallHelpDeskService().GetResponse<List<EmployeeResponse>>("getEmployeeRolesDetails", listParam, ref errorMessage1);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
-                    return PartialView("LowerNetwork",response);
+                    if (employeeList != null)
+                    {
+                        for (int i = 0; i < response.Count; i++)
+                        {
+                            var employee = employeeList.Where(m => m.EmployeeId == response[i].employeeId).FirstOrDefault();
+                            if (employee != null)
+                            {
+                                response[i].employeeName = employee.EmployeeName;
+                            }
+
+                        }
+                    }
+                    return PartialView("LowerNetwork", response);
                 }
                 return PartialView("LowerNetwork");
             }

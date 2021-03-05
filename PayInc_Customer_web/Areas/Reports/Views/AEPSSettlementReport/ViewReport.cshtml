@@ -13,21 +13,37 @@
                 <td>Account Number</td>
                 <td>IFSC Code</td>
                 <td>Remarks</td>
+                <td>ISO Trxn Id</td>
+                <td>Amount</td>
+                <td>Op Bal.</td>
+                <td>Cl Bal.</td>
                 <td>Payment Mode</td>
+                <td>Bank Reference</td>
+                <td>Requested Date</td>
+                <td>Processed Date</td>
+                <td>Transaction Status</td>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@item.CustomerName</td>
-                    <td>@item.CustomerMobileNo</td>
-                    <td>@item.BeneficiaryName</td>
-                    <td>@item.AccountNumber</td>
-                    <td>@item.IFSCCode</td>
-                    <td>@item.Remarks</td>
-                    <td>@item.PaymentMode</td>
-                </tr>
+            <tr>
+                <td>@item.CustomerName</td>
+                <td>@item.CustomerMobileNo</td>
+                <td>@item.BeneficiaryName</td>
+                <td>@item.AccountNumber</td>
+                <td>@item.IFSCCode</td>
+                <td>@item.Remarks</td>
+                <td>@item.ISOTransactionID</td>
+                <td>@item.RequestedAmount</td>
+                <td>@item.CustomerOpBal</td>
+                <td>@item.CustomerClBal</td>
+                <td>@item.PaymentMode</td>
+                <td>@item.bankRefenreceNo</td>
+                <td>@item.requestDate</td>
+                <td>@item.processedDate</td>
+                <td>@item.transactionStatusDescription</td>
+            </tr>
             }
 
         </tbody>
@@ -42,6 +58,14 @@ else
 <script>
     $('#tbl_ledger').DataTable({
         responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+            'print'
+        ]
     });
     $("#tbl_ledger").on("click", ".btn_complaint", function () {
         $(this).addClass("spinner spinner-right spinner-white pr-15");
@@ -67,6 +91,9 @@ else
 </script>
 <style>
     .dataTables_length {
+        display: none;
+    }
+    .dt-buttons {
         display: none;
     }
 </style>

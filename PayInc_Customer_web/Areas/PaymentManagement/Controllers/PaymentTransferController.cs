@@ -105,7 +105,7 @@ namespace PayInc_Customer_web.Areas.PaymentManagement.Controllers
                 var listParam = new List<KeyValuePair<string, string>>();
                 listParam.Add(new KeyValuePair<string, string>("cutomerId", Convert.ToString(new SessionUtility().GetLoginSession().customerId)));
                 string errorMessage = string.Empty;
-                var response = new CallService().GetResponse<List<OnBoarding.Models.LowChainResponse>>("getViewCustomerNetwork", listParam, ref errorMessage);
+                var response = new CallService().GetResponse<List<OnBoarding.Models.LowChainResponse>>("getLowerAllCustomerNetwork", listParam, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     if (response.Count > 0)

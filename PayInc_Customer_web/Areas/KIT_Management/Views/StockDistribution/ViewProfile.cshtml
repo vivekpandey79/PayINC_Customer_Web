@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-form-label text-left col-lg-2 col-sm-12">Balance:</label>
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Wallet Balance:</label>
         <div class="col-lg-8 col-md-9 col-sm-12">
             <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.customerEffectiveBalance</label>
         </div>
@@ -29,6 +29,12 @@
         <label class="col-form-label text-left col-lg-2 col-sm-12">Number of Stocks:</label>
         <div class="col-lg-8 col-md-9 col-sm-12">
             <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.NumberOfStock</label>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label text-left col-lg-2 col-sm-12">Stock Amount:</label>
+        <div class="col-lg-8 col-md-9 col-sm-12">
+            <label class="col-form-label text-left col-lg-4 col-sm-12">@Model.StockAmount</label>
         </div>
     </div>
     <div class="form-group row">
@@ -62,7 +68,7 @@
     <div class="form-group row">
         <div class="col-lg-10 ml-lg-auto">
             <div class="btn btn-light-primary font-weight-bold mr-2 prev-step" data-wizard-type="action-prev">Back</div>
-            <button type="submit" class="btn btn-primary font-weight-bold mr-2">Transfer Now</button>
+            <button type="submit" class="btn btn-primary font-weight-bold mr-2" id="btn_transfer">Transfer Now</button>
         </div>
     </div>
 </form>
@@ -72,12 +78,14 @@
         if (!$(this).valid()) {
             return;
         }
+        $("#btn_transfer").addClass("spinner spinner-white spinner-right");
         var url = this.action;
         $.ajax({
             url: url,
             type: "POST",
             data: $(this).serialize(),
             success: function (data) {
+                $("#btn_transfer").removeClass("spinner spinner-white spinner-right");
                 _wizard1.goTo(3);
                 $("#first_step").hide();
                 $("#view_profile").hide();

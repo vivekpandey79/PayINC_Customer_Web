@@ -35,12 +35,12 @@
                     <div class="login-signin">
                         <div class="mb-20">
                             <h3>Sign In To RNFI</h3>
-                            <div class="text-muted font-weight-bold">Enter your credential to login your account:</div>
+                            <div class="text-muted font-weight-bold">Enter your credential to login your account</div>
                         </div>
                         <form class="form" asp-controller="login" asp-action="index" method="post" id="form_login">
                             @Html.AntiForgeryToken()
                             <div class="form-group mb-5">
-                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" value="9000000090" />
+                                <input asp-for="UserName" class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="CUSTOMER CODE/MOBILE NUMBER" name="username" value="9000000090" maxlength="18"/>
                                 <span asp-validation-for="UserName" class="text-danger"></span>
 
                             </div>
@@ -52,13 +52,13 @@
                             <div class="form-group d-flex flex-wrap justify-content-between align-items-center">
                                 <div class="checkbox-inline">
                                     <label class="checkbox m-0 text-muted">
-                                        <input type="checkbox" name="remember" />
+                                        <input type="checkbox" name="remember" checked/>
                                         <span></span>Remember me
                                     </label>
                                 </div>
                                 <a href="#" id="kt_login_forgot" class="text-muted text-hover-primary">Forgot Password ?</a>
                             </div>
-                            <button type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4" id="btn_signin">Sign In</button>
+                            <button type="submit" class="btn btn-block btn-primary font-weight-bold px-9 py-4" id="btn_signin">Sign In</button>
                         </form>
                         <div class="mt-10">
                         </div>
@@ -116,7 +116,7 @@
                                 <input type="text" id="digit-6" name="digit6" data-previous="digit-5" class="form-control-solid" />
                             </div> 
                             <div class="form-group d-flex flex-wrap flex-center mt-10">
-                                <button id="kt_login_forgot_submit" type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Change</button>
+                                <button id="kt_login_verify_submit" type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Change</button>
                                 <a href="/" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-2">Cancel</a>
                             </div>
                         </form>
@@ -156,11 +156,13 @@
             });
             $("#kt_login_forgot_form").submit(function (e) {
                 e.preventDefault();
+                $("#kt_login_forgot_submit").attr("disabled","disabled");
                 $.ajax({
                     url: "@Url.Action("ForgotPassword", "Login")",
                     type: "POST",
                     data: $(this).serialize(),
                     success: function (data) {
+                        $("#kt_login_forgot_submit").removeAttr("disabled");
                         if (data.success) {
                             $("#kt_login_forgot_form").hide();
                             $("#kt_login_forgot_otp").show();
@@ -168,31 +170,40 @@
                         else {
                             toastr.error(data.errorMessage, "Alert");
                         }
+                    },
+                    error: function (err) {
+                        $("#kt_login_forgot_submit").removeAttr("disabled");
                     }
                 });
 
             });
             $("#kt_login_forgot_otp").submit(function (e) {
                 e.preventDefault();
+                $("#kt_login_verify_submit").attr("disabled", "disabled");
                 $.ajax({
                     url: "@Url.Action("VerifyOTP", "Login")",
                     type: "POST",
                     data: $(this).serialize(),
                     success: function (data) {
+                        $("#kt_login_verify_submit").removeAttr("disabled");
                         if (data.success) {
                             toastr.error("Password reset and sent to registered mobile number", "Alert");
                         }
                         else {
                             toastr.error(data.errorMessage, "Alert");
                         }
+                    },
+                    error: function (err) {
+                        $("#kt_login_verify_submit").removeAttr("disabled");
                     }
                 });
             });
 
             $("#form_login").submit(function (e) {
-                $("#btn_signin").text("Logging you in...");
-
-                $("#btn_signin").addClass("spinner spinner-right spinner-white pr-15");
+                if ($(this).valid()) {
+                    $("#btn_signin").text("Logging you in...");
+                    $("#btn_signin").addClass("spinner spinner-right spinner-white pr-15");
+                }
             });
         });
     </script>

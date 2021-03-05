@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -89,6 +90,9 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
         public string IfscCode { get; set; }
         [Required]
         public string Amount { get; set; }
+        [Required(ErrorMessage = "Please select a file.")]
+        [DataType(DataType.Upload)]
+        public IFormFile UploadFile { get; set; }
         [Required]
         public string Password { get; set; }
     }
