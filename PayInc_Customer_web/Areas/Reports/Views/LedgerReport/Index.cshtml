@@ -115,14 +115,14 @@
                         {
                             <label class="mr-3 mb-0 d-none d-md-block">Transaction Type:</label>
                             <div class="d-flex align-items-center">
-                                @Html.DropDownList("ddlTransType", new SelectList(ViewBag.TransactionType, "transactionTypeId", "transactionTypeDescription"), "--Select--", new { @class = "form-control" })
+                                @Html.DropDownList("ddlTransType", new SelectList(ViewBag.TransactionType, "transactionTypeId", "transactionTypeDescription"), "ALL", new { @class = "form-control" })
                             </div>
                         }
                     </div>
                     <div class="col-lg-2 col-sm-12">
                         <label class="mr-3 mb-0 d-none d-md-block">Wallet Type:</label>
                         <div class="d-flex align-items-center">
-                            @Html.DropDownList("ddlWalletType", new List<SelectListItem> { new SelectListItem { Text = "Main Wallet", Value = "1" }, new SelectListItem { Text = "AEPS Wallet", Value = "2" } }, "--Select Wallet--", new { @class = "form-control" })
+                            @Html.DropDownList("ddlWalletType", new List<SelectListItem> { new SelectListItem { Text = "Main Wallet", Value = "1",Selected=true }, new SelectListItem { Text = "AEPS Wallet", Value = "2" } }, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-12">

@@ -22,7 +22,6 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             if (!string.IsNullOrEmpty(rolename))
             {
                 new SessionUtility().SetSession("BoardingRoleName", rolename);
-
             }
             return View();
         }
@@ -132,7 +131,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                         listParam.Add(new KeyValuePair<string, string>("parentMobileNumber", Convert.ToString(obj.mobileNumber)));
                         string errorMessage = string.Empty;
                         var response = new CallService().GetResponse<List<LowChainResponse>>("getNetworkADByNumber", listParam, ref errorMessage);
-                        if (response.Count > 0)
+                        if (response!=null)
                         {
                             foreach (var item in response)
                             {
@@ -148,6 +147,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     else
                     {
                         ViewData["ADCustomerName"] = obj.mobileNumber + " - " + obj.firstName + " " + obj.lastName + " - " + obj.customerRoleDesc;
+                        ViewData["ADCustomerId"] = obj.customerId;
                     }
                 }
                 else

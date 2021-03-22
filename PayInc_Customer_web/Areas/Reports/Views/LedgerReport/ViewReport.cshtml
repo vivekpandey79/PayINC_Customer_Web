@@ -8,13 +8,13 @@
         <thead>
             <tr>
                 <td>TransactionId</td>
-                <td>Customer Name</td>
-                <td>Mobile Number</td>
-                <td>Operator</td>
+                @*<td>Customer Name</td>
+                <td>Mobile Number</td>*@
+                @*<td>Operator</td>*@
                 <td>Category</td>
                 <td>Txn Date</td>
                 <td>Txn Type</td>
-                <td>Txn Amount</td>
+                <td>Amount</td>
                 <td>Operator RefNo</td>
                 <td>Op Bal</td>
                 <td>Cl Bal</td>
@@ -28,11 +28,11 @@
             {
             <tr>
                 <td>@item.transactionId</td>
-                <td>
+                @*<td>
                     @item.customerName (@item.customerRoleDesc)
                 </td>
-                <td>@item.consumerNumber</td>
-                <td>@item.serviceProviderName</td>
+                <td>@item.consumerNumber</td>*@
+                @*<td>@item.serviceProviderName</td>*@
                 <td>
                     @if (item.category == "Debit")
                     {

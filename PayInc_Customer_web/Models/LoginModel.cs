@@ -17,6 +17,19 @@ namespace PayInc_Customer_web.Models
         [Required(ErrorMessage = "Please enter mobile number")]
         public string MobileNumber { get; set; }
     }
+    public class ChangePassword
+    {
+        [Required(ErrorMessage = "Please enter old password")]
+        [MinLength(8, ErrorMessage = "Please enter 8 digit password")]
+        public string OldPassword { get; set; }
+        [Required(ErrorMessage = "Please enter new password")]
+        [MinLength(8, ErrorMessage = "Please enter 8 digit password")]
+        public string NewPassword { get; set; }
+        [Required(ErrorMessage = "Please enter confirm password")]
+        [MinLength(8, ErrorMessage = "Please enter 8 digit password")]
+        [Compare("NewPassword", ErrorMessage ="Not match")]
+        public string ConfirmPassword { get; set; }
+    }
 
 
     public class LoginResData
@@ -39,8 +52,14 @@ namespace PayInc_Customer_web.Models
         public long mobileNumber { get; set; }
         public string customerRole { get; set; }
         public string customerRoleDesc { get; set; }
-
+         
         public string Address { get; set; }
+        public int? customerAccountStatus { get; set; }
+        public string accountStatusDescription { get; set; }
+        public int? customerLastActivityDate { get; set; }
+        public int? customerLastActivityTime { get; set; }
+        public int? customerLastLoginDate { get; set; }
+        public int? customerLastLoginTime { get; set; }
     }
 
     public class ApiResponse

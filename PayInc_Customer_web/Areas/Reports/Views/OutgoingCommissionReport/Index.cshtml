@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Outgoing Commission Report";
+    ViewData["Title"] = "My Commission";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,8 +8,8 @@
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
             <h3 class="card-label">
-                Outgoing Commission Report
-                <span class="d-block text-muted pt-2 font-size-sm">Comission Detailed Report with Network chain</span>
+                My Commission
+                <span class="d-block text-muted pt-2 font-size-sm"></span>
             </h3>
         </div>
         <div class="card-toolbar">
@@ -76,7 +76,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form action="@Url.Action("Report","OutgoingCommissionReport")" method="post" id="form_get_report">
+        @*<form action="@Url.Action("Report","OutgoingCommissionReport")" method="post" id="form_get_report">
             <div class="mb-7">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-sm-12">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </form>*@
         <div class="" id="report_section">
             <div class="text-center">
                 <div class="btn btn-default">Please wait... <span class="spinner spinner-right spinner-dark p-15"></span></div>

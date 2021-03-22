@@ -11,7 +11,7 @@ using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Controllers
 {
-    [AuthenticationAttribute]
+    [NewAuthentication]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

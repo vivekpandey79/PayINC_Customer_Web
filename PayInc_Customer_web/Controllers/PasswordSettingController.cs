@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PayInc_Customer_web.Controllers
 {
-
+    [NewAuthentication]
     public class PasswordSettingController : Controller
     {
         public IActionResult Index()

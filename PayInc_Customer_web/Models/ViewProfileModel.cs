@@ -76,6 +76,8 @@ namespace PayInc_Customer_web.Models
         public string walletType { get; set; }
         public int? customerAccountStatus { get; set; }
         public decimal? aepsBalance { get; set; }
+        public int? onboardingId { get; set; }
+        public string customerImagePath { get; set; }
     }
 
 }

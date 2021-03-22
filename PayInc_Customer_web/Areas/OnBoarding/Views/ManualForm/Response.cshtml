@@ -13,64 +13,28 @@
 <body>
     <div class="">
         <div class="d-flex justify-content-center pt-30">
-            <div class="alert alert-white fade show mb-5 p-5" role="alert">
-                <h4 class="alert-heading text-center">Video Verification Done!</h4>
-                <hr />
-                <p>You have successfully submitted your all document. Retailer On Boarding Submitted. Check your sms on your mobile for credentials.</p>
-                <div class="border-bottom border-dark opacity-20 mb-5"></div>
-                <p class="mb-0 text-warning">Your docuemnt is in Review. Please wait for further notice.</p>
-            </div>
+            @if (TempData["ErrorMessage"] == null)
+            {
+                <div class="alert alert-white fade show mb-5 p-5" role="alert">
+                    <h4 class="alert-heading text-center">Video Verification Done!</h4>
+                    <hr />
+                    <p>You have successfully submitted your all document. Retailer On Boarding Submitted. Check your sms on your mobile for credentials.</p>
+                    <div class="border-bottom border-dark opacity-20 mb-5"></div>
+                    <p class="mb-0 text-warning">Your docuemnt is in Review. Please wait for further notice.</p>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger fade show mb-5 p-5" role="alert">
+                    <h4 class="alert-heading text-center">Video Verification Error!</h4>
+                    <hr />
+                    <p>@TempData["ErrorMessage"]</p>
+                    <div class="border-bottom border-dark opacity-20 mb-5"></div>
+                    <p class="mb-0 text-warning">Your docuemnt is in Review. Please wait for further notice.</p>
+                </div>
+            }
         </div>
     </div>
-    @*<div class="">
-        <div class="d-flex justify-content-center">
-            <div class="card card-custom gutter-b">
-                <div class="card-header">
-                    <div class="card-title">
-                        <h3 class="card-label">
-                            Video Verification Summary
-                            <small></small>
-                        </h3>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>PAN Image</td>
-                                <td>Video Image</td>
-                                <td>Match Percent</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.result != null)
-                            {
-                                if (Model.result.videoVerification != null)
-                                {
-                                    foreach (var item in Model.result.videoVerification.videoFaceMatch)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <img src="@Model.PanImage" class="img-fluid" style="width:150px"/>
-                                            </td>
-                                            <td>
-                                                <img src="@item.videoImages[0]" class="img-fluid" style="width:150px"/>
-                                            </td>
-                                            <td>@Model.result.videoVerification.videoFaceMatch[0].matchStatistics.matchPercentage</td>
-                                        </tr>
-                                    }
-                                }
-                            }
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>*@
-
-    
-    
     <div class="text-center mt-3">
         <span class="font-weight-bold text-muted font-size-h5">Already having?</span>
         <a href="/Login" class="font-weight-bolder text-primary font-size-h4" id="kt_login_signup">Login Here</a>

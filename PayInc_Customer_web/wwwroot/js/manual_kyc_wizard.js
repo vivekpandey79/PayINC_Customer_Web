@@ -29,11 +29,17 @@
 				type: "POST",
 				data: {},
 				success: function (data) {
-					if (data.bankData !== "") {
-						$("#ddlBank").val(data.bankData.bankId);
-						$("#accountname").val(data.bankData.accountname);
-						$("#bankaccount").val(data.bankData.bankaccount);
-						$("#txtifsccode").val(data.bankData.ifsccode);
+					if (data.bankData !== "")
+					{
+                        try {
+							$("#ddlBank").val(data.bankData.bankId);
+							$("#accountname").val(data.bankData.accountname);
+							$("#bankaccount").val(data.bankData.bankaccount);
+							$("#txtifsccode").val(data.bankData.ifsccode);
+						} catch (e) {
+							console.log(e.message);
+                        }
+						
 					}
 				}
 			});
@@ -213,6 +219,15 @@
 					$("#txtBasicState").val(data.responseData.state);
 					$("#txtBasicPinCode").val(data.responseData.pinCode);
 					$("#ddlBasicArea").append($("<option></option>").val('').html('-- Loading Area --'));
+
+					if (data.allInfoData!=="") {
+						$("#txtBasicLandmark").val(data.allInfoData.address.residentialLandmark);
+						$("#txtBasicPinCode").val(data.allInfoData.address.residentialPinCode);
+						$("#txFirmName").val(data.allInfoData.outlet.outletName);
+						$("#txtOutletAddress").val(data.allInfoData.outlet.outletAddress);
+						$("#txtOutletState").val(data.allInfoData.outlet.stateName);
+						$("#txtOutletCity").val(data.allInfoData.outlet.districtName);
+                    }
 					$.ajax({
 						url: '/OnBoarding/ManualForm/GetAreaPinCode',
 						type: "POST",
@@ -224,6 +239,10 @@
 								$.each(res.responseData, function (data, value) {
 									$("#ddlBasicArea").append($("<option></option>").val(value.areaId).html(value.area));
 								});
+								if (data.allInfoData!=="") {
+									$("#ddlBasicArea").val(data.allInfoData.address.residentialAreaId);
+									
+                                }
 							}
 							else {
 								$("#ddlBasicArea").empty();

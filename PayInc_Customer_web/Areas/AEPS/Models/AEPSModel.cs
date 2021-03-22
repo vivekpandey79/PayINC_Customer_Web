@@ -17,6 +17,9 @@ namespace PayInc_Customer_web.Areas.AEPS.Models
         public string CustomerNumber { get; set; }
         [Required(ErrorMessage = "Please enter Amount")]
         public string Amount { get; set; }
+
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Please check terms and conditions")]
+        public bool termscondition { get; set; }
     }
     public class LocationDatum
     {

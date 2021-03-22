@@ -20,8 +20,7 @@
             <td class="text-right text-muted ml-5">
                 <b>Agent Name:</b> @(loginRes.firstName+ " "+ loginRes.lastName )<br />
                 <b>Mobile Number:</b> @loginRes.mobileNumber<br />
-                <b>Address:</b> @(loginRes.Address ?? "NA")<br />
-                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy")
+                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")
             </td>
         </tr>
     </tbody>
@@ -54,7 +53,7 @@
         </tr>
         <tr>
             <th>Txn Date</th>
-            <td>@System.DateTime.Now.ToString("dddd, dd MMMM yyyy")	</td>
+            <td>@System.DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")	</td>
         </tr>
         <tr>
             <th>Mobile Number</th>

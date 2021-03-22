@@ -7,7 +7,7 @@ using PayInc_Customer_web.Models;
 
 namespace PayInc_Customer_web.Controllers
 {
-    [Authentication]
+    [NewAuthentication]
     public class CertificateController : Controller
     {
         public IActionResult Index()

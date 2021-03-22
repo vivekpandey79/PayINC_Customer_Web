@@ -19,8 +19,8 @@
             <td class="text-right text-muted ml-5">
                 <b>Agent Name:</b> @(loginRes.firstName+ " "+ loginRes.lastName )<br />
                 <b>Mobile Number:</b> @loginRes.mobileNumber<br />
-                <b>Address:</b> @(loginRes.Address ?? "NA")<br />
-                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy")
+                @*<b>Address:</b> @(loginRes.Address ?? "NA")<br />*@
+                <b>Reciept Date:</b> @System.DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")
             </td>
         </tr>
     </tbody>
@@ -28,12 +28,8 @@
 <table class="table table-bordered">
     <tbody>
         <tr>
-            <th>Load Req ID</th>
+            <th>Payment Request ID</th>
             <td>@Model.LoadRequestId</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>@Model.Status</td>
         </tr>
         <tr>
             <th>Transaction ID</th>
@@ -48,7 +44,7 @@
             <td>@Model.BankRefNo</td>
         </tr>
         <tr>
-            <th>Load Amount</th>
+            <th>Payment Amount</th>
             <td>Rs. @Model.LoadAmount</td>
         </tr>
         <tr>

@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PayInc_Customer_web.Areas.Reports.Models;
+using PayInc_Customer_web.Models;
 using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Areas.Reports.Controllers
 {
     [Area("Reports")]
+    [Authentication]
     public class TransactionReportController : Controller
     {
         public IActionResult Index()

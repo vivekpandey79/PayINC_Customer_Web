@@ -146,7 +146,7 @@ function GetCharts(data) {
 	const apexChart = "#chart_1";
 	var options = {
 		series: [{
-			name: "Usage",
+			name: "Usage ₹",
 			data: arrUsage
 		}],
 		chart: {

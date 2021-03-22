@@ -7,42 +7,42 @@
     <table class="table table-bordered" id="tbl_ledger">
         <thead>
             <tr>
-                <td>Customer Name</td>
-                <td>Customer Mob</td>
+                @*<td>Customer Name</td>
+        <td>Customer Mob</td>*@
                 <td>Beneficiary Name</td>
                 <td>Account Number</td>
                 <td>IFSC Code</td>
-                <td>Remarks</td>
-                <td>ISO Trxn Id</td>
                 <td>Amount</td>
-                <td>Op Bal.</td>
-                <td>Cl Bal.</td>
-                <td>Payment Mode</td>
-                <td>Bank Reference</td>
-                <td>Requested Date</td>
-                <td>Processed Date</td>
-                <td>Transaction Status</td>
+                <td>Requested On</td>
+                <td>Status</td>
+                <td>Processed On</td>
+                <td>RRN</td>
+                <td>Mode</td>
+                @*<td>Op Bal.</td>
+                <td>Cl Bal.</td>*@
+                <td>Remarks</td>
+                <td>ISO Txn Id</td>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
             <tr>
-                <td>@item.CustomerName</td>
-                <td>@item.CustomerMobileNo</td>
+                @*<td>@item.CustomerName</td>
+        <td>@item.CustomerMobileNo</td>*@
                 <td>@item.BeneficiaryName</td>
                 <td>@item.AccountNumber</td>
                 <td>@item.IFSCCode</td>
+                <td>@item.RequestedAmount</td>
+                <td>@item.requestDate</td>
+                <td>@item.transactionStatusDescription</td>
+                <td>@item.processedDate</td>
+                <td>@item.bankRefenreceNo</td>
+                <td>@item.PaymentMode</td>
+                @*<td>@item.CustomerOpBal</td>
+                <td>@item.CustomerClBal</td>*@
                 <td>@item.Remarks</td>
                 <td>@item.ISOTransactionID</td>
-                <td>@item.RequestedAmount</td>
-                <td>@item.CustomerOpBal</td>
-                <td>@item.CustomerClBal</td>
-                <td>@item.PaymentMode</td>
-                <td>@item.bankRefenreceNo</td>
-                <td>@item.requestDate</td>
-                <td>@item.processedDate</td>
-                <td>@item.transactionStatusDescription</td>
             </tr>
             }
 

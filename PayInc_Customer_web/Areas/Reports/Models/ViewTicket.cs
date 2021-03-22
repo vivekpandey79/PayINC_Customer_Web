@@ -12,7 +12,7 @@ namespace PayInc_Customer_web.Areas.Reports.Models
         public string CustomerName { get; set; }
         public string CustomerEmailId { get; set; }
         public string AlternateMobileNumber { get; set; }
-        public int? TransactionId { get; set; }
+        public string TransactionId { get; set; }
         public string CustomerRemark { get; set; }
         public string BookedOn { get; set; }
         public int? BookedBy { get; set; }

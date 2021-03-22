@@ -54,43 +54,109 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             ViewData["BoardedName"] = reponse1[0].FirstName + " " + reponse1[0].MiddleName + " " + reponse1[0].LastName;
                             ViewData["BoardedMobile"] = reponse1[0].CustomerNumber;
                             var onBoardingData=GetCustomerOnboarding(Convert.ToString(reponse1[0].OnboardingId));
-                            if (onBoardingData!=null)
+                            if (onBoardingData != null)
                             {
-                                sessionUtilty.SetSession("ExistingData",JsonConvert.SerializeObject(onBoardingData));
-                                if (onBoardingData.detailsKycBankInfo!=null)
+                                sessionUtilty.SetSession("ExistingData", JsonConvert.SerializeObject(onBoardingData));
+
+                                if (onBoardingData.detailsKycPanOcrInfo != null && onBoardingData.detailsKycResidentialInfo != null && onBoardingData.detailsKycBankInfo != null)
                                 {
-                                    if (onBoardingData.detailsKycBankInfo[0].customerKYCStatus != "APPROVED")
+
+                                    if (onBoardingData.detailsKycPanOcrInfo.LastOrDefault().customerKYCStatus == "INPROCESS"
+                                        && onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "INPROCESS"
+                                        && onBoardingData.detailsKycOutletInfo.LastOrDefault().customerKYCStatus == "INPROCESS"
+                                        && onBoardingData.detailsKycBasicInfo.LastOrDefault().customerKYCStatus == "INPROCESS"
+                                        && onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
                                     {
-                                        ViewData["StepNum"] = "5";
-                                    }
-                                    else
-                                    {
-                                        ViewData["StepNum"] = "6";
-                                    }
-                                    
-                                }
-                                else if (onBoardingData.detailsKycResidentialInfo != null)
-                                {
-                                    if (onBoardingData.detailsKycResidentialInfo[0].customerKYCStatus!= "APPROVED")
-                                    {
-                                        ViewData["StepNum"] = "3";
-                                    }
-                                    else
-                                    {
-                                        ViewData["StepNum"] = "5";
+                                        ViewData["ErrorMessage"] = "Your KYC form in review. We will notify you if any rejection in form.";
                                     }
                                 }
-                                else if (onBoardingData.detailsKycPanOcrInfo != null)
-                                {
-                                    if (onBoardingData.detailsKycPanOcrInfo[0].customerKYCStatus != "APPROVED")
+                                
+                                    if (onBoardingData.detailsKycPanOcrInfo != null)
                                     {
-                                        ViewData["StepNum"] = "2";
+                                        if (onBoardingData.detailsKycPanOcrInfo.LastOrDefault().customerKYCStatus == "APPROVED"
+                                            || onBoardingData.detailsKycPanOcrInfo.LastOrDefault().customerKYCStatus == "INPROCESS" 
+                                            || onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "ONBOARDED")
+                                        {
+                                            sessionUtilty.SetSession("PanImageURL", onBoardingData.detailsKycPanOcrInfo.LastOrDefault().imagePath);
+                                            ViewData["StepNum"] = "3";
+                                            if (onBoardingData.detailsKycResidentialInfo != null)
+                                            {
+                                                if (onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "APPROVED" || onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "ONBOARDED" || onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
+                                                {
+                                                    ViewData["StepNum"] = "5";
+                                                    if (onBoardingData.detailsKycBankInfo != null)
+                                                    {
+                                                        if (onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "APPROVED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "ONBOARDED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
+                                                        {
+                                                            ViewData["StepNum"] = "6";
+                                                        }
+                                                        else
+                                                        {
+                                                            ViewData["StepNum"] = "5";//REJECTED
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    ViewData["StepNum"] = "3";//REJECTED
+                                                }
+                                            }
+                                            else if (onBoardingData.detailsKycBankInfo != null)
+                                            {
+                                                if (onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "APPROVED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "ONBOARDED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
+                                                {
+                                                    ViewData["StepNum"] = "6";
+                                                }
+                                                else
+                                                {
+                                                    ViewData["StepNum"] = "5";//REJECTED
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            ViewData["StepNum"] = "2";//REJECTED
+                                        }
                                     }
-                                    else
+                                    else if (onBoardingData.detailsKycResidentialInfo != null)
                                     {
-                                        ViewData["StepNum"] = "3";
+                                        if (onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "APPROVED" || onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "ONBOARDED" || onBoardingData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
+                                        {
+                                            ViewData["StepNum"] = "5";
+                                            if (onBoardingData.detailsKycBankInfo != null)
+                                            {
+                                                if (onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "APPROVED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "ONBOARDED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
+                                                {
+                                                    ViewData["StepNum"] = "6";
+                                                }
+                                                else
+                                                {
+                                                    ViewData["StepNum"] = "5";//REJECTED
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            ViewData["StepNum"] = "3";//REJECTED
+                                        }
                                     }
-                                }
+                                    else if (onBoardingData.detailsKycBankInfo != null)
+                                    {
+                                        if (onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "APPROVED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "ONBOARDED" || onBoardingData.detailsKycBankInfo.LastOrDefault().customerKYCStatus == "INPROCESS")
+                                        {
+                                            ViewData["StepNum"] = "6";
+                                        }
+                                        else
+                                        {
+                                            ViewData["StepNum"] = "5";//REJECTED
+                                        }
+
+                                    }
+
+                                
                             }
                         }
                         else
@@ -98,6 +164,11 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             ViewData["ErrorMessage"] = "There is no KYC process found for this user.";
                         }
                     }
+                }
+                else
+                {
+                    //return View();
+                    ViewData["ErrorMessage"] = "There is no On Boarding Process. Please go through valid link.";
                 }
             }
             else
@@ -563,7 +634,25 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 {
                     getValue.PinCode = dlPinCode;
                 }
-                return Json(new { success = true,responseData=getValue });
+                var sessionUtility = new SessionUtility();
+                if (sessionUtility.GetStringSession("ExistingData") != null)
+                {
+                    var onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
+                    if (onBoardedData.detailsKycResidentialInfo!=null)
+                    {
+                        var addressProofData = onBoardedData.detailsKycResidentialInfo.LastOrDefault();
+                        var outletInfoProofData = onBoardedData.detailsKycOutletInfo.LastOrDefault();
+                        var basicInfoProofData = onBoardedData.detailsKycBasicInfo.LastOrDefault();
+                        var allInfoData = new
+                        {
+                            address = addressProofData,
+                            outlet = outletInfoProofData,
+                            basic = basicInfoProofData
+                        };
+                        return Json(new { success = true, responseData = getValue, allInfoData = allInfoData, });
+                    }
+                }
+                return Json(new { success = true,responseData=getValue, allInfoData = "" });
             }
             catch (Exception)
             {
@@ -586,62 +675,190 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     var onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
                     var basicInfo = new BasicInput();
                     var addressInfo = new AddressInput();
-                    var personalInfo=new PersonalDetailsInput();
-                    if (onBoardedData.detailsKycOutletInfo != null)
-                    {   
-                        basicInfo = new BasicInput()
-                        {
-                            firmname=onBoardedData.detailsKycOutletInfo[0].outletName,
-                            firmstate=onBoardedData.detailsKycOutletInfo[0].stateName,
-                            firmcity=onBoardedData.detailsKycOutletInfo[0].districtName,
-                            firmdist=onBoardedData.detailsKycOutletInfo[0].outletDistrictId+"~"+onBoardedData.detailsKycOutletInfo[0].districtName,
-                            firmaddress=onBoardedData.detailsKycOutletInfo[0].outletAddress,
-                            firmAreaId=onBoardedData.detailsKycOutletInfo[0].outletAreaId+ "~" + onBoardedData.detailsKycOutletInfo[0].area,
-                            firmLandmark=onBoardedData.detailsKycOutletInfo[0].outletLandmark,
-                            firmPinCode=Convert.ToString(onBoardedData.detailsKycOutletInfo[0].outletPinCode)
-                        };
-                    }
-                    else if(onBoardedData.detailsKycResidentialInfo != null)
+                    var personalInfo = new PersonalDetailsInput();
+                    if (onBoardedData.detailsKycResidentialInfo != null)
                     {
+                        if (onBoardedData.detailsKycResidentialInfo.LastOrDefault().customerKYCStatus == "REJECTED")
+                        {
+                            //if Residential info is rejected then it will update information of residential and overwrite residential information
+                            #region User Input Form Data
+                            var fc1 = fc["personalDetails"];
+                            var dict = HttpUtility.ParseQueryString(fc1);
+                            string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
+                            var personalDetails = JsonConvert.DeserializeObject<PersonalDetailsInput>(json);
+                            var fc2 = fc["addressDetails"];
+                            var dict1 = HttpUtility.ParseQueryString(fc2);
+                            string json1 = JsonConvert.SerializeObject(dict1.Cast<string>().ToDictionary(k => k, v => dict1[v]));
+                            var addressDetails = JsonConvert.DeserializeObject<AddressInput>(json1);
+                            var fc3 = fc["basicDetails"];//outletdetails
+                            var dict2 = HttpUtility.ParseQueryString(fc3);
+                            string json2 = JsonConvert.SerializeObject(dict2.Cast<string>().ToDictionary(k => k, v => dict2[v]));
+                            var basicDetails = JsonConvert.DeserializeObject<BasicInput>(json2);
+                            var allValues = new AllBasicDetailsInput();
+                            allValues.personalDetails = personalDetails;
+                            allValues.addressDetails = addressDetails;
+                            allValues.basicInput = basicDetails;
+                            #endregion
+                            new SessionUtility().SetSession("AllBasicDetails", JsonConvert.SerializeObject(allValues));
+                            bool isUpdated = UpdateResidentInfo(onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialInformationId);
+                            var onBoardingData = GetCustomerOnboarding(sessionUtility.GetStringSession("BoardingId"));
+                            if (onBoardingData != null)
+                            {
+                                sessionUtility.SetSession("ExistingData", JsonConvert.SerializeObject(onBoardingData));
+                                onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
+                            }
+                        }
                         addressInfo = new AddressInput()
                         {
-                            address=onBoardedData.detailsKycResidentialInfo[0].residentialAddress,
-                            areaId=onBoardedData.detailsKycResidentialInfo[0].residentialAreaId+"~"+onBoardedData.detailsKycResidentialInfo[0].area,
-                            city=onBoardedData.detailsKycResidentialInfo[0].districtName,
-                            district=onBoardedData.detailsKycResidentialInfo[0].residentialDistrictId+"~"+onBoardedData.detailsKycResidentialInfo[0].districtName,
-                            landmark= onBoardedData.detailsKycResidentialInfo[0].residentialLandmark,
-                            pincode= onBoardedData.detailsKycResidentialInfo[0].residentialPinCode.ToString(),
-                            state= onBoardedData.detailsKycResidentialInfo[0].stateName
+                            address = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialAddress,
+                            areaId = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialAreaId + "~" + onBoardedData.detailsKycResidentialInfo.LastOrDefault().area,
+                            city = onBoardedData.detailsKycResidentialInfo.LastOrDefault().districtName,
+                            district = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialDistrictId + "~" + onBoardedData.detailsKycResidentialInfo.LastOrDefault().districtName,
+                            landmark = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialLandmark,
+                            pincode = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialPinCode.ToString(),
+                            state = onBoardedData.detailsKycResidentialInfo.LastOrDefault().stateName
                         };
                     }
-                    else if (onBoardedData.detailsKycBasicInfo != null)
+                    if (onBoardedData.detailsKycOutletInfo != null)
                     {
+                        if (onBoardedData.detailsKycOutletInfo.LastOrDefault().customerKYCStatus == "REJECTED")
+                        {
+                            //if Outlet info is rejected then it will update information of Outlet and overwrite residential information
+                            #region User Input Form Data
+                            var fc1 = fc["personalDetails"];
+                            var dict = HttpUtility.ParseQueryString(fc1);
+                            string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
+                            var personalDetails = JsonConvert.DeserializeObject<PersonalDetailsInput>(json);
+                            var fc2 = fc["addressDetails"];
+                            var dict1 = HttpUtility.ParseQueryString(fc2);
+                            string json1 = JsonConvert.SerializeObject(dict1.Cast<string>().ToDictionary(k => k, v => dict1[v]));
+                            var addressDetails = JsonConvert.DeserializeObject<AddressInput>(json1);
+                            var fc3 = fc["basicDetails"];//outletdetails
+                            var dict2 = HttpUtility.ParseQueryString(fc3);
+                            string json2 = JsonConvert.SerializeObject(dict2.Cast<string>().ToDictionary(k => k, v => dict2[v]));
+                            var basicDetails = JsonConvert.DeserializeObject<BasicInput>(json2);
+                            var allValues = new AllBasicDetailsInput();
+                            allValues.personalDetails = personalDetails;
+                            allValues.addressDetails = addressDetails;
+                            allValues.basicInput = basicDetails;
+                            #endregion
+                            new SessionUtility().SetSession("AllBasicDetails", JsonConvert.SerializeObject(allValues));
+                            bool isUpdated = UpdateOutletInfo(onBoardedData.detailsKycOutletInfo.LastOrDefault().outletInformationId);
+                            var onBoardingData = GetCustomerOnboarding(sessionUtility.GetStringSession("BoardingId"));
+                            if (onBoardingData != null)
+                            {
+                                sessionUtility.SetSession("ExistingData", JsonConvert.SerializeObject(onBoardingData));
+                                onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
+                            }
+                        }
+                        basicInfo = new BasicInput()
+                        {
+                            firmname = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletName,
+                            firmstate = onBoardedData.detailsKycOutletInfo.LastOrDefault().stateName,
+                            firmcity = onBoardedData.detailsKycOutletInfo.LastOrDefault().districtName,
+                            firmdist = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletDistrictId + "~" + onBoardedData.detailsKycOutletInfo.LastOrDefault().districtName,
+                            firmaddress = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletAddress,
+                            firmAreaId = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletAreaId + "~" + onBoardedData.detailsKycOutletInfo.LastOrDefault().area,
+                            firmLandmark = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletLandmark,
+                            firmPinCode = Convert.ToString(onBoardedData.detailsKycOutletInfo.LastOrDefault().outletPinCode)
+                        };
+                    }
+
+                    if (onBoardedData.detailsKycBasicInfo != null)
+                    {
+                        if (onBoardedData.detailsKycBasicInfo.LastOrDefault().customerKYCStatus=="REJECTED")
+                        {
+                            //if Outlet info is rejected then it will update information of Outlet and overwrite residential information
+                            #region User Input Form Data
+                            var fc1 = fc["personalDetails"];
+                            var dict = HttpUtility.ParseQueryString(fc1);
+                            string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
+                            var personalDetails = JsonConvert.DeserializeObject<PersonalDetailsInput>(json);
+                            var fc2 = fc["addressDetails"];
+                            var dict1 = HttpUtility.ParseQueryString(fc2);
+                            string json1 = JsonConvert.SerializeObject(dict1.Cast<string>().ToDictionary(k => k, v => dict1[v]));
+                            var addressDetails = JsonConvert.DeserializeObject<AddressInput>(json1);
+                            var fc3 = fc["basicDetails"];//outletdetails
+                            var dict2 = HttpUtility.ParseQueryString(fc3);
+                            string json2 = JsonConvert.SerializeObject(dict2.Cast<string>().ToDictionary(k => k, v => dict2[v]));
+                            var basicDetails = JsonConvert.DeserializeObject<BasicInput>(json2);
+                            var allValues = new AllBasicDetailsInput();
+                            allValues.personalDetails = personalDetails;
+                            allValues.addressDetails = addressDetails;
+                            allValues.basicInput = basicDetails;
+                            #endregion
+                            new SessionUtility().SetSession("AllBasicDetails", JsonConvert.SerializeObject(allValues));
+                            bool isUpdated = UpdateBasicInfo(onBoardedData.detailsKycBasicInfo.LastOrDefault().basicInformationId);
+                            var onBoardingData = GetCustomerOnboarding(sessionUtility.GetStringSession("BoardingId"));
+                            if (onBoardingData != null)
+                            {
+                                sessionUtility.SetSession("ExistingData", JsonConvert.SerializeObject(onBoardingData));
+                                onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
+                            }
+                        }
                         personalInfo = new PersonalDetailsInput()
                         {
-                            EmailAddress= onBoardedData.detailsKycBasicInfo[0].emailId
+                            EmailAddress = onBoardedData.detailsKycBasicInfo.LastOrDefault().emailId,
+                            Gender = onBoardedData.detailsKycBasicInfo.LastOrDefault().genderId + "~" + onBoardedData.detailsKycBasicInfo.LastOrDefault().genderName,
+                            OccupationType = onBoardedData.detailsKycBasicInfo.LastOrDefault().occupationType
                         };
                     }
-                    var allInfo = new AllBasicDetailsInput();
-                    allInfo.personalDetails = personalInfo;
-                    allInfo.addressDetails = addressInfo;
-                    allInfo.basicInput = basicInfo;
-                    new SessionUtility().SetSession("AllBasicDetails", JsonConvert.SerializeObject(allInfo));
+                    if (onBoardedData.detailsKycResidentialInfo == null)
+                    {
+                        //From Input, If data not inserted in DB then take input from User
+                        #region Form submittion 
+                        var fc1 = fc["personalDetails"];
+                        var dict = HttpUtility.ParseQueryString(fc1);
+                        string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
+                        var personalDetails = JsonConvert.DeserializeObject<PersonalDetailsInput>(json);
+
+                        var fc2 = fc["addressDetails"];
+                        var dict1 = HttpUtility.ParseQueryString(fc2);
+                        string json1 = JsonConvert.SerializeObject(dict1.Cast<string>().ToDictionary(k => k, v => dict1[v]));
+                        var addressDetails = JsonConvert.DeserializeObject<AddressInput>(json1);
+
+                        var fc3 = fc["basicDetails"];//outletdetails
+                        var dict2 = HttpUtility.ParseQueryString(fc3);
+                        string json2 = JsonConvert.SerializeObject(dict2.Cast<string>().ToDictionary(k => k, v => dict2[v]));
+                        var basicDetails = JsonConvert.DeserializeObject<BasicInput>(json2);
+                        var allValues = new AllBasicDetailsInput();
+                        allValues.personalDetails = personalDetails;
+                        allValues.addressDetails = addressDetails;
+                        allValues.basicInput = basicDetails;
+                        new SessionUtility().SetSession("AllBasicDetails", JsonConvert.SerializeObject(allValues));
+                        bool isInserted = InsertBasicInfo();
+                        bool isOutletInserted = InsertKycOutletInfo();
+                        bool isResidentialInserted = InsertResidentialInfo();
+                        #endregion
+                    }
+                    if (personalInfo != null)
+                    {
+                        //If Data Already inserted in DB then take all data for next step.
+                        var allInfo = new AllBasicDetailsInput();
+                        allInfo.personalDetails = personalInfo;
+                        allInfo.addressDetails = addressInfo;
+                        allInfo.basicInput = basicInfo;
+                        new SessionUtility().SetSession("AllBasicDetails", JsonConvert.SerializeObject(allInfo));
+                    }
+
                     if (onBoardedData.detailsKycBankInfo != null)
                     {
+                        //If data already inserted
                         var bankDt = new
                         {
-                            bankId = onBoardedData.detailsKycBankInfo[0].bankId + "~" + onBoardedData.detailsKycBankInfo[0].bankName,
-                            accountname = onBoardedData.detailsKycBankInfo[0].accountName,
-                            bankaccount = onBoardedData.detailsKycBankInfo[0].accountNumber,
-                            ifsccode = onBoardedData.detailsKycBankInfo[0].ifscCode
+                            bankId = onBoardedData.detailsKycBankInfo.LastOrDefault().bankId,
+                            accountname = onBoardedData.detailsKycBankInfo.LastOrDefault().accountName,
+                            bankaccount = onBoardedData.detailsKycBankInfo.LastOrDefault().accountNumber,
+                            ifsccode = onBoardedData.detailsKycBankInfo.LastOrDefault().ifscCode
                         };
                         return Json(new { success = true, bankData = bankDt });
                     }
-                    
+
                     #endregion
                 }
                 else
                 {
+                    //If time form fill up
                     #region Form submittion 
                     var fc1 = fc["personalDetails"];
                     var dict = HttpUtility.ParseQueryString(fc1);
@@ -687,59 +904,99 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 {
                     #region ReSubmittion
                     var onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
-                    var mainDetails =new SetAllValue();
-                    mainDetails.BankName = onBoardedData.detailsKycBankInfo[0].bankId+"~"+onBoardedData.detailsKycBankInfo[0].bankName;
-                    mainDetails.BankAccount = onBoardedData.detailsKycBankInfo[0].accountNumber;
-                    mainDetails.BankIFSCCode = onBoardedData.detailsKycBankInfo[0].ifscCode;
-                    mainDetails.AccountHolderName = onBoardedData.detailsKycBankInfo[0].accountName;
-                    mainDetails.FullName = onBoardedData.detailsCustomerOnboarding[0].firstName+" "+onBoardedData.detailsCustomerOnboarding[0].lastName;
-                    mainDetails.FatherName = onBoardedData.detailsCustomerOnboarding[0].fatherName;
-                    mainDetails.DateOfBirth = onBoardedData.detailsCustomerOnboarding[0].dob;
-                    mainDetails.MobileNumber = onBoardedData.detailsCustomerOnboarding[0].customerNumber.ToString();
-                    sessionUtility.SetSession("MainDetails", JsonConvert.SerializeObject(mainDetails));
-                    mainDetails.BankName = onBoardedData.detailsKycBankInfo[0].bankName;
-                    var allBasicDetails = new AllBasicDetailsInput();
-                    var personalDetails = new PersonalDetailsInput() { 
-                        EmailAddress= onBoardedData.detailsKycBasicInfo[0].emailId,
-                        Caste = onBoardedData.detailsKycBasicInfo[0].casteCategory,
-                        EducationalQualification="NA",
-                        EntityType = onBoardedData.detailsKycBasicInfo[0].entityType,
-                        IsPhysicallyDisabled = onBoardedData.detailsKycBasicInfo[0].physicalStatus,
-                        MaritialStatus = onBoardedData.detailsKycBasicInfo[0].maritalStatusName,
-                        MobileOperator = onBoardedData.detailsKycBasicInfo[0].serviceProviderName
-                    };
-                    var addressDetails = new AddressInput()
+
+                    if (onBoardedData.detailsKycBankInfo==null)
                     {
-                        address = onBoardedData.detailsKycResidentialInfo[0].residentialAddress,
-                        city = onBoardedData.detailsKycResidentialInfo[0].districtName,
-                        district = onBoardedData.detailsKycResidentialInfo[0].districtName,
-                        landmark = onBoardedData.detailsKycResidentialInfo[0].residentialLandmark,
-                        pincode = Convert.ToString(onBoardedData.detailsKycResidentialInfo[0].residentialPinCode),
-                        state = onBoardedData.detailsKycResidentialInfo[0].stateName,
-                        areaId = onBoardedData.detailsKycResidentialInfo[0].residentialAreaId+"~"+ onBoardedData.detailsKycResidentialInfo[0].area
-                    };
-                    var basicInput = new BasicInput()
+                        #region Bank form Submission
+                        var bankName = Convert.ToString(fc["ddlBank"]);
+                        var accountHolderName = Convert.ToString(fc["accountname"]);
+                        var bankAccount = Convert.ToString(fc["bankaccount"]);
+                        string bankIFSCCode = Convert.ToString(fc["bankifsccode"]);
+                        var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                        GetAllValues();
+                        var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
+                        mainDetails.BankName = bankName;
+                        mainDetails.BankAccount = bankAccount;
+                        mainDetails.BankIFSCCode = bankIFSCCode;
+                        mainDetails.AccountHolderName = accountHolderName;
+                        sessionUtility.SetSession("MainDetails", JsonConvert.SerializeObject(mainDetails));
+                        mainDetails.BankName = bankName.Split('~')[1];
+                        allBasicDetails.personalDetails.Gender = allBasicDetails.personalDetails.Gender ==null ? "" : allBasicDetails.personalDetails.Gender.Split("~")[1];
+                        allBasicDetails.personalDetails.MaritialStatus = allBasicDetails.personalDetails.MaritialStatus ==null ? "" : allBasicDetails.personalDetails.MaritialStatus.Split("~")[1];
+                        var overviewDtls = new OverviewDetails();
+                        overviewDtls.allDetails = allBasicDetails;
+                        overviewDtls.allValue = mainDetails;
+                        bool isInserted = InsertBankInfo();
+                        return PartialView("AllDetails", overviewDtls);
+                        #endregion
+                    }
+                    else
                     {
-                        firmname=onBoardedData.detailsKycOutletInfo[0].outletName,
-                        firmaddress=onBoardedData.detailsKycOutletInfo[0].outletAddress,
-                        firmstate=onBoardedData.detailsKycOutletInfo[0].stateName,
-                        firmcity=onBoardedData.detailsKycOutletInfo[0].districtName,
-                        firmdist= onBoardedData.detailsKycOutletInfo[0].outletDistrictId+"~"+onBoardedData.detailsKycOutletInfo[0].districtName,
-                        firmAreaId=onBoardedData.detailsKycOutletInfo[0].outletAreaId+ "~" + onBoardedData.detailsKycOutletInfo[0].area,
-                        firmLandmark=onBoardedData.detailsKycOutletInfo[0].outletLandmark,
-                        firmPinCode=Convert.ToString(onBoardedData.detailsKycOutletInfo[0].outletPinCode)
-                    };
-                    allBasicDetails.personalDetails = personalDetails;
-                    allBasicDetails.addressDetails = addressDetails;
-                    allBasicDetails.basicInput = basicInput;
-                    sessionUtility.SetSession("AllBasicDetails", JsonConvert.SerializeObject(allBasicDetails));
-                    allBasicDetails.basicInput.firmAreaId = onBoardedData.detailsKycOutletInfo[0].area;
-                    allBasicDetails.basicInput.firmdist = onBoardedData.detailsKycOutletInfo[0].districtName;
-                    allBasicDetails.addressDetails.areaId = onBoardedData.detailsKycResidentialInfo[0].area;
-                    var overviewDtls = new OverviewDetails();
-                    overviewDtls.allDetails = allBasicDetails;
-                    overviewDtls.allValue = mainDetails;
-                    return PartialView("AllDetails", overviewDtls);
+                        #region IF Bank Submission Already Done
+                        var mainDetails = new SetAllValue();
+                        mainDetails.BankName = onBoardedData.detailsKycBankInfo.LastOrDefault().bankId + "~" + onBoardedData.detailsKycBankInfo.LastOrDefault().bankName;
+                        mainDetails.BankAccount = onBoardedData.detailsKycBankInfo.LastOrDefault().accountNumber;
+                        mainDetails.BankIFSCCode = onBoardedData.detailsKycBankInfo.LastOrDefault().ifscCode;
+                        mainDetails.AccountHolderName = onBoardedData.detailsKycBankInfo.LastOrDefault().accountName;
+                        mainDetails.FullName = onBoardedData.detailsCustomerOnboarding.LastOrDefault().firstName + " " + onBoardedData.detailsCustomerOnboarding.LastOrDefault().lastName;
+                        mainDetails.FatherName = onBoardedData.detailsCustomerOnboarding.LastOrDefault().fatherName;
+                        mainDetails.DateOfBirth = onBoardedData.detailsKycPanOcrInfo.LastOrDefault().dateOfBirth;
+                        mainDetails.MobileNumber = onBoardedData.detailsCustomerOnboarding.LastOrDefault().customerNumber.ToString();
+                        sessionUtility.SetSession("MainDetails", JsonConvert.SerializeObject(mainDetails));
+                        mainDetails.BankName = onBoardedData.detailsKycBankInfo.LastOrDefault().bankName;
+                        var allBasicDetails = new AllBasicDetailsInput();
+                        var personalDetails = new PersonalDetailsInput()
+                        {
+                            Gender = onBoardedData.detailsKycBasicInfo.LastOrDefault().genderId + "~" + onBoardedData.detailsKycBasicInfo.LastOrDefault().genderName,
+                            OccupationType = onBoardedData.detailsKycBasicInfo.LastOrDefault().occupationType,
+                            EmailAddress = onBoardedData.detailsKycBasicInfo.LastOrDefault().emailId,
+                            Caste = onBoardedData.detailsKycBasicInfo.LastOrDefault().casteCategory,
+                            EducationalQualification = "NA",
+                            EntityType = onBoardedData.detailsKycBasicInfo.LastOrDefault().entityType,
+                            IsPhysicallyDisabled = onBoardedData.detailsKycBasicInfo.LastOrDefault().physicalStatus,
+                            MaritialStatus = onBoardedData.detailsKycBasicInfo.LastOrDefault().maritalStatusId+"~"+ onBoardedData.detailsKycBasicInfo.LastOrDefault().maritalStatusName,
+                            MobileOperator = onBoardedData.detailsKycBasicInfo.LastOrDefault().serviceProviderId + "~" + onBoardedData.detailsKycBasicInfo.LastOrDefault().serviceProviderName
+                        };
+                        var addressDetails = new AddressInput()
+                        {
+                            address = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialAddress,
+                            city = onBoardedData.detailsKycResidentialInfo.LastOrDefault().districtName,
+                            district = onBoardedData.detailsKycResidentialInfo.LastOrDefault().districtName,
+                            landmark = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialLandmark,
+                            pincode = Convert.ToString(onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialPinCode),
+                            state = onBoardedData.detailsKycResidentialInfo.LastOrDefault().stateName,
+                            areaId = onBoardedData.detailsKycResidentialInfo.LastOrDefault().residentialAreaId + "~" + onBoardedData.detailsKycResidentialInfo.LastOrDefault().area
+                        };
+                        var basicInput = new BasicInput()
+                        {
+                            firmname = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletName,
+                            firmaddress = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletAddress,
+                            firmstate = onBoardedData.detailsKycOutletInfo.LastOrDefault().stateName,
+                            firmcity = onBoardedData.detailsKycOutletInfo.LastOrDefault().districtName,
+                            firmdist = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletDistrictId + "~" + onBoardedData.detailsKycOutletInfo.LastOrDefault().districtName,
+                            firmAreaId = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletAreaId + "~" + onBoardedData.detailsKycOutletInfo.LastOrDefault().area,
+                            firmLandmark = onBoardedData.detailsKycOutletInfo.LastOrDefault().outletLandmark,
+                            firmPinCode = Convert.ToString(onBoardedData.detailsKycOutletInfo.LastOrDefault().outletPinCode)
+                        };
+                        allBasicDetails.personalDetails = personalDetails;
+                        allBasicDetails.addressDetails = addressDetails;
+                        allBasicDetails.basicInput = basicInput;
+                        sessionUtility.SetSession("AllBasicDetails", JsonConvert.SerializeObject(allBasicDetails));
+                        allBasicDetails.basicInput.firmAreaId = onBoardedData.detailsKycOutletInfo.LastOrDefault().area;
+                        allBasicDetails.basicInput.firmdist = onBoardedData.detailsKycOutletInfo.LastOrDefault().districtName;
+                        allBasicDetails.addressDetails.areaId = onBoardedData.detailsKycResidentialInfo.LastOrDefault().area;
+                        allBasicDetails.personalDetails.Gender = onBoardedData.detailsKycBasicInfo.LastOrDefault().genderName;
+                        allBasicDetails.personalDetails.MaritialStatus = onBoardedData.detailsKycBasicInfo.LastOrDefault().maritalStatusName;
+                        allBasicDetails.personalDetails.MobileOperator = onBoardedData.detailsKycBasicInfo.LastOrDefault().serviceProviderName;
+                        var overviewDtls = new OverviewDetails();
+                        overviewDtls.allDetails = allBasicDetails;
+                        overviewDtls.allValue = mainDetails;
+                        UpdateBankInfo(onBoardedData.detailsKycBankInfo.LastOrDefault().bankInformationId);
+                        return PartialView("AllDetails", overviewDtls);
+                        #endregion
+                    }
+
+
                     #endregion
                 }
                 else
@@ -952,6 +1209,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     sessionUtility.SetSession("PANCroppedUrl", response.response.result.cropped);
+                    InsertCustomerKyc(14,"Selfi","", response.response.result.cropped,1,null,null,null);
                 }
                 else
                 {
@@ -1033,7 +1291,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     var onBoardedData = JsonConvert.DeserializeObject<OnBoardingCustomer>(sessionUtility.GetStringSession("ExistingData"));
                     if (onBoardedData.detailsKycPanOcrInfo!=null)
                     {
-                        sessionUtility.SetSession("PANCroppedUrl", onBoardedData.detailsKycPanOcrInfo[0].imagePath);
+                        sessionUtility.SetSession("PANCroppedUrl", onBoardedData.detailsKycPanOcrInfo.LastOrDefault().imagePath);
                     }
                 }
                 var req = new {
@@ -1110,7 +1368,12 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             DateTime dt = DateTime.ParseExact(mainDetails.DateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                             dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
                         }
-                        
+                        else if (DateTime.TryParseExact(mainDetails.DateOfBirth, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out panDOB))
+                        {
+                            DateTime dt = DateTime.ParseExact(mainDetails.DateOfBirth, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                            dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
+                        }
+
                     }
                     if (sessionUtility.GetStringSession("isInserted")==null)
                     {
@@ -1120,29 +1383,29 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                             onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
                             dob = dob,
                             emailId = allBasicDetails.personalDetails.EmailAddress,
-                            genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender.Split('~')[0]),
-                            maritalStatusId = Convert.ToInt32(allBasicDetails.personalDetails.MaritialStatus.Split('~')[0]),
+                            genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender ?? allBasicDetails.personalDetails.Gender.Split('~')[0]),
+                            maritalStatusId = Convert.ToInt32(allBasicDetails.personalDetails.MaritialStatus?? allBasicDetails.personalDetails.MaritialStatus.Split('~')[0]),
                             casteCategory = allBasicDetails.personalDetails.Caste,
                             qualification = allBasicDetails.personalDetails.EducationalQualification,
-                            serviceProviderId = Convert.ToInt32(allBasicDetails.personalDetails.MobileOperator.Split('~')[0]),
+                            serviceProviderId = Convert.ToInt32(allBasicDetails.personalDetails.MobileOperator ?? allBasicDetails.personalDetails.MobileOperator.Split('~')[0]),
                             physicalStatus = allBasicDetails.personalDetails.IsPhysicallyDisabled,
                             occupationType = allBasicDetails.personalDetails.OccupationType,
                             occupationDuration = "",
                             entityType = allBasicDetails.personalDetails.EntityType,
                             districtId = GetAddressByPinCode(allBasicDetails.addressDetails.pincode).districtId,
-                            areaId = Convert.ToInt32(allBasicDetails.addressDetails.areaId),
+                            areaId = Convert.ToInt32(allBasicDetails.addressDetails.areaId ?? allBasicDetails.addressDetails.areaId.Split('~')[0]),
                             pinCode = Convert.ToInt32(allBasicDetails.addressDetails.pincode),
                             landmark = allBasicDetails.addressDetails.landmark,
                             address = allBasicDetails.addressDetails.address,
                             outletName = allBasicDetails.basicInput.firmname,
                             outletCategoryId = 1,
                             outletDistrictId = areaOutletDetails.districtId,
-                            outletAreaId = Convert.ToInt32(allBasicDetails.basicInput.firmAreaId),
+                            outletAreaId = Convert.ToInt32(allBasicDetails.basicInput.firmAreaId ?? allBasicDetails.basicInput.firmAreaId.Split('~')[0]),
                             outletPinCode = Convert.ToInt32(allBasicDetails.basicInput.firmPinCode),
                             outletLandmark = allBasicDetails.basicInput.firmLandmark,
                             outletAddress = allBasicDetails.basicInput.firmaddress,
                             bankAccountTypeId = 1,
-                            bankId = Convert.ToInt32(mainDetails.BankName.Split("~")[0]),
+                            bankId = Convert.ToInt32(mainDetails.BankName ?? mainDetails.BankName.Split("~")[0]),
                             accountName = mainDetails.AccountHolderName,
                             accountNumber = mainDetails.BankAccount,
                             ifscCode = mainDetails.BankIFSCCode,
@@ -1153,21 +1416,20 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                         var insertKyc = new CallService().PostResponse<string>("putDetailsCustomerOnbBoardingKyc", req, ref errorMessage1);
                         if (string.IsNullOrEmpty(errorMessage1))
                         {
-                            sessionUtility.RemoveSession("MainDetails");
-                            sessionUtility.RemoveSession("AllBasicDetails");
+                            //sessionUtility.RemoveSession("MainDetails");
+                            //sessionUtility.RemoveSession("AllBasicDetails");
                             sessionUtility.SetSession("isInserted", "true");
                             InsertCustomerKyc(10, null, null, null, 1, JsonConvert.SerializeObject(response), null, "Video Verification");
                         }
-                       
                     }
                     
                     return View("Response", response);
                 }
                 return View("Response");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                TempData["ErrorMessage"] = ex.Message;
             }
             return View("Response");
         }
@@ -1349,7 +1611,11 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                         DateTime dt = DateTime.ParseExact(panDOB, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                         dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
                     }
-
+                    else if(DateTime.TryParseExact(panDOB, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                    {
+                        DateTime dt = DateTime.ParseExact(panDOB, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
+                    }
                 }
                 var req = new
                 {
@@ -1408,7 +1674,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
         #endregion
 
         #region UPDATE METHOD BASIC DETAILS
-        public bool UpdateBasicInfo()
+        public bool UpdateBasicInfo(int basicInfoId)
         {
             try
             {
@@ -1416,6 +1682,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
                 var req = new
                 {
+                    basicInformationId=basicInfoId,
                     onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
                     emailId = allBasicDetails.personalDetails.EmailAddress,
                     genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender.Split('~')[0]),
@@ -1426,7 +1693,11 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     occupationType = allBasicDetails.personalDetails.OccupationType,
                     entityType = allBasicDetails.personalDetails.EntityType,
                     alternateNumber = "0",
-                    submittedBy = 0
+                    kycStatus = 1,
+                    approvedBy=0,
+                    remarks=1,
+                    basicInfo1="",
+                    basicInfo2=""
                 };
                 string errorMessage = string.Empty;
                 var response = new CallService().PostResponse<string>("updateDetailsKycBasicInfo", req, ref errorMessage);
@@ -1441,7 +1712,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             }
             return false;
         }
-        public bool UpdateResidentInfo()
+        public bool UpdateResidentInfo(int residentialInfoId)
         {
             try
             {
@@ -1450,13 +1721,18 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var residential = GetAddressByPinCode(allBasicDetails.addressDetails.pincode);
                 var req = new
                 {
+                    residentialInformationId= residentialInfoId,
                     onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
                     residentialDistrictId = residential.districtId,
                     residentialAreaId = Convert.ToInt32(allBasicDetails.addressDetails.areaId),
                     residentialPinCode = Convert.ToInt32(allBasicDetails.addressDetails.pincode),
                     residentialLandmark = allBasicDetails.addressDetails.landmark,
                     residentialAddress = allBasicDetails.addressDetails.address,
-                    submittedBy = 0,
+                    kycStatus=1,
+                    approvedBy=0,
+                    remarks=1,
+                    residentialInfo1 = "0",
+                    residentialInfo2="0"
                 };
                 string errorMessage = string.Empty;
                 var response = new CallService().PostResponse<string>("updateDetailsKycResidentialInfo", req, ref errorMessage);
@@ -1471,7 +1747,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             }
             return false;
         }
-        public bool UpdateOutletInfo()
+        public bool UpdateOutletInfo(int outletInformationId)
         {
             try
             {
@@ -1480,6 +1756,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var pinAddress = GetAddressByPinCode(allBasicDetails.basicInput.firmPinCode);
                 var req = new
                 {
+                    outletInformationId=outletInformationId,
                     onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
                     outletName = allBasicDetails.basicInput.firmname,
                     outletCategoryId = 1,
@@ -1491,8 +1768,13 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                     occupationDuration = "1",
                     outletLatitude = 0,
                     outletLongitude = 0,
-                    submittedBy = 0,
+                    kycStatus=1,
+                    approvedBy=0,
+                    remarks=1,
+                    outletInfo1="",
+                    OutletInfo2=""
                 };
+
                 string errorMessage = string.Empty;
                 var response = new CallService().PostResponse<string>("updateDetailsKycOutletInfo", req, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
@@ -1549,28 +1831,30 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
             }
             return false;
         }
-        public bool UpdateBankInfo()
+        public bool UpdateBankInfo(int bankInfoId)
         {
             try
             {
                 var sessionUtility = new SessionUtility();
                 var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
+
                 var req = new
                 {
+                    bankInformationId = bankInfoId,
                     onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
-                    emailId = allBasicDetails.personalDetails.EmailAddress,
-                    genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender.Split('~')[0]),
-                    maritalStatusId = Convert.ToInt32(allBasicDetails.personalDetails.MaritialStatus.Split('~')[0]),
-                    casteCategory = Convert.ToString(allBasicDetails.personalDetails.Caste),
-                    serviceProviderId = Convert.ToInt32(allBasicDetails.personalDetails.MobileOperator.Split('~')[0]),
-                    physicalStatus = allBasicDetails.personalDetails.IsPhysicallyDisabled,
-                    occupationType = allBasicDetails.personalDetails.OccupationType,
-                    entityType = allBasicDetails.personalDetails.EntityType,
-                    alternateNumber = "0",
-                    submittedBy = 0
+                    bankAccountTypeId = 1,
+                    bankId = Convert.ToInt32(mainDetails.BankName.Split('~')[0]),
+                    accountName = mainDetails.AccountHolderName,
+                    accountNumber = mainDetails.BankAccount,
+                    ifscCode = mainDetails.BankIFSCCode,
+                    imagePath = "",
+                    kycStatus = 1,
+                    approvedBy = 0,
+                    remarks = 1
                 };
                 string errorMessage = string.Empty;
-                var response = new CallService().PostResponse<string>("updateDetailsKycBasicInfo", req, ref errorMessage);
+                var response = new CallService().PostResponse<string>("updateDetailsKycBankInfo", req, ref errorMessage);
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     return true;

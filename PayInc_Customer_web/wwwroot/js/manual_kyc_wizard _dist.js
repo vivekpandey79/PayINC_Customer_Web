@@ -1,97 +1,51 @@
 ﻿$(document).ready(function (e) {
-	var _wizard1 = new KTWizard("kt_wizard", {
-		startStep: 1,
-		clickableSteps: false
-	});
-
-	var _validations = [];
-	var initValidation = function () {
-		_validations.push(FormValidation.formValidation(
-			_formEl,
-			{
-				fields: {
-					firstname: {
-						validators: {
-							notEmpty: {
-								message: 'First name is required'
-							}
-						}
-					},
-					lastname: {
-						validators: {
-							notEmpty: {
-								message: 'Last name is required'
-							}
-						}
-					},
-					phone: {
-						validators: {
-							notEmpty: {
-								message: 'Phone is required'
-							}
-						}
-					}
-				},
-				plugins: {
-					trigger: new FormValidation.plugins.Trigger(),
-					bootstrap: new FormValidation.plugins.Bootstrap()
+	var _wizard1 = "";
+	if ($("#step_num").val() === "") {
+		_wizard1 = new KTWizard("kt_wizard", {
+			startStep: 1,
+			clickableSteps: false
+		});
+	}
+	else {
+		_wizard1 = new KTWizard("kt_wizard", {
+			startStep: 6,
+			clickableSteps: false
+		});
+		if ($("#step_num").val() === "6") {
+			$.ajax({
+				url: "/OnBoarding/ManualForm/BankDetails",
+				type: "POST",
+				data: {},
+				success: function (data) {
+					$("#panel_all_details").html(data);
+					_wizard1.goTo(6);
 				}
-			}
-		));
-		_validations.push(FormValidation.formValidation(
-			_formEl,
-			{
-				fields: {
-					address1: {
-						validators: {
-							notEmpty: {
-								message: 'Address is required'
-							}
-						}
-					},
-					address2: {
-						validators: {
-							notEmpty: {
-								message: 'Address is required'
-							}
-						}
-					},
-					postcode: {
-						validators: {
-							notEmpty: {
-								message: 'Postcode is required'
-							}
-						}
-					},
-					city: {
-						validators: {
-							notEmpty: {
-								message: 'City is required'
-							}
-						}
-					},
-					state: {
-						validators: {
-							notEmpty: {
-								message: 'State is required'
-							}
-						}
-					},
-					country: {
-						validators: {
-							notEmpty: {
-								message: 'Country is required'
-							}
-						}
+			});
+		}
+		if ($("#step_num").val() === "5") {
+			GetBankList();
+			$.ajax({
+				url: "/OnBoarding/ManualForm/BasicDetails",
+				type: "POST",
+				data: {},
+				success: function (data) {
+					if (data.bankData !== "") {
+						$("#ddlBank").val(data.bankData.bankId);
+						$("#accountname").val(data.bankData.accountname);
+						$("#bankaccount").val(data.bankData.bankaccount);
+						$("#txtifsccode").val(data.bankData.ifsccode);
 					}
-				},
-				plugins: {
-					trigger: new FormValidation.plugins.Trigger(),
-					bootstrap: new FormValidation.plugins.Bootstrap()
 				}
-			}
-		));
-	};
+			});
+			_wizard1.goTo(5);
+		}
+		if ($("#step_num").val() === "3") {
+			_wizard1.goTo(3);
+		}
+		if ($("#step_num").val() === "2") {
+			_wizard1.goTo(2);
+		}
+	}
 
 	$("#form_verify_mobile").submit(function (e) {
 		e.preventDefault();
@@ -169,6 +123,16 @@
 					$("#txtBasicCity").val(data.responseData.city);
 					$("#txtBasicState").val(data.responseData.state);
 					$("#txtBasicPinCode").val(data.responseData.pinCode);
+
+					if (data.allInfoData !== "") {
+						$("#txtBasicLandmark").val(data.allInfoData.address.residentialLandmark);
+						$("#txtBasicPinCode").val(data.allInfoData.address.residentialPinCode);
+						$("#txFirmName").val(data.allInfoData.outlet.outletName);
+						$("#txtOutletAddress").val(data.allInfoData.outlet.outletAddress);
+						$("#txtOutletState").val(data.allInfoData.outlet.stateName);
+						$("#txtOutletCity").val(data.allInfoData.outlet.districtName);
+					}
+
 					$("#ddlBasicArea").append($("<option></option>").val('').html('-- Loading Area --'));
 					$.ajax({
 						url: '/OnBoarding/ManualForm/GetAreaPinCode',

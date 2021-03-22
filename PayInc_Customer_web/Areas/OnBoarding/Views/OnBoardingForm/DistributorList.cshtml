@@ -12,7 +12,8 @@
                 {
                     <div class="form-group">
                         <label>Distributor</label>
-                        <input type="text" class="form-control form-control-solid" name="ddlADlist" placeholder="PARTNER" value="@ViewData["ADCustomerName"]" readonly />
+                        <input type="text" class="form-control form-control-solid"  placeholder="PARTNER" value="@ViewData["ADCustomerName"]" readonly />
+                        <input type="hidden" value="@ViewData["ADCustomerId"]" name="ddlADlist"/>
                     </div>
                 }
                 else

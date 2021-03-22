@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,16 +34,13 @@ namespace PayInc_Customer_web.Controllers
                         ViewData["ErrorMessage"] = "NO response from server.";
                         return View();
                     }
-                    //var listParams = new List<KeyValuePair<string, string>>();
-                    //listParams.Add(new KeyValuePair<string, string>("customerId", Convert.ToString(response.customerId)));
-                    //var response1 = new CallService().GetResponse<List<ProfileResponse>>("geCustomerProfile", listParams, ref errorMessage);
-                    //if (response1 == null)
-                    //{
-                    //    ViewData["ErrorMessage"] = "NO response from server.";
-                    //    return View();
-                    //}
-                    //response.Address = response1[0].permAddressLine1 + ", " + response1[0].permAddressLine2;
                     HttpContext.Session.SetString("LoginDetails", JsonConvert.SerializeObject(response));
+                    if (response.customerLastLoginDate == 0)
+                    {
+
+                        return View("ChangePassword");
+                    }
+                    UpdateLastLogin(response.customerAuthenticationId);
                     var menuList = new MenuBinding().BindSideMenu();
                     HttpContext.Session.SetString("menuList", JsonConvert.SerializeObject(menuList));
                     return RedirectToAction("Index", "Home");
@@ -62,7 +61,14 @@ namespace PayInc_Customer_web.Controllers
         public IActionResult LogOut()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Login");
+            return View("Index");
+        }
+        [Route("SessionExpire/Login/LogOutRedirect")]
+        [HttpGet]
+        public IActionResult LogOutRedirect()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index","Login",new { area=""});
         }
 
         [HttpPost]
@@ -124,7 +130,54 @@ namespace PayInc_Customer_web.Controllers
                 return Json(new { success = false, errorMessage = ex.Message });
             }
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(ChangePassword input)
+        {
+            try
+            {
+                var httpContextAccessor = new Microsoft.AspNetCore.Http.HttpContextAccessor();
+                var result = httpContextAccessor.HttpContext.Session.GetString("LoginDetails");
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResData>(result);
+                string errorMessage = string.Empty;
+                var parameter = new { customerId = obj.customerId, passwordType = 1, oldPassword = HashShA1(input.OldPassword), newPassword = HashShA1(input.NewPassword) };
+                var response = new CallService().PostResponse<int>(APIMethodConst.ChangePassword, parameter, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    UpdateLastLogin(obj.customerAuthenticationId);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = errorMessage;
+                    return View(input);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("Index");
+        }
+        public string HashShA1(string password)
+        {
+            string response = string.Empty;
+            try
+            {
+                using (SHA1Managed sha1 = new SHA1Managed())
+                {
+                    var hashSh1 = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                    return System.Convert.ToBase64String(hashSh1);
+                }
+            }
+            catch
+            {
+
+            }
+            return response;
+        }
         public void GetMarquee(int roleId)
         {
             var listParams = new List<KeyValuePair<string, string>>();
@@ -138,6 +191,25 @@ namespace PayInc_Customer_web.Controllers
             else
             {
 
+            }
+        }
+
+        public void UpdateLastLogin(int customerAuthId)
+        {
+            try
+            {
+                var req1 = new
+                {
+                    
+                };
+                var listParams = new List<KeyValuePair<string, string>>();
+                listParams.Add(new KeyValuePair<string, string>("customerAuthenticationId",Convert.ToString(customerAuthId)));
+                string errorMessage1 = string.Empty;
+                var response1 = new CallService().PostWithParams<string>("updateDetailsCustomerLastLogin", listParams, req1, ref errorMessage1);
+            }
+            catch
+            {
+                
             }
         }
     }

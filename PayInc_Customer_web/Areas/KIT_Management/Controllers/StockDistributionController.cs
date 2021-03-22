@@ -11,6 +11,7 @@ using PayInc_Customer_web.Utility;
 namespace PayInc_Customer_web.Areas.KIT_Management.Controllers
 {
     [Area("KIT_Management")]
+    [Authentication]
     public class StockDistributionController : Controller
     {
         public IActionResult Index()

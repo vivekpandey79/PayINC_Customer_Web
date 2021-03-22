@@ -208,15 +208,15 @@
                     <div class="text-muted font-weight-bold d-flex flex-center">ENTER TPIN</div>
                     <div class="d-flex flex-center">
                         <div class="form-group digit-group mb-10">
-                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" class="form-control-solid" autofocus />
-                            <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1" class="form-control-solid" />
-                            <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2" class="form-control-solid" />
-                            <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3" class="form-control-solid" />
+                            <input type="password" id="digit-1" name="digit1" data-next="digit-2" autofocus />
+                            <input type="password" id="digit-2" name="digit2" data-next="digit-3" data-previous="digit-1"/>
+                            <input type="password" id="digit-3" name="digit3" data-next="digit-4" data-previous="digit-2"/>
+                            <input type="password" id="digit-4" name="digit4" data-next="digit-5" data-previous="digit-3"/>
                             <span class="splitter">&ndash;</span>
-                            <input type="password" id="digit-5" name="digit5" data-next="digit-6" data-previous="digit-4" class="form-control-solid" />
-                            <input type="password" id="digit-6" name="digit6" data-next="digit-7" data-previous="digit-5" class="form-control-solid" />
-                            <input type="password" id="digit-7" name="digit7" data-next="digit-8" data-previous="digit-6" class="form-control-solid" />
-                            <input type="password" id="digit-8" name="digit8" data-previous="digit-7" class="form-control-solid" />
+                            <input type="password" id="digit-5" name="digit5" data-next="digit-6" data-previous="digit-4"/>
+                            <input type="password" id="digit-6" name="digit6" data-next="digit-7" data-previous="digit-5"/>
+                            <input type="password" id="digit-7" name="digit7" data-next="digit-8" data-previous="digit-6"/>
+                            <input type="password" id="digit-8" name="digit8" data-previous="digit-7" />
                         </div>
                     </div>
                 </div>
@@ -234,12 +234,22 @@
         height: 50px;
         line-height: 50px;
         text-align: center;
-        font-size: 24px;
+        font-size: 30px;
         font-family: 'Raleway', sans-serif;
         font-weight: 200;
         margin: 0 2px;
+        border-radius: 2rem;
+        border: 1px solid #E4E6EF;
+        background-color: #F3F6F9;
+        color: #3F4254;
     }
 
+        .digit-group input:focus {
+            outline: none !important;
+            box-shadow: 0 0 10px #719ECE;
+            border-radius: 2rem !important;
+            border: 1px solid #719ECE !important;
+        }
     .splitter {
         padding: 0 5px;
         color: black;

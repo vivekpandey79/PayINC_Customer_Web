@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -248,6 +249,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(aadharData);
                 aadharDetails.original_kyc_info.mobile = string.IsNullOrEmpty(aadharDetails.original_kyc_info.mobile) ? sessionUtility.GetStringSession("BoardedMobile") : aadharDetails.original_kyc_info.mobile;
                 var getValue = GetAllValues();
+                InsertResidentialInfo();
                 return Json(new { success = true, responseData = aadharDetails.original_kyc_info });
             }
             catch (Exception)
@@ -491,6 +493,7 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     new SessionUtility().SetSession("PANCroppedUrl", response.response.result.cropped);
+                    InsertCustomerKyc(14, "Selfi", "", response.response.result.cropped, 1, null, null, null);
                 }
             }
             catch (Exception)
@@ -699,5 +702,384 @@ namespace PayInc_Customer_web.Areas.OnBoarding.Controllers
                 return response[0];
             }
         }
+
+        #region INSERT METHOD BASIC DETAILS
+        public bool InsertBasicInfo()
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var req = new
+                {
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    emailId = allBasicDetails.personalDetails.EmailAddress,
+                    genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender.Split('~')[0]),
+                    maritalStatusId = Convert.ToInt32(allBasicDetails.personalDetails.MaritialStatus.Split('~')[0]),
+                    casteCategory = Convert.ToString(allBasicDetails.personalDetails.Caste),
+                    serviceProviderId = Convert.ToInt32(allBasicDetails.personalDetails.MobileOperator.Split('~')[0]),
+                    physicalStatus = allBasicDetails.personalDetails.IsPhysicallyDisabled,
+                    occupationType = allBasicDetails.personalDetails.OccupationType,
+                    entityType = allBasicDetails.personalDetails.EntityType,
+                    alternateNumber = "0",
+                    submittedBy = 0
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("putDetailsKycBasicInfoReq", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+
+        public bool InsertResidentialInfo()
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var aadharData = sessionUtility.GetStringSession("Aadhar_Details");
+                var aadharDetails = JsonConvert.DeserializeObject<AadharOTPRes>(aadharData);
+                var residential = GetAddressByPinCode(aadharDetails.original_kyc_info.pc);
+                var req = new
+                {
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    residentialDistrictId = residential.districtId,
+                    residentialAreaId = Convert.ToInt32(residential.areaId),
+                    residentialPinCode = Convert.ToInt32(aadharDetails.original_kyc_info.pc),
+                    residentialLandmark = aadharDetails.original_kyc_info.landmark,
+                    residentialAddress = aadharDetails.original_kyc_info.address,
+                    submittedBy = 0,
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("putDetailsKycResidentialInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+
+        public bool InsertKycOutletInfo()
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var pinAddress = GetAddressByPinCode(allBasicDetails.basicInput.firmPinCode);
+                var req = new
+                {
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    outletName = allBasicDetails.basicInput.firmname,
+                    outletCategoryId = 1,
+                    outletDistrictId = Convert.ToInt32(pinAddress.districtId),
+                    outletAreaId = Convert.ToInt32(allBasicDetails.basicInput.firmAreaId),
+                    outletPinCode = Convert.ToInt32(allBasicDetails.basicInput.firmPinCode),
+                    outletLandmark = allBasicDetails.basicInput.firmLandmark,
+                    outletAddress = allBasicDetails.basicInput.firmaddress,
+                    occupationDuration = "1",
+                    outletLatitude = 0,
+                    outletLongitude = 0,
+                    submittedBy = 0,
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("putDetailsKycOutletInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+
+        public bool InsertPANInfo()
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                string panDOB = sessionUtility.GetStringSession("BoardingDob");
+                var dateTime = new DateTime();
+                int dob = 0;
+                if (DateTime.TryParse(panDOB, out dateTime))
+                {
+                    dob = Convert.ToInt32(Convert.ToDateTime(panDOB).ToString("yyyyMMdd"));
+                }
+                else
+                {
+                    if (DateTime.TryParseExact(panDOB, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                    {
+                        DateTime dt = DateTime.ParseExact(panDOB, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
+                    }
+                    else if (DateTime.TryParseExact(panDOB, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                    {
+                        DateTime dt = DateTime.ParseExact(panDOB, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
+                    }
+                }
+                var req = new
+                {
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    nameonPancard = sessionUtility.GetStringSession("BoardingName"),
+                    fatherName = sessionUtility.GetStringSession("BoardingFatherName"),
+                    dob = dob,
+                    imagePath = sessionUtility.GetStringSession("PanImageURL"),
+                    submittedBy = 0
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("putDetailsKycPanOcrInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+
+        public bool InsertBankInfo()
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
+                var req = new
+                {
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    bankAccountTypeId = 1,
+                    bankId = Convert.ToInt32(mainDetails.BankName.Split("~")[0]),
+                    accountName = mainDetails.AccountHolderName,
+                    accountNumber = mainDetails.BankAccount,
+                    ifscCode = mainDetails.BankIFSCCode,
+                    imagePath = "NA",
+                    submittedBy = 0
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("putDetailsKycBankInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region UPDATE METHOD BASIC DETAILS
+        public bool UpdateBasicInfo(int basicInfoId)
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var req = new
+                {
+                    basicInformationId = basicInfoId,
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    emailId = allBasicDetails.personalDetails.EmailAddress,
+                    genderId = Convert.ToInt32(allBasicDetails.personalDetails.Gender.Split('~')[0]),
+                    maritalStatusId = Convert.ToInt32(allBasicDetails.personalDetails.MaritialStatus.Split('~')[0]),
+                    casteCategory = Convert.ToString(allBasicDetails.personalDetails.Caste),
+                    serviceProviderId = Convert.ToInt32(allBasicDetails.personalDetails.MobileOperator.Split('~')[0]),
+                    physicalStatus = allBasicDetails.personalDetails.IsPhysicallyDisabled,
+                    occupationType = allBasicDetails.personalDetails.OccupationType,
+                    entityType = allBasicDetails.personalDetails.EntityType,
+                    alternateNumber = "0",
+                    kycStatus = 1,
+                    approvedBy = 0,
+                    remarks = 1,
+                    basicInfo1 = "",
+                    basicInfo2 = ""
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("updateDetailsKycBasicInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+        public bool UpdateResidentInfo(int residentialInfoId)
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var residential = GetAddressByPinCode(allBasicDetails.addressDetails.pincode);
+                var req = new
+                {
+                    residentialInformationId = residentialInfoId,
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    residentialDistrictId = residential.districtId,
+                    residentialAreaId = Convert.ToInt32(allBasicDetails.addressDetails.areaId),
+                    residentialPinCode = Convert.ToInt32(allBasicDetails.addressDetails.pincode),
+                    residentialLandmark = allBasicDetails.addressDetails.landmark,
+                    residentialAddress = allBasicDetails.addressDetails.address,
+                    kycStatus = 1,
+                    approvedBy = 0,
+                    remarks = 1,
+                    residentialInfo1 = "0",
+                    residentialInfo2 = "0"
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("updateDetailsKycResidentialInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+        public bool UpdateOutletInfo(int outletInformationId)
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var pinAddress = GetAddressByPinCode(allBasicDetails.basicInput.firmPinCode);
+                var req = new
+                {
+                    outletInformationId = outletInformationId,
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    outletName = allBasicDetails.basicInput.firmname,
+                    outletCategoryId = 1,
+                    outletDistrictId = Convert.ToInt32(pinAddress.districtId),
+                    outletAreaId = Convert.ToInt32(allBasicDetails.basicInput.firmAreaId),
+                    outletPinCode = Convert.ToInt32(allBasicDetails.basicInput.firmPinCode),
+                    outletLandmark = allBasicDetails.basicInput.firmLandmark,
+                    outletAddress = allBasicDetails.basicInput.firmaddress,
+                    occupationDuration = "1",
+                    outletLatitude = 0,
+                    outletLongitude = 0,
+                    kycStatus = 1,
+                    approvedBy = 0,
+                    remarks = 1,
+                    outletInfo1 = "",
+                    OutletInfo2 = ""
+                };
+
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("updateDetailsKycOutletInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+        public bool UpdatePANInfo()
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                string panDOB = sessionUtility.GetStringSession("BoardingDob");
+                var dateTime = new DateTime();
+                int dob = 0;
+                if (DateTime.TryParse(panDOB, out dateTime))
+                {
+                    dob = Convert.ToInt32(Convert.ToDateTime(panDOB).ToString("yyyyMMdd"));
+                }
+                else
+                {
+                    if (DateTime.TryParseExact(panDOB, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                    {
+                        DateTime dt = DateTime.ParseExact(panDOB, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        dob = Convert.ToInt32(dt.ToString("yyyyMMdd"));
+                    }
+
+                }
+                var req = new
+                {
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    nameonPancard = sessionUtility.GetStringSession("BoardingName"),
+                    fatherName = sessionUtility.GetStringSession("BoardingFatherName"),
+                    dob = dob,
+                    imagePath = sessionUtility.GetStringSession("PanImageURL"),
+                    submittedBy = 0
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("updateDetailsKycBasicInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+        public bool UpdateBankInfo(int bankInfoId)
+        {
+            try
+            {
+                var sessionUtility = new SessionUtility();
+                var allBasicDetails = JsonConvert.DeserializeObject<AllBasicDetailsInput>(sessionUtility.GetStringSession("AllBasicDetails"));
+                var mainDetails = JsonConvert.DeserializeObject<SetAllValue>(sessionUtility.GetStringSession("MainDetails"));
+
+                var req = new
+                {
+                    bankInformationId = bankInfoId,
+                    onboardingId = Convert.ToInt64(sessionUtility.GetStringSession("BoardingId")),
+                    bankAccountTypeId = 1,
+                    bankId = Convert.ToInt32(mainDetails.BankName.Split('~')[0]),
+                    accountName = mainDetails.AccountHolderName,
+                    accountNumber = mainDetails.BankAccount,
+                    ifscCode = mainDetails.BankIFSCCode,
+                    imagePath = "",
+                    kycStatus = 1,
+                    approvedBy = 0,
+                    remarks = 1
+                };
+                string errorMessage = string.Empty;
+                var response = new CallService().PostResponse<string>("updateDetailsKycBankInfo", req, ref errorMessage);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return false;
+        }
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ using PayInc_Customer_web.Utility;
 
 namespace PayInc_Customer_web.Controllers
 {
-    [Authentication]
+    [NewAuthentication]
     public class ViewProfileController : Controller
     {
         public IActionResult Index()
